@@ -38,6 +38,7 @@ export class Client {
     public readonly analytics: analytics.ServiceClient
     public readonly automation: automation.ServiceClient
     public readonly content: content.ServiceClient
+    public readonly health: health.ServiceClient
     public readonly newsletter: newsletter.ServiceClient
     public readonly seo: seo.ServiceClient
     private readonly options: ClientOptions
@@ -59,6 +60,7 @@ export class Client {
         this.analytics = new analytics.ServiceClient(base)
         this.automation = new automation.ServiceClient(base)
         this.content = new content.ServiceClient(base)
+        this.health = new health.ServiceClient(base)
         this.newsletter = new newsletter.ServiceClient(base)
         this.seo = new seo.ServiceClient(base)
     }
@@ -984,6 +986,81 @@ export namespace content {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/articles/by-id/${encodeURIComponent(params.id)}`, {method: "PUT", body: JSON.stringify(body)})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_content_update_article_updateArticle>
+        }
+    }
+}
+
+/**
+ * Import the endpoint handlers to derive the types for the client.
+ */
+import { checkAmazon as api_health_check_amazon_checkAmazon } from "~backend/health/check_amazon";
+import { checkGoogleSheets as api_health_check_google_sheets_checkGoogleSheets } from "~backend/health/check_google_sheets";
+import { checkOpenAI as api_health_check_openai_checkOpenAI } from "~backend/health/check_openai";
+import { getAllHealth as api_health_get_all_health_getAllHealth } from "~backend/health/get_all_health";
+import { getHealthHistory as api_health_get_health_history_getHealthHistory } from "~backend/health/get_health_history";
+import { getServiceStats as api_health_get_service_stats_getServiceStats } from "~backend/health/get_service_stats";
+
+export namespace health {
+
+    export class ServiceClient {
+        private baseClient: BaseClient
+
+        constructor(baseClient: BaseClient) {
+            this.baseClient = baseClient
+            this.checkAmazon = this.checkAmazon.bind(this)
+            this.checkGoogleSheets = this.checkGoogleSheets.bind(this)
+            this.checkOpenAI = this.checkOpenAI.bind(this)
+            this.getAllHealth = this.getAllHealth.bind(this)
+            this.getHealthHistory = this.getHealthHistory.bind(this)
+            this.getServiceStats = this.getServiceStats.bind(this)
+        }
+
+        public async checkAmazon(): Promise<ResponseType<typeof api_health_check_amazon_checkAmazon>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/health/amazon`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_health_check_amazon_checkAmazon>
+        }
+
+        public async checkGoogleSheets(): Promise<ResponseType<typeof api_health_check_google_sheets_checkGoogleSheets>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/health/google-sheets`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_health_check_google_sheets_checkGoogleSheets>
+        }
+
+        public async checkOpenAI(): Promise<ResponseType<typeof api_health_check_openai_checkOpenAI>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/health/openai`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_health_check_openai_checkOpenAI>
+        }
+
+        public async getAllHealth(): Promise<ResponseType<typeof api_health_get_all_health_getAllHealth>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/health`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_health_get_all_health_getAllHealth>
+        }
+
+        public async getHealthHistory(params: RequestType<typeof api_health_get_health_history_getHealthHistory>): Promise<ResponseType<typeof api_health_get_health_history_getHealthHistory>> {
+            // Convert our params into the objects we need for the request
+            const query = makeRecord<string, string | string[]>({
+                hours:   params.hours === undefined ? undefined : String(params.hours),
+                limit:   params.limit === undefined ? undefined : String(params.limit),
+                service: params.service,
+            })
+
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/health/history`, {query, method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_health_get_health_history_getHealthHistory>
+        }
+
+        public async getServiceStats(params: RequestType<typeof api_health_get_service_stats_getServiceStats>): Promise<ResponseType<typeof api_health_get_service_stats_getServiceStats>> {
+            // Convert our params into the objects we need for the request
+            const query = makeRecord<string, string | string[]>({
+                hours: params.hours === undefined ? undefined : String(params.hours),
+            })
+
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/health/stats`, {query, method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_health_get_service_stats_getServiceStats>
         }
     }
 }

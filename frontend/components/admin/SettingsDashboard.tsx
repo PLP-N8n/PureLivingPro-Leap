@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Settings, Plug, Globe } from "lucide-react";
-import SecretsTestDashboard from './SecretsTestDashboard';
+import { HealthMonitor } from './HealthMonitor';
 import { AdminErrorBoundary, AdminErrorFallback } from './AdminErrorBoundary';
 
 export function SettingsDashboard() {
@@ -32,7 +32,7 @@ export function SettingsDashboard() {
             <AdminErrorBoundary context="External Services" fallback={
               <AdminErrorFallback context="External Services" />
             }>
-              <SecretsTestDashboard />
+              <HealthMonitor />
             </AdminErrorBoundary>
           </TabsContent>
 

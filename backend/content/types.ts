@@ -26,6 +26,10 @@ export interface Article {
   published: boolean;
   featured: boolean;
   viewCount: number;
+  wpPostId?: number;
+  mediumPostId?: string;
+  seoMeta?: any;
+  affiliateBlocks?: any;
   createdAt: Date;
   updatedAt: Date;
   category?: Category;

@@ -110,7 +110,9 @@ export const updateArticle = api<UpdateArticleParams & UpdateArticleRequest, Art
       SELECT 
         id, title, slug, content, excerpt, featured_image_url as "featuredImageUrl",
         category_id as "categoryId", author_name as "authorName", author_email as "authorEmail",
-        published, featured, view_count as "viewCount", created_at as "createdAt", updated_at as "updatedAt"
+        published, featured, view_count as "viewCount", wp_post_id as "wpPostId", 
+        medium_post_id as "mediumPostId", seo_meta as "seoMeta", affiliate_blocks as "affiliateBlocks",
+        created_at as "createdAt", updated_at as "updatedAt"
       FROM articles WHERE id = ${id}
     `;
 

@@ -17,6 +17,8 @@ export const getArticle = api<GetArticleParams, Article>(
         a.featured_image_url as "featuredImageUrl", a.category_id as "categoryId",
         a.author_name as "authorName", a.author_email as "authorEmail",
         a.published, a.featured, a.view_count as "viewCount",
+        a.wp_post_id as "wpPostId", a.medium_post_id as "mediumPostId",
+        a.seo_meta as "seoMeta", a.affiliate_blocks as "affiliateBlocks",
         a.created_at as "createdAt", a.updated_at as "updatedAt",
         c.name as "categoryName", c.slug as "categorySlug"
       FROM articles a

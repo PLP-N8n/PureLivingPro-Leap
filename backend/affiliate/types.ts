@@ -77,7 +77,7 @@ export interface ListAffiliateProgramsResponse {
 export interface CreateAffiliateProductRequest {
   programId: number;
   name: string;
-  slug: string;
+  slug?: string;
   description?: string;
   price?: number;
   originalUrl: string;

@@ -18,6 +18,17 @@ export const updateProduct = api<UpdateProductParams & UpdateAffiliateProductReq
       throw APIError.notFound("Affiliate product not found");
     }
 
+    // Check slug uniqueness if being updated
+    if (req.slug) {
+      const slugExists = await affiliateDB.queryRow`
+        SELECT id FROM affiliate_products WHERE slug = ${req.slug} AND id != ${id}
+      `;
+      
+      if (slugExists) {
+        throw APIError.alreadyExists("A product with this slug already exists");
+      }
+    }
+
     const updates: string[] = [];
     const params: any[] = [];
     let paramIndex = 1;

@@ -1,13 +1,22 @@
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import backend from "~backend/client";
 import { ArticleCard } from "../components/ArticleCard";
+import { PopularArticles } from "../components/PopularArticles";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+import { SEOHead } from "../components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { useAnalytics } from "../hooks/useAnalytics";
 import { useState } from "react";
 
 export function HomePage() {
   const [page, setPage] = useState(0);
   const limit = 12;
+  const { trackPageView } = useAnalytics();
+
+  useEffect(() => {
+    trackPageView("/");
+  }, [trackPageView]);
 
   const { data: featuredArticles, isLoading: featuredLoading } = useQuery({
     queryKey: ["articles", "featured"],
@@ -37,63 +46,70 @@ export function HomePage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Hero Section */}
-      <section className="text-center mb-16">
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-          Welcome to <span className="text-green-600">Pure Living Pro</span>
-        </h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-          Discover the secrets to a healthier, more balanced lifestyle through our expert-curated 
-          content on nutrition, fitness, wellness, and sustainable living.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          {categories?.categories.slice(0, 4).map((category) => (
-            <Button key={category.id} variant="outline" size="lg">
-              {category.name}
-            </Button>
-          ))}
-        </div>
-      </section>
-
-      {/* Featured Articles */}
-      {featuredArticles?.articles && featuredArticles.articles.length > 0 && (
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Articles</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredArticles.articles.map((article, index) => (
-              <ArticleCard 
-                key={article.id} 
-                article={article} 
-                featured={index === 0}
-              />
+    <>
+      <SEOHead />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Hero Section */}
+        <section className="text-center mb-16">
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            Welcome to <span className="text-green-600">Pure Living Pro</span>
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            Discover the secrets to a healthier, more balanced lifestyle through our expert-curated 
+            content on nutrition, fitness, wellness, and sustainable living.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            {categories?.categories.slice(0, 4).map((category) => (
+              <Button key={category.id} variant="outline" size="lg">
+                {category.name}
+              </Button>
             ))}
           </div>
         </section>
-      )}
 
-      {/* Recent Articles */}
-      <section>
-        <h2 className="text-3xl font-bold text-gray-900 mb-8">Latest Articles</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {recentArticles?.articles.map((article) => (
-            <ArticleCard key={article.id} article={article} />
-          ))}
-        </div>
-
-        {/* Load More */}
-        {recentArticles && recentArticles.articles.length === limit && (
-          <div className="text-center mt-12">
-            <Button 
-              onClick={() => setPage(page + 1)}
-              size="lg"
-              variant="outline"
-            >
-              Load More Articles
-            </Button>
-          </div>
+        {/* Featured Articles */}
+        {featuredArticles?.articles && featuredArticles.articles.length > 0 && (
+          <section className="mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Articles</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredArticles.articles.map((article, index) => (
+                <ArticleCard 
+                  key={article.id} 
+                  article={article} 
+                  featured={index === 0}
+                />
+              ))}
+            </div>
+          </section>
         )}
-      </section>
-    </div>
+
+        {/* Popular Articles */}
+        <PopularArticles title="Trending This Month" days={30} limit={6} />
+
+        {/* Recent Articles */}
+        <section>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">Latest Articles</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {recentArticles?.articles.map((article) => (
+              <ArticleCard key={article.id} article={article} />
+            ))}
+          </div>
+
+          {/* Load More */}
+          {recentArticles && recentArticles.articles.length === limit && (
+            <div className="text-center mt-12">
+              <Button 
+                onClick={() => setPage(page + 1)}
+                size="lg"
+                variant="outline"
+              >
+                Load More Articles
+              </Button>
+            </div>
+          )}
+        </section>
+      </div>
+    </>
   );
 }

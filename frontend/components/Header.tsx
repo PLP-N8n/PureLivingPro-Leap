@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { Leaf, Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
+import { SearchBar } from "./SearchBar";
 
 export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -78,26 +78,23 @@ export function Header() {
                   <Link to="/category/recipes" className="text-gray-700 hover:text-green-600 transition-colors">
                     Recipes
                   </Link>
+                  <Button
+                    variant="ghost"
+                    onClick={() => setIsSearchOpen(true)}
+                    className="justify-start p-0 h-auto font-normal text-gray-700 hover:text-green-600"
+                  >
+                    <Search className="h-4 w-4 mr-2" />
+                    Search
+                  </Button>
                 </nav>
               </SheetContent>
             </Sheet>
           </div>
         </div>
-
-        {/* Search Bar */}
-        {isSearchOpen && (
-          <div className="pb-4">
-            <div className="max-w-md mx-auto">
-              <Input
-                type="search"
-                placeholder="Search articles..."
-                className="w-full"
-                autoFocus
-              />
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* Search Bar */}
+      <SearchBar isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </header>
   );
 }

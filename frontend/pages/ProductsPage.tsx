@@ -51,12 +51,12 @@ export function ProductsPage() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section with Wellness Image */}
+        {/* Hero Section with Enhanced Wellness Image */}
         <section className="relative mb-16 rounded-3xl overflow-hidden">
           <div className="relative h-96">
             <img
               src="https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=1200&h=600&fit=crop&crop=center"
-              alt="Premium wellness products"
+              alt="Premium wellness products and natural supplements"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
@@ -112,13 +112,13 @@ export function ProductsPage() {
             </Button>
           </form>
 
-          {/* Category Showcase */}
+          {/* Enhanced Category Showcase with More Images */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="relative group cursor-pointer" onClick={() => handleCategoryChange("supplements")}>
               <div className="relative h-32 rounded-2xl overflow-hidden">
                 <img
                   src="https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400&h=200&fit=crop&crop=center"
-                  alt="Supplements"
+                  alt="Natural supplements and vitamins"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/80 to-teal-600/80"></div>
@@ -134,8 +134,8 @@ export function ProductsPage() {
             <div className="relative group cursor-pointer" onClick={() => handleCategoryChange("skincare")}>
               <div className="relative h-32 rounded-2xl overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400&h=200&fit=crop&crop=center"
-                  alt="Skincare"
+                  src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=200&fit=crop&crop=center"
+                  alt="Natural skincare and beauty products"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-pink-600/80 to-rose-600/80"></div>
@@ -152,7 +152,7 @@ export function ProductsPage() {
               <div className="relative h-32 rounded-2xl overflow-hidden">
                 <img
                   src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=200&fit=crop&crop=center"
-                  alt="Fitness"
+                  alt="Home fitness equipment and yoga accessories"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/80 to-indigo-600/80"></div>
@@ -161,6 +161,65 @@ export function ProductsPage() {
                     <Sparkles className="h-8 w-8 mx-auto mb-2" />
                     <h3 className="font-bold text-lg">Fitness</h3>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Wellness Categories */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="relative group cursor-pointer" onClick={() => handleCategoryChange("nutrition")}>
+              <div className="relative h-24 rounded-xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=300&h=150&fit=crop&crop=center"
+                  alt="Healthy nutrition and superfoods"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-green-600/80 to-emerald-600/80"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h4 className="font-bold text-white text-sm">Nutrition</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer" onClick={() => handleCategoryChange("wellness")}>
+              <div className="relative h-24 rounded-xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=150&fit=crop&crop=center"
+                  alt="Wellness and mindfulness products"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/80 to-pink-600/80"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h4 className="font-bold text-white text-sm">Wellness</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer">
+              <div className="relative h-24 rounded-xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&h=150&fit=crop&crop=center"
+                  alt="Essential oils and aromatherapy"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-600/80 to-yellow-600/80"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h4 className="font-bold text-white text-sm">Aromatherapy</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer">
+              <div className="relative h-24 rounded-xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=150&fit=crop&crop=center"
+                  alt="Yoga and meditation accessories"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/80 to-blue-600/80"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h4 className="font-bold text-white text-sm">Yoga & Meditation</h4>
                 </div>
               </div>
             </div>

@@ -74,8 +74,17 @@ export function BlogPage() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="text-center mb-16">
+        {/* Enhanced Header with Wellness Image */}
+        <div className="text-center mb-16 relative">
+          {/* Background wellness image */}
+          <div className="absolute inset-0 -z-10 rounded-3xl overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=400&fit=crop&crop=center"
+              alt="Wellness and mindfulness background"
+              className="w-full h-full object-cover opacity-10"
+            />
+          </div>
+          
           <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-sm font-medium mb-8">
             <BookOpen className="h-4 w-4" />
             Expert Content
@@ -107,9 +116,9 @@ export function BlogPage() {
           </form>
         </div>
 
-        {/* Category Filters */}
+        {/* Enhanced Category Filters with Images */}
         <div className="mb-12">
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
             <Button
               variant={selectedCategory === "" ? "default" : "outline"}
               onClick={() => handleCategoryFilter("")}
@@ -135,6 +144,65 @@ export function BlogPage() {
                 {category.name}
               </Button>
             ))}
+          </div>
+
+          {/* Category showcase with images */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            <div className="relative group cursor-pointer" onClick={() => handleCategoryFilter("1")}>
+              <div className="relative h-24 rounded-xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=300&h=150&fit=crop&crop=center"
+                  alt="Nutrition and healthy eating"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-green-600/80 to-emerald-600/80"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h4 className="font-bold text-white text-sm">Nutrition</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer" onClick={() => handleCategoryFilter("2")}>
+              <div className="relative h-24 rounded-xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=150&fit=crop&crop=center"
+                  alt="Fitness and exercise"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/80 to-indigo-600/80"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h4 className="font-bold text-white text-sm">Fitness</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer" onClick={() => handleCategoryFilter("3")}>
+              <div className="relative h-24 rounded-xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=150&fit=crop&crop=center"
+                  alt="Wellness and mindfulness"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/80 to-pink-600/80"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h4 className="font-bold text-white text-sm">Wellness</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer" onClick={() => handleCategoryFilter("4")}>
+              <div className="relative h-24 rounded-xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&h=150&fit=crop&crop=center"
+                  alt="Healthy recipes and cooking"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-600/80 to-yellow-600/80"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h4 className="font-bold text-white text-sm">Recipes</h4>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

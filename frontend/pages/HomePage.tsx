@@ -135,7 +135,7 @@ export function HomePage() {
           </div>
         </section>
 
-        {/* Features Section with Wellness Images */}
+        {/* Features Section with Enhanced Wellness Images */}
         <section className="py-24">
           <div className="text-center mb-20">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 px-6 py-3 rounded-full text-sm font-semibold mb-8 shadow-lg">
@@ -160,7 +160,7 @@ export function HomePage() {
                 <div className="relative h-48 overflow-hidden rounded-t-2xl">
                   <img
                     src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center"
-                    alt="AI Wellness Plans"
+                    alt="AI Wellness Plans - Meditation and mindfulness"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
@@ -187,7 +187,7 @@ export function HomePage() {
                 <div className="relative h-48 overflow-hidden rounded-t-2xl">
                   <img
                     src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=400&fit=crop&crop=center"
-                    alt="Curated Products"
+                    alt="Curated Products - Home fitness and wellness equipment"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
@@ -214,7 +214,7 @@ export function HomePage() {
                 <div className="relative h-48 overflow-hidden rounded-t-2xl">
                   <img
                     src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=400&fit=crop&crop=center"
-                    alt="Progress Tracking"
+                    alt="Progress Tracking - Healthy nutrition and meal planning"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
@@ -237,7 +237,7 @@ export function HomePage() {
           </div>
         </section>
 
-        {/* Wellness Showcase Section */}
+        {/* Enhanced Wellness Showcase Section */}
         <section className="py-24">
           <div className="text-center mb-20">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 px-6 py-3 rounded-full text-sm font-semibold mb-8 shadow-lg">
@@ -256,7 +256,7 @@ export function HomePage() {
             <div className="relative">
               <img
                 src="https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=800&h=600&fit=crop&crop=center"
-                alt="Natural herbs and essential oils"
+                alt="Natural herbs and essential oils for wellness"
                 className="w-full h-96 object-cover rounded-3xl shadow-2xl"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
@@ -279,7 +279,7 @@ export function HomePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
             <div className="space-y-6 lg:order-2">
               <h3 className="text-3xl font-bold text-slate-900">Nutritious Meal Planning</h3>
               <p className="text-lg text-slate-600 leading-relaxed">
@@ -299,10 +299,52 @@ export function HomePage() {
             <div className="relative lg:order-1">
               <img
                 src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=600&fit=crop&crop=center"
-                alt="Healthy nutritious meal bowls"
+                alt="Healthy nutritious meal bowls with fresh ingredients"
                 className="w-full h-96 object-cover rounded-3xl shadow-2xl"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
+            </div>
+          </div>
+
+          {/* Additional Wellness Images Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="relative group cursor-pointer">
+              <img
+                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=400&fit=crop&crop=center"
+                alt="Home fitness and yoga practice"
+                className="w-full h-64 object-cover rounded-2xl shadow-lg group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-2xl"></div>
+              <div className="absolute bottom-4 left-4 right-4 text-white">
+                <h4 className="font-bold text-lg mb-2">Home Fitness</h4>
+                <p className="text-sm">Transform your space into a wellness sanctuary</p>
+              </div>
+            </div>
+            
+            <div className="relative group cursor-pointer">
+              <img
+                src="https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?w=600&h=400&fit=crop&crop=center"
+                alt="Mindfulness and meditation practice"
+                className="w-full h-64 object-cover rounded-2xl shadow-lg group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-2xl"></div>
+              <div className="absolute bottom-4 left-4 right-4 text-white">
+                <h4 className="font-bold text-lg mb-2">Mindful Living</h4>
+                <p className="text-sm">Cultivate peace and presence in daily life</p>
+              </div>
+            </div>
+            
+            <div className="relative group cursor-pointer">
+              <img
+                src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=600&h=400&fit=crop&crop=center"
+                alt="Natural skincare and beauty products"
+                className="w-full h-64 object-cover rounded-2xl shadow-lg group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-2xl"></div>
+              <div className="absolute bottom-4 left-4 right-4 text-white">
+                <h4 className="font-bold text-lg mb-2">Natural Beauty</h4>
+                <p className="text-sm">Nourish your skin with pure ingredients</p>
+              </div>
             </div>
           </div>
         </section>
@@ -364,12 +406,12 @@ export function HomePage() {
               </p>
             </div>
 
-            {/* Product Showcase with Image */}
+            {/* Product Showcase with Enhanced Images */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
               <div className="relative">
                 <img
                   src="https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=800&h=600&fit=crop&crop=center"
-                  alt="Premium wellness supplements"
+                  alt="Premium wellness supplements and natural products"
                   className="w-full h-96 object-cover rounded-3xl shadow-2xl"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-3xl"></div>

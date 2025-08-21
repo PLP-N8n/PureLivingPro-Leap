@@ -20,21 +20,56 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
 
   const estimatedReadTime = Math.ceil(article.content.length / 1000) || 3;
 
-  // Use wellness images as fallback if no featured image is provided
+  // Enhanced wellness images based on category and content
   const getArticleImage = () => {
     if (article.featuredImageUrl) return article.featuredImageUrl;
     
-    // Fallback images based on category
+    // Enhanced fallback images with more variety
     const fallbackImages = {
-      nutrition: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=400&fit=crop&crop=center",
-      fitness: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=400&fit=crop&crop=center",
-      wellness: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center",
-      supplements: "https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=800&h=400&fit=crop&crop=center",
-      recipes: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=400&fit=crop&crop=center"
+      nutrition: [
+        "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1547496502-affa22d38842?w=800&h=400&fit=crop&crop=center"
+      ],
+      fitness: [
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=800&h=400&fit=crop&crop=center"
+      ],
+      wellness: [
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1545389336-cf090694435e?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&h=400&fit=crop&crop=center"
+      ],
+      supplements: [
+        "https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1550572017-edd951aa8f72?w=800&h=400&fit=crop&crop=center"
+      ],
+      recipes: [
+        "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=800&h=400&fit=crop&crop=center"
+      ],
+      mindfulness: [
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&h=400&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1545389336-cf090694435e?w=800&h=400&fit=crop&crop=center"
+      ]
     };
     
-    return fallbackImages[article.category?.name?.toLowerCase() as keyof typeof fallbackImages] || 
-           "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center";
+    const categoryName = article.category?.name?.toLowerCase() || 'wellness';
+    const categoryImages = fallbackImages[categoryName as keyof typeof fallbackImages] || fallbackImages.wellness;
+    
+    // Use article ID to consistently select the same image for each article
+    const imageIndex = article.id % categoryImages.length;
+    return categoryImages[imageIndex];
   };
 
   return (

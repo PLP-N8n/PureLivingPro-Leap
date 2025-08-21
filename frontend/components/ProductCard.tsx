@@ -45,21 +45,52 @@ export function ProductCard({
     }
   };
 
-  // Use wellness images as fallback if no product image is provided
+  // Enhanced wellness product images with more variety
   const getProductImage = () => {
     if (product.imageUrl) return product.imageUrl;
     
-    // Fallback images based on category
+    // Enhanced fallback images based on category
     const fallbackImages = {
-      supplements: "https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400&h=300&fit=crop&crop=center",
-      skincare: "https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400&h=300&fit=crop&crop=center",
-      fitness: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&crop=center",
-      wellness: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&crop=center",
-      nutrition: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&h=300&fit=crop&crop=center"
+      supplements: [
+        "https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1550572017-edd951aa8f72?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop&crop=center"
+      ],
+      skincare: [
+        "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&h=300&fit=crop&crop=center"
+      ],
+      fitness: [
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1434596922112-19c563067271?w=400&h=300&fit=crop&crop=center"
+      ],
+      wellness: [
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1545389336-cf090694435e?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=300&fit=crop&crop=center"
+      ],
+      nutrition: [
+        "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=400&h=300&fit=crop&crop=center",
+        "https://images.unsplash.com/photo-1547496502-affa22d38842?w=400&h=300&fit=crop&crop=center"
+      ]
     };
     
-    return fallbackImages[product.category?.toLowerCase() as keyof typeof fallbackImages] || 
-           "https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400&h=300&fit=crop&crop=center";
+    const categoryName = product.category?.toLowerCase() || 'wellness';
+    const categoryImages = fallbackImages[categoryName as keyof typeof fallbackImages] || fallbackImages.wellness;
+    
+    // Use product ID to consistently select the same image for each product
+    const imageIndex = product.id % categoryImages.length;
+    return categoryImages[imageIndex];
   };
 
   return (

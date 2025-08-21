@@ -123,12 +123,12 @@ export function WellnessPlanPage() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section with Wellness Image */}
+        {/* Hero Section with Enhanced Wellness Image */}
         <section className="relative mb-16 rounded-3xl overflow-hidden">
           <div className="relative h-96">
             <img
               src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop&crop=center"
-              alt="Peaceful wellness meditation"
+              alt="Peaceful wellness meditation in serene natural setting"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
@@ -261,35 +261,44 @@ export function WellnessPlanPage() {
               <CardContent className="p-6">
                 {suggestedProducts?.products ? (
                   <div className="space-y-6">
-                    {suggestedProducts.products.slice(0, 3).map((product) => (
-                      <div key={product.id} className="border border-slate-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                        {product.imageUrl && (
+                    {suggestedProducts.products.slice(0, 3).map((product, index) => {
+                      // Enhanced product images for wellness plan
+                      const wellnessImages = [
+                        "https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=300&h=200&fit=crop&crop=center",
+                        "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&h=200&fit=crop&crop=center",
+                        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop&crop=center",
+                        "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=200&fit=crop&crop=center",
+                        "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=300&h=200&fit=crop&crop=center"
+                      ];
+                      
+                      return (
+                        <div key={product.id} className="border border-slate-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                           <img
-                            src={product.imageUrl}
+                            src={product.imageUrl || wellnessImages[index % wellnessImages.length]}
                             alt={product.name}
                             className="w-full h-32 object-cover rounded-lg mb-4 shadow-md"
                           />
-                        )}
-                        <h4 className="font-bold text-slate-900 mb-2 text-lg">{product.name}</h4>
-                        <p className="text-sm text-slate-600 mb-4 line-clamp-2 leading-relaxed">
-                          {product.description}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          {product.price && (
-                            <span className="font-bold text-emerald-600 text-lg">
-                              ${product.price.toFixed(2)}
-                            </span>
-                          )}
-                          <Button
-                            size="sm"
-                            onClick={() => handleAffiliateClick(product.id)}
-                            className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg hover:shadow-xl transition-all duration-200"
-                          >
-                            View Product
-                          </Button>
+                          <h4 className="font-bold text-slate-900 mb-2 text-lg">{product.name}</h4>
+                          <p className="text-sm text-slate-600 mb-4 line-clamp-2 leading-relaxed">
+                            {product.description}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            {product.price && (
+                              <span className="font-bold text-emerald-600 text-lg">
+                                ${product.price.toFixed(2)}
+                              </span>
+                            )}
+                            <Button
+                              size="sm"
+                              onClick={() => handleAffiliateClick(product.id)}
+                              className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg hover:shadow-xl transition-all duration-200"
+                            >
+                              View Product
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 ) : (
                   <LoadingSpinner />
@@ -299,7 +308,7 @@ export function WellnessPlanPage() {
           </div>
         </div>
 
-        {/* Wellness Tips Section */}
+        {/* Enhanced Wellness Tips Section with More Images */}
         <section className="mt-16 py-12 bg-gradient-to-br from-slate-50 to-slate-100 rounded-3xl">
           <div className="text-center mb-12">
             <h3 className="text-3xl font-bold text-slate-900 mb-4">Enhance Your Wellness Journey</h3>
@@ -308,11 +317,11 @@ export function WellnessPlanPage() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
             <div className="relative">
               <img
                 src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&h=400&fit=crop&crop=center"
-                alt="Healthy nutrition"
+                alt="Healthy nutrition with fresh fruits and vegetables"
                 className="w-full h-48 object-cover rounded-2xl shadow-lg"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-2xl"></div>
@@ -325,13 +334,64 @@ export function WellnessPlanPage() {
             <div className="relative">
               <img
                 src="https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=600&h=400&fit=crop&crop=center"
-                alt="Natural wellness"
+                alt="Natural wellness supplements and herbs"
                 className="w-full h-48 object-cover rounded-2xl shadow-lg"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-2xl"></div>
               <div className="absolute bottom-4 left-4 right-4 text-white">
                 <h4 className="font-bold text-lg mb-2">Natural Remedies</h4>
                 <p className="text-sm">Harness the power of nature for healing</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Wellness Activity Images */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
+            <div className="relative">
+              <img
+                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=200&fit=crop&crop=center"
+                alt="Yoga and stretching for flexibility"
+                className="w-full h-32 object-cover rounded-xl shadow-md"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-xl"></div>
+              <div className="absolute bottom-2 left-2 right-2 text-white">
+                <h5 className="font-semibold text-sm">Yoga & Stretching</h5>
+              </div>
+            </div>
+
+            <div className="relative">
+              <img
+                src="https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?w=300&h=200&fit=crop&crop=center"
+                alt="Meditation and mindfulness practice"
+                className="w-full h-32 object-cover rounded-xl shadow-md"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-xl"></div>
+              <div className="absolute bottom-2 left-2 right-2 text-white">
+                <h5 className="font-semibold text-sm">Meditation</h5>
+              </div>
+            </div>
+
+            <div className="relative">
+              <img
+                src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&h=200&fit=crop&crop=center"
+                alt="Essential oils and aromatherapy"
+                className="w-full h-32 object-cover rounded-xl shadow-md"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-xl"></div>
+              <div className="absolute bottom-2 left-2 right-2 text-white">
+                <h5 className="font-semibold text-sm">Aromatherapy</h5>
+              </div>
+            </div>
+
+            <div className="relative">
+              <img
+                src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=300&h=200&fit=crop&crop=center"
+                alt="Natural skincare and self-care"
+                className="w-full h-32 object-cover rounded-xl shadow-md"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-xl"></div>
+              <div className="absolute bottom-2 left-2 right-2 text-white">
+                <h5 className="font-semibold text-sm">Self-Care</h5>
               </div>
             </div>
           </div>

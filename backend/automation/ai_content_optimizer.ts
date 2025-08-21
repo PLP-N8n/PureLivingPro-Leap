@@ -1,10 +1,8 @@
 import { api } from "encore.dev/api";
-import { secret } from "encore.dev/config";
 import { automationDB } from "./db";
 import { contentDB } from "../content/db";
 import { affiliateDB } from "../affiliate/db";
-
-const openAIKey = secret("OpenAIKey");
+import { openAIKey } from "./secrets";
 
 interface ContentOptimizationRequest {
   articleId: number;

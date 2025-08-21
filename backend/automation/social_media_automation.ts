@@ -1,9 +1,7 @@
 import { api } from "encore.dev/api";
-import { secret } from "encore.dev/config";
 import { automationDB } from "./db";
 import { contentDB } from "../content/db";
-
-const openAIKey = secret("OpenAIKey");
+import { openAIKey } from "./secrets";
 
 interface SocialMediaPost {
   platform: string;

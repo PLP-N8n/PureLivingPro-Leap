@@ -124,6 +124,7 @@ export function ProductRecommendations() {
                     product={rec.product}
                     reason={rec.reason}
                     confidenceScore={rec.confidenceScore}
+                    contentId="ai_recommendations"
                     onAffiliateClick={handleAffiliateClick}
                   />
                 ))}

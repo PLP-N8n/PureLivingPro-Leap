@@ -2,6 +2,7 @@ import { ExternalLink, Star, DollarSign } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { handleProductClick, getSessionId } from "../utils/affiliate";
 
 interface Product {
   id: number;
@@ -21,6 +22,7 @@ interface ProductCardProps {
   product: Product;
   reason?: string;
   confidenceScore?: number;
+  contentId?: string;
   onAffiliateClick?: (productId: number) => void;
 }
 
@@ -28,14 +30,21 @@ export function ProductCard({
   product, 
   reason, 
   confidenceScore,
+  contentId,
   onAffiliateClick 
 }: ProductCardProps) {
-  const handleAffiliateClick = () => {
+  const handleClick = () => {
+    // Call the enhanced affiliate click handler
+    handleProductClick(product, {
+      contentId,
+      campaign: 'product_recommendation',
+      source: 'product_card'
+    });
+    
+    // Call the optional callback
     if (onAffiliateClick) {
       onAffiliateClick(product.id);
     }
-    // Open affiliate link in new tab
-    window.open(product.affiliateUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -47,6 +56,7 @@ export function ProductCard({
               src={product.imageUrl}
               alt={product.name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
             />
             {product.category && (
               <Badge className="absolute top-2 left-2 bg-green-600">
@@ -98,7 +108,7 @@ export function ProductCard({
         </div>
 
         <Button 
-          onClick={handleAffiliateClick}
+          onClick={handleClick}
           className="w-full bg-green-600 hover:bg-green-700"
         >
           <ExternalLink className="h-4 w-4 mr-2" />

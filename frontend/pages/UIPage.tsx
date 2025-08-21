@@ -30,6 +30,10 @@ import {
   CheckCircle,
   Info,
 } from "lucide-react";
+import { MotionWrapper } from "../components/design-system/MotionWrapper";
+import { motion } from "framer-motion";
+import { useMotion } from "../providers/MotionProvider";
+import { motionContract } from "../lib/motion";
 
 const ColorSwatch = ({ name, className }: { name: string; className: string }) => (
   <div className="flex items-center gap-4">
@@ -40,6 +44,26 @@ const ColorSwatch = ({ name, className }: { name: string; className: string }) =
     </div>
   </div>
 );
+
+const MotionHoverCard = () => {
+  const { isReducedMotion } = useMotion();
+
+  const hoverVariant = isReducedMotion ? {} : motionContract.hoverCard;
+  const tapVariant = isReducedMotion ? {} : motionContract.tap;
+
+  return (
+    <motion.div whileHover={hoverVariant} whileTap={tapVariant}>
+      <Card className="w-full md:w-1/2 transition-shadow duration-200 ease-out hover:shadow-2xl">
+        <CardHeader>
+          <CardTitle>Hover Me</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>This demonstrates the `hoverCard` and `tap` motion contracts.</p>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
 
 export function UIPage() {
   return (
@@ -169,6 +193,29 @@ export function UIPage() {
             <Input type="email" placeholder="Email" />
             <Input type="password" placeholder="Password" />
             {/* NewsletterSignup component would be rendered here */}
+          </div>
+        </section>
+
+        {/* Motion & Animation Section */}
+        <section>
+          <h2 className="text-3xl font-bold font-display mb-6">Motion & Animation</h2>
+          <div className="space-y-8">
+            <MotionWrapper>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Scroll Reveal</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p>This card fades and slides in when it enters the viewport, if motion is enabled.</p>
+                </CardContent>
+              </Card>
+            </MotionWrapper>
+
+            <div>
+              <h3 className="text-xl font-bold font-display mb-4">Hover & Tap</h3>
+              <p className="text-muted-foreground mb-4">This card lifts on hover and shrinks on tap.</p>
+              <MotionHoverCard />
+            </div>
           </div>
         </section>
 

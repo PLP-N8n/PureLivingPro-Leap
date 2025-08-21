@@ -1,4 +1,5 @@
 import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 import {
   LayoutDashboard,
   Newspaper,
@@ -16,6 +17,7 @@ import { BlogManagement } from "../components/admin/BlogManagement";
 import { ProductManagement } from "../components/admin/ProductManagement";
 import { AutomationDashboard } from "../components/admin/AutomationDashboard";
 import { SettingsDashboard } from "../components/admin/SettingsDashboard";
+import { useAnalytics } from "../hooks/useAnalytics";
 
 const navItems = [
   { name: "Overview", href: "overview", icon: LayoutDashboard },
@@ -29,6 +31,12 @@ const navItems = [
 export function AdminPage() {
   const [searchParams] = useSearchParams();
   const activeTab = searchParams.get("tab") || "overview";
+  const { trackPageView } = useAnalytics();
+
+  useEffect(() => {
+    // Track page view with error handling
+    trackPageView(`/admin?tab=${activeTab}`);
+  }, [activeTab, trackPageView]);
 
   const renderContent = () => {
     switch (activeTab) {

@@ -18,7 +18,8 @@ export function useAnalytics() {
         sessionId,
       });
     } catch (error) {
-      console.error('Failed to track page view:', error);
+      // Silently fail analytics tracking to prevent app crashes
+      console.warn('Analytics tracking failed:', error);
     }
   }, []);
 
@@ -37,7 +38,8 @@ export function useAnalytics() {
         sessionId,
       });
     } catch (error) {
-      console.error('Failed to track search:', error);
+      // Silently fail analytics tracking to prevent app crashes
+      console.warn('Search tracking failed:', error);
     }
   }, []);
 

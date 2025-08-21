@@ -22,39 +22,50 @@ import {
 import { LoadingSpinner } from "../LoadingSpinner";
 
 export function OverviewDashboard() {
-  const { data: analytics, isLoading: analyticsLoading } = useQuery({
+  const { data: analytics, isLoading: analyticsLoading, error: analyticsError } = useQuery({
     queryKey: ["admin", "analytics"],
     queryFn: () => backend.analytics.getAnalyticsSummary(),
+    retry: false,
+    refetchOnWindowFocus: false,
   });
 
-  const { data: affiliateStats, isLoading: affiliateLoading } = useQuery({
+  const { data: affiliateStats, isLoading: affiliateLoading, error: affiliateError } = useQuery({
     queryKey: ["admin", "affiliate-stats"],
     queryFn: () => backend.affiliate.getAffiliateStats(),
+    retry: false,
+    refetchOnWindowFocus: false,
   });
 
-  const { data: articles } = useQuery({
+  const { data: articles, error: articlesError } = useQuery({
     queryKey: ["admin", "articles"],
     queryFn: () => backend.content.listArticles({ limit: 1 }),
+    retry: false,
+    refetchOnWindowFocus: false,
   });
 
-  const { data: weeklyReport } = useQuery({
+  const { data: weeklyReport, error: weeklyReportError } = useQuery({
     queryKey: ["automation", "weekly-report"],
     queryFn: () => backend.automation.generateWeeklyReport(),
+    retry: false,
+    refetchOnWindowFocus: false,
   });
 
-  const { data: revenueAnalysis } = useQuery({
+  const { data: revenueAnalysis, error: revenueError } = useQuery({
     queryKey: ["automation", "revenue-analysis"],
     queryFn: () => backend.automation.analyzeRevenue(),
+    retry: false,
+    refetchOnWindowFocus: false,
   });
-
-  if (analyticsLoading || affiliateLoading) {
-    return <LoadingSpinner size="lg" />;
-  }
 
   const monthlyTarget = 2000; // £2,000 target
   const currentRevenue = revenueAnalysis?.currentMonthRevenue || 0;
   const projectedRevenue = revenueAnalysis?.projectedMonthlyRevenue || 0;
   const progressPercentage = (projectedRevenue / monthlyTarget) * 100;
+
+  // Show loading state only if all queries are loading
+  if (analyticsLoading && affiliateLoading) {
+    return <LoadingSpinner size="lg" />;
+  }
 
   return (
     <div className="space-y-8">
@@ -62,6 +73,40 @@ export function OverviewDashboard() {
         <h1 className="text-3xl font-bold text-gray-900">Revenue Dashboard</h1>
         <p className="text-gray-600">Autonomous revenue generation system overview and performance metrics.</p>
       </div>
+
+      {/* Error Messages */}
+      {(analyticsError || affiliateError || articlesError || weeklyReportError || revenueError) && (
+        <Card className="border-yellow-200 bg-yellow-50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-yellow-800">
+              <AlertTriangle className="h-5 w-5" />
+              Service Status
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2 text-sm">
+              {analyticsError && (
+                <p className="text-yellow-700">• Analytics service unavailable</p>
+              )}
+              {affiliateError && (
+                <p className="text-yellow-700">• Affiliate tracking service unavailable</p>
+              )}
+              {articlesError && (
+                <p className="text-yellow-700">• Content service unavailable</p>
+              )}
+              {weeklyReportError && (
+                <p className="text-yellow-700">• Automation reporting unavailable</p>
+              )}
+              {revenueError && (
+                <p className="text-yellow-700">• Revenue analysis unavailable</p>
+              )}
+              <p className="text-yellow-600 mt-2">
+                Some features may be limited. The system will continue to function with available services.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Revenue Progress */}
       <Card className="border-green-200 bg-green-50">
@@ -172,6 +217,11 @@ export function OverviewDashboard() {
                   </div>
                 ))}
               </div>
+            ) : weeklyReportError ? (
+              <div className="text-center py-4">
+                <p className="text-gray-500">AI recommendations unavailable</p>
+                <p className="text-sm text-gray-400">Check automation service status</p>
+              </div>
             ) : (
               <LoadingSpinner />
             )}
@@ -206,6 +256,10 @@ export function OverviewDashboard() {
                     </div>
                   </div>
                 ))}
+              </div>
+            ) : revenueError ? (
+              <div className="text-center py-4">
+                <p className="text-gray-500">Revenue data unavailable</p>
               </div>
             ) : (
               <LoadingSpinner />

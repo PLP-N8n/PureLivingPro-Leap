@@ -20,7 +20,21 @@ export function Footer() {
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center space-x-4 mb-8 group">
               <div className="relative">
-                <div className="w-14 h-14 bg-gradient-to-br from-green-500 via-green-600 to-lime-500 rounded-2xl flex items-center justify-center shadow-xl">
+                <img
+                  src="/logo.svg"
+                  alt="Pure Living Pro Logo"
+                  className="w-14 h-14 shadow-xl"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/logo.png";
+                    target.onerror = () => {
+                      target.style.display = "none";
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = "flex";
+                    };
+                  }}
+                />
+                <div className="w-14 h-14 bg-gradient-to-br from-green-500 via-green-600 to-lime-500 rounded-2xl flex items-center justify-center shadow-xl" style={{ display: "none" }}>
                   <Sparkles className="h-8 w-8 text-white animate-pulse" />
                 </div>
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-lime-400 to-green-400 rounded-full animate-bounce"></div>

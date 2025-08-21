@@ -65,7 +65,21 @@ export function AdminPage() {
           <aside className="w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white min-h-screen p-4 flex flex-col justify-between shadow-2xl">
             <div>
               <div className="mb-8 flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-lime-600 rounded-xl flex items-center justify-center shadow-lg">
+                <img
+                  src="/logo.svg"
+                  alt="Pure Living Pro Logo"
+                  className="w-10 h-10 shadow-lg"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/logo.png";
+                    target.onerror = () => {
+                      target.style.display = "none";
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = "flex";
+                    };
+                  }}
+                />
+                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-lime-600 rounded-xl flex items-center justify-center shadow-lg" style={{ display: "none" }}>
                   <Sparkles className="h-6 w-6 text-white" />
                 </div>
                 <div>

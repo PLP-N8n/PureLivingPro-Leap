@@ -22,7 +22,7 @@ export function SEOHead({
     "holistic wellness", "preventive healthcare", "wellness technology", "health optimization",
     "nutrition planning", "fitness tracking", "mental wellness", "lifestyle medicine"
   ],
-  image = "/og-image.jpg",
+  image = "/logo.png",
   url = "https://purelivingpro.com",
   type = "website",
   publishedTime,
@@ -40,6 +40,11 @@ export function SEOHead({
       <meta name="keywords" content={keywords.join(", ")} />
       <meta name="author" content={author || "Pure Living Pro"} />
       <link rel="canonical" href={url} />
+
+      {/* Favicon and Logo */}
+      <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+      <link rel="icon" type="image/png" href="/logo.png" />
+      <link rel="apple-touch-icon" href="/logo.png" />
 
       {/* Enhanced SEO Meta Tags */}
       <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />

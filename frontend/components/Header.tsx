@@ -15,7 +15,23 @@ export function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 via-green-600 to-lime-600 rounded-2xl flex items-center justify-center shadow-xl transform rotate-3 group-hover:rotate-6 transition-transform duration-300">
+              <img
+                src="/logo.svg"
+                alt="Pure Living Pro Logo"
+                className="w-12 h-12 transform rotate-3 group-hover:rotate-6 transition-transform duration-300"
+                onError={(e) => {
+                  // Fallback to PNG if SVG fails
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/logo.png";
+                  target.onerror = () => {
+                    // Final fallback to icon if both fail
+                    target.style.display = "none";
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.style.display = "flex";
+                  };
+                }}
+              />
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 via-green-600 to-lime-600 rounded-2xl flex items-center justify-center shadow-xl transform rotate-3 group-hover:rotate-6 transition-transform duration-300" style={{ display: "none" }}>
                 <Sparkles className="h-7 w-7 text-white animate-pulse" />
               </div>
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-lime-400 to-green-400 rounded-full animate-bounce"></div>
@@ -79,7 +95,21 @@ export function Header() {
               </SheetTrigger>
               <SheetContent className="w-80 bg-white/95 backdrop-blur-xl">
                 <div className="flex items-center space-x-3 mb-8">
-                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-lime-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <img
+                    src="/logo.svg"
+                    alt="Pure Living Pro Logo"
+                    className="w-10 h-10"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/logo.png";
+                      target.onerror = () => {
+                        target.style.display = "none";
+                        const fallback = target.nextElementSibling as HTMLElement;
+                        if (fallback) fallback.style.display = "flex";
+                      };
+                    }}
+                  />
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-lime-600 rounded-xl flex items-center justify-center shadow-lg" style={{ display: "none" }}>
                     <Sparkles className="h-6 w-6 text-white" />
                   </div>
                   <div>

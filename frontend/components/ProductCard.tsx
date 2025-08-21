@@ -2,14 +2,16 @@ import { Star, DollarSign, ShoppingBag } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { handleProductClick } from "../utils/affiliate";
 import { motion } from "framer-motion";
 import { useMotion } from "../providers/MotionProvider";
 import { motionContract } from "../lib/motion";
+import { useAnalytics } from "../hooks/useAnalytics";
+import { Link } from "react-router-dom";
 
 interface Product {
   id: number;
   name: string;
+  slug: string;
   description?: string;
   price?: number;
   imageUrl?: string;
@@ -26,7 +28,6 @@ interface ProductCardProps {
   reason?: string;
   confidenceScore?: number;
   contentId?: string;
-  onAffiliateClick?: (productId: number) => void;
 }
 
 export function ProductCard({ 
@@ -34,20 +35,14 @@ export function ProductCard({
   reason, 
   confidenceScore,
   contentId,
-  onAffiliateClick 
 }: ProductCardProps) {
   const { isReducedMotion } = useMotion();
+  const { trackAffiliateClick } = useAnalytics();
 
-  const handleClick = () => {
-    handleProductClick(product, {
-      contentId,
-      campaign: 'product_recommendation',
-      source: 'product_card'
-    });
-    
-    if (onAffiliateClick) {
-      onAffiliateClick(product.id);
-    }
+  const handleAffiliateLinkClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    trackAffiliateClick(product.id, product.affiliateUrl, contentId);
+    window.open(product.affiliateUrl, '_blank', 'noopener,noreferrer,sponsored');
   };
 
   const getProductImage = () => {
@@ -70,33 +65,37 @@ export function ProductCard({
     <motion.div whileHover={cardHover} className="h-full">
       <Card className="h-full flex flex-col transition-shadow duration-300 hover:shadow-2xl border-0 bg-white/90 backdrop-blur-sm relative overflow-hidden rounded-2xl">
         <CardHeader className="p-0 relative">
-          <div className="relative h-64 overflow-hidden rounded-t-2xl">
-            <motion.img
-              src={getProductImage()}
-              alt={product.name}
-              className="w-full h-full object-cover"
-              whileHover={imageHover}
-              transition={{ duration: 0.7, ease: "easeOut" }}
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
-            {product.category && (
-              <Badge className="absolute top-4 left-4 bg-white/95 text-slate-700 backdrop-blur-sm border-0 shadow-lg font-semibold">
-                {product.category}
-              </Badge>
-            )}
-            {confidenceScore && confidenceScore > 0.8 && (
-              <Badge className="absolute top-4 right-4 bg-gradient-to-r from-green-500 to-lime-600 text-white border-0 shadow-xl animate-pulse">
-                <Star className="h-3 w-3 mr-1" />
-                Top Pick
-              </Badge>
-            )}
-          </div>
+          <Link to={`/picks/${product.slug}`} className="block">
+            <div className="relative h-64 overflow-hidden rounded-t-2xl">
+              <motion.img
+                src={getProductImage()}
+                alt={product.name}
+                className="w-full h-full object-cover"
+                whileHover={imageHover}
+                transition={{ duration: 0.7, ease: "easeOut" }}
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+              {product.category && (
+                <Badge className="absolute top-4 left-4 bg-white/95 text-slate-700 backdrop-blur-sm border-0 shadow-lg font-semibold">
+                  {product.category}
+                </Badge>
+              )}
+              {confidenceScore && confidenceScore > 0.8 && (
+                <Badge className="absolute top-4 right-4 bg-gradient-to-r from-green-500 to-lime-600 text-white border-0 shadow-xl animate-pulse">
+                  <Star className="h-3 w-3 mr-1" />
+                  Top Pick
+                </Badge>
+              )}
+            </div>
+          </Link>
         </CardHeader>
         <CardContent className="p-8 relative z-10 flex flex-col flex-grow">
-          <h3 className="font-black text-xl text-slate-900 mb-4 group-hover:text-primary transition-colors leading-tight">
-            {product.name}
-          </h3>
+          <Link to={`/picks/${product.slug}`} className="block">
+            <h3 className="font-black text-xl text-slate-900 mb-4 group-hover:text-primary transition-colors leading-tight">
+              {product.name}
+            </h3>
+          </Link>
           {product.description && (
             <p className="text-slate-600 mb-6 line-clamp-3 leading-relaxed flex-grow">
               {product.description}
@@ -116,11 +115,13 @@ export function ProductCard({
             )}
           </div>
           <Button 
-            onClick={handleClick}
+            asChild
             className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-300 h-14 text-base font-bold rounded-xl transform hover:scale-105"
           >
-            <ShoppingBag className="h-5 w-5 mr-3" />
-            View Product
+            <a href={product.affiliateUrl} onClick={handleAffiliateLinkClick} target="_blank" rel="nofollow sponsored">
+              <ShoppingBag className="h-5 w-5 mr-3" />
+              View on Amazon
+            </a>
           </Button>
         </CardContent>
       </Card>

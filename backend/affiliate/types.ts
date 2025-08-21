@@ -16,6 +16,7 @@ export interface AffiliateProduct {
   id: number;
   programId: number;
   name: string;
+  slug: string;
   description?: string;
   price?: number;
   originalUrl: string;
@@ -76,6 +77,7 @@ export interface ListAffiliateProgramsResponse {
 export interface CreateAffiliateProductRequest {
   programId: number;
   name: string;
+  slug: string;
   description?: string;
   price?: number;
   originalUrl: string;
@@ -88,6 +90,7 @@ export interface CreateAffiliateProductRequest {
 export interface UpdateAffiliateProductRequest {
   programId?: number;
   name?: string;
+  slug?: string;
   description?: string;
   price?: number;
   originalUrl?: string;

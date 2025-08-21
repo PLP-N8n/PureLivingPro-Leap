@@ -2,69 +2,71 @@ import { Link } from "react-router-dom";
 import { Search, Menu, User, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SearchBar } from "./SearchBar";
+import { cn } from "@/lib/utils";
 
 export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="bg-white/80 backdrop-blur-xl border-b border-green-200/50 sticky top-0 z-50 shadow-lg shadow-green-200/20">
+    <header className={cn(
+      "bg-white/80 backdrop-blur-xl border-b border-green-200/50 sticky top-0 z-50 transition-all duration-300",
+      isScrolled ? "shadow-lg shadow-green-200/20 h-16" : "h-20"
+    )}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-full">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
               <img
                 src="/logo.svg"
                 alt="Pure Living Pro Logo"
-                className="w-12 h-12 transform rotate-3 group-hover:rotate-6 transition-transform duration-300"
+                className={cn("transform rotate-3 group-hover:rotate-6 transition-all duration-300", isScrolled ? "w-10 h-10" : "w-12 h-12")}
                 onError={(e) => {
-                  // Fallback to PNG if SVG fails
                   const target = e.target as HTMLImageElement;
                   target.src = "/logo.png";
                   target.onerror = () => {
-                    // Final fallback to icon if both fail
                     target.style.display = "none";
                     const fallback = target.nextElementSibling as HTMLElement;
                     if (fallback) fallback.style.display = "flex";
                   };
                 }}
               />
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 via-green-600 to-lime-600 rounded-2xl flex items-center justify-center shadow-xl transform rotate-3 group-hover:rotate-6 transition-transform duration-300" style={{ display: "none" }}>
-                <Sparkles className="h-7 w-7 text-white animate-pulse" />
+              <div className={cn("bg-gradient-to-br from-green-500 via-green-600 to-lime-600 rounded-2xl flex items-center justify-center shadow-xl transform rotate-3 group-hover:rotate-6 transition-all duration-300", isScrolled ? "w-10 h-10" : "w-12 h-12")} style={{ display: "none" }}>
+                <Sparkles className={cn("text-white animate-pulse", isScrolled ? "h-6 w-6" : "h-7 w-7")} />
               </div>
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-lime-400 to-green-400 rounded-full animate-bounce"></div>
             </div>
             <div>
               <span className="text-2xl font-bold bg-gradient-to-r from-green-600 via-green-700 to-lime-600 bg-clip-text text-transparent">
                 Pure Living Pro
               </span>
-              <div className="text-xs text-slate-500 font-medium">Wellness Redefined</div>
+              <div className={cn("text-xs text-slate-500 font-medium transition-opacity duration-300", isScrolled ? "opacity-0" : "opacity-100")}>Wellness Redefined</div>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-2">
-            <Link to="/" className="relative px-4 py-2 text-slate-700 hover:text-green-600 rounded-xl transition-all duration-300 font-medium group">
-              <span className="relative z-10">Home</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-green-50 to-lime-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-95 group-hover:scale-100"></div>
+            <Link to="/insights" className="relative px-4 py-2 text-slate-700 hover:text-primary rounded-xl transition-all duration-300 font-medium group">
+              <span className="relative z-10">Insights</span>
+              <div className="absolute inset-0 bg-primary/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-95 group-hover:scale-100"></div>
             </Link>
-            <Link to="/blog" className="relative px-4 py-2 text-slate-700 hover:text-green-600 rounded-xl transition-all duration-300 font-medium group">
-              <span className="relative z-10">Blog</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-green-50 to-lime-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-95 group-hover:scale-100"></div>
+            <Link to="/picks" className="relative px-4 py-2 text-slate-700 hover:text-primary rounded-xl transition-all duration-300 font-medium group">
+              <span className="relative z-10">Our Picks</span>
+              <div className="absolute inset-0 bg-primary/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-95 group-hover:scale-100"></div>
             </Link>
-            <Link to="/products" className="relative px-4 py-2 text-slate-700 hover:text-green-600 rounded-xl transition-all duration-300 font-medium group">
-              <span className="relative z-10">Products</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-green-50 to-lime-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-95 group-hover:scale-100"></div>
-            </Link>
-            <Link to="/wellness-plan" className="relative px-4 py-2 text-slate-700 hover:text-green-600 rounded-xl transition-all duration-300 font-medium group">
-              <span className="relative z-10">Wellness Plan</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-green-50 to-lime-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-95 group-hover:scale-100"></div>
-            </Link>
-            <Link to="/dashboard" className="relative px-4 py-2 text-slate-700 hover:text-green-600 rounded-xl transition-all duration-300 font-medium group">
-              <span className="relative z-10">Dashboard</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-green-50 to-lime-50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-95 group-hover:scale-100"></div>
+            <Link to="/about" className="relative px-4 py-2 text-slate-700 hover:text-primary rounded-xl transition-all duration-300 font-medium group">
+              <span className="relative z-10">About</span>
+              <div className="absolute inset-0 bg-primary/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-95 group-hover:scale-100"></div>
             </Link>
           </nav>
 
@@ -74,13 +76,13 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="hidden sm:flex h-12 w-12 p-0 hover:bg-green-100/80 rounded-full transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-xl"
+              className="hidden sm:flex h-10 w-10 p-0 hover:bg-primary/10 rounded-full transition-all duration-300 hover:scale-110"
             >
               <Search className="h-5 w-5 text-slate-600" />
             </Button>
             
             <Link to="/admin">
-              <Button variant="outline" size="sm" className="hidden sm:flex border-2 border-green-200/80 hover:border-green-500 hover:bg-green-50 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <Button variant="outline" size="sm" className="hidden sm:flex border-2 border-primary/20 hover:border-primary hover:bg-primary/10 backdrop-blur-sm shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-105">
                 <User className="h-4 w-4 mr-2" />
                 Admin
               </Button>
@@ -89,7 +91,7 @@ export function Header() {
             {/* Mobile Menu */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="md:hidden h-12 w-12 p-0 rounded-full hover:bg-green-100/80 transition-all duration-300 hover:scale-110">
+                <Button variant="ghost" size="sm" className="md:hidden h-10 w-10 p-0 rounded-full hover:bg-primary/10 transition-all duration-300 hover:scale-110">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
@@ -118,30 +120,24 @@ export function Header() {
                   </div>
                 </div>
                 <nav className="flex flex-col space-y-2">
-                  <Link to="/" className="px-4 py-3 text-slate-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-300 font-medium">
-                    Home
+                  <Link to="/insights" className="px-4 py-3 text-slate-700 hover:text-primary hover:bg-primary/10 rounded-xl transition-all duration-300 font-medium">
+                    Insights
                   </Link>
-                  <Link to="/blog" className="px-4 py-3 text-slate-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-300 font-medium">
-                    Blog
+                  <Link to="/picks" className="px-4 py-3 text-slate-700 hover:text-primary hover:bg-primary/10 rounded-xl transition-all duration-300 font-medium">
+                    Our Picks
                   </Link>
-                  <Link to="/products" className="px-4 py-3 text-slate-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-300 font-medium">
-                    Products
-                  </Link>
-                  <Link to="/wellness-plan" className="px-4 py-3 text-slate-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-300 font-medium">
-                    Wellness Plan
-                  </Link>
-                  <Link to="/dashboard" className="px-4 py-3 text-slate-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-300 font-medium">
-                    Dashboard
+                  <Link to="/about" className="px-4 py-3 text-slate-700 hover:text-primary hover:bg-primary/10 rounded-xl transition-all duration-300 font-medium">
+                    About
                   </Link>
                   <Button
                     variant="ghost"
                     onClick={() => setIsSearchOpen(true)}
-                    className="justify-start px-4 py-3 h-auto font-medium text-slate-700 hover:text-green-600 hover:bg-green-50 rounded-xl"
+                    className="justify-start px-4 py-3 h-auto font-medium text-slate-700 hover:text-primary hover:bg-primary/10 rounded-xl"
                   >
                     <Search className="h-4 w-4 mr-3" />
                     Search
                   </Button>
-                  <Link to="/admin" className="px-4 py-3 text-slate-700 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-300 font-medium">
+                  <Link to="/admin" className="px-4 py-3 text-slate-700 hover:text-primary hover:bg-primary/10 rounded-xl transition-all duration-300 font-medium">
                     <User className="h-4 w-4 mr-3 inline" />
                     Admin
                   </Link>

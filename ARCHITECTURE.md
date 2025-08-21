@@ -18,7 +18,7 @@ PureLivingPro is a comprehensive affiliate marketing website built with **Encore
 ## Architecture Principles
 
 1. **Microservices with Encore.ts**: Each domain (content, affiliate, analytics, AI, automation, seo, newsletter) is a separate service.
-2. **Type Safety**: End-to-end TypeScript with shared types between frontend and backend.
+2. **Type Safety**: End-to-end TypeScript with shared types between frontend and backend. Zod schemas are used for frontend validation.
 3. **Graceful Degradation**: System works without external API keys (AI, payments) and respects user motion preferences.
 4. **Performance First**: Optimized queries, caching, and lazy loading.
 5. **SEO Optimized**: Server-side sitemap generation and meta tag management.
@@ -61,25 +61,29 @@ frontend/
 │   └── design-system/  # Core design system components
 ├── pages/              # Page components
 │   ├── HomePage.tsx    # Landing page
-│   ├── ArticlePage.tsx # Individual article view
-│   └── UIPage.tsx      # Design system showcase
+│   ├── BlogPage.tsx    # Insights index (/insights)
+│   ├── ArticlePage.tsx # Post template (/insights/[slug])
+│   ├── ProductsPage.tsx # Our Picks list (/picks)
+│   ├── ProductDetailPage.tsx # Product detail (/picks/[slug])
+│   └── ...             # Other pages (About, Legal, etc.)
 ├── providers/          # React Context providers (e.g., MotionProvider)
-├── hooks/              # Custom React hooks
-├── utils/              # Utility functions
+├── hooks/              # Custom React hooks (useAnalytics, useDebounce)
+├── lib/                # Core utilities (utils.ts, schemas.ts)
+├── data/               # Static data and fixtures (fixtures.ts)
 ├── styles/             # Global styles and theming
-└── App.tsx             # Main app component
+└── App.tsx             # Main app component with routing
 ```
 
 ### Key Components
 
-#### Admin Dashboard (`frontend/pages/AdminPage.tsx` & `frontend/components/admin/*`)
-- A modular dashboard for managing content, products, and automation.
-
-#### Design System (`frontend/components/design-system/*`)
-- A library of reusable, brand-aligned components including `Hero`, `InsightCard`, `ProductCard`, `CTASection`, `NewsletterSignup`, and more.
-
 #### `ArticlePage.tsx`
-- Optimized for readability with features like a reading progress bar, table of contents, and clear typographic hierarchy to keep users engaged.
+- Optimized for readability with features like a reading progress bar, table of contents, breadcrumbs, and clear typographic hierarchy to keep users engaged.
+
+#### `BlogPage.tsx` (Insights)
+- Features client-side search and filtering by category, with sorting options for "Newest," "Most Read," and "Editor's Pick." An infinite scroll or pagination is used for loading articles.
+
+#### `ProductsPage.tsx` (Our Picks)
+- A filterable grid of affiliate products. Users can filter by category, tags (e.g., "budget-friendly"), and availability.
 
 ### Motion & Animation System
 - **Library**: `framer-motion` is used for all animations.
@@ -87,11 +91,15 @@ frontend/
 - **Motion Contract**: A centralized `motion.ts` file defines standard animation variants (e.g., `reveal`, `hoverCard`) to ensure consistency.
 - **Implementation**: Components like cards and sections use a `MotionWrapper` or directly use `motion` components to apply animations conditionally based on the `useMotion` context.
 
-### State Management
-
-- **TanStack Query**: Server state management and caching.
+### State Management & Data Fetching
+- **TanStack Query**: Server state management, caching, and data fetching from the Encore backend.
 - **React Router**: Client-side routing.
 - **React Hooks**: Local component state.
+- **Zod**: Frontend data validation, with schemas defined in `frontend/lib/schemas.ts`.
+
+### Analytics
+- A custom `useAnalytics` hook centralizes tracking logic.
+- Key events tracked: `ai:post_view`, `ai:cta_click`, `ai:affiliate_click`, `ai:newsletter_submit`.
 
 ## Data Flow
 

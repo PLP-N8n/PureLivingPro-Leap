@@ -18,13 +18,13 @@ SELECT * FROM (VALUES
 WHERE NOT EXISTS (SELECT 1 FROM affiliate_programs WHERE affiliate_programs.name = v.name);
 
 -- Add sample products (only if they don't exist)
-INSERT INTO affiliate_products (program_id, name, description, price, original_url, image_url, category, tags, is_active)
-SELECT p.id, v.name, v.description, v.price, v.original_url, v.image_url, v.category, v.tags, v.is_active
+INSERT INTO affiliate_products (program_id, name, slug, description, price, original_url, image_url, category, tags, is_active)
+SELECT p.id, v.name, v.slug, v.description, v.price, v.original_url, v.image_url, v.category, v.tags, v.is_active
 FROM (VALUES
-  ('Amazon Associates', 'Organic Multivitamin Complex', 'Complete daily multivitamin with organic ingredients', 29.99, 'https://amazon.com/dp/example1', 'https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400', 'supplements', ARRAY['vitamins', 'organic', 'daily'], true),
-  ('iHerb', 'Plant-Based Protein Powder', 'High-quality plant protein for fitness enthusiasts', 39.99, 'https://iherb.com/example2', 'https://images.unsplash.com/photo-1543353071-873f6b6a6a89?w=400', 'fitness', ARRAY['protein', 'plant-based', 'fitness'], true),
-  ('Vitacost', 'Omega-3 Fish Oil', 'Premium omega-3 supplement for heart health', 24.99, 'https://vitacost.com/example3', 'https://images.unsplash.com/photo-1627485695003-3380847a461a?w=400', 'supplements', ARRAY['omega-3', 'heart-health', 'fish-oil'], true),
-  ('Thrive Market', 'Organic Green Tea', 'Premium organic green tea for wellness', 19.99, 'https://thrivemarket.com/example4', 'https://images.unsplash.com/photo-1576092762791-d67b99ea27b2?w=400', 'wellness', ARRAY['tea', 'organic', 'antioxidants'], true)
-) AS v(program_name, name, description, price, original_url, image_url, category, tags, is_active)
+  ('Amazon Associates', 'Organic Multivitamin Complex', 'organic-multivitamin-complex', 'Complete daily multivitamin with organic ingredients', 29.99, 'https://amazon.com/dp/example1', 'https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400', 'supplements', ARRAY['vitamins', 'organic', 'daily'], true),
+  ('iHerb', 'Plant-Based Protein Powder', 'plant-based-protein-powder', 'High-quality plant protein for fitness enthusiasts', 39.99, 'https://iherb.com/example2', 'https://images.unsplash.com/photo-1543353071-873f6b6a6a89?w=400', 'fitness', ARRAY['protein', 'plant-based', 'fitness'], true),
+  ('Vitacost', 'Omega-3 Fish Oil', 'omega-3-fish-oil', 'Premium omega-3 supplement for heart health', 24.99, 'https://vitacost.com/example3', 'https://images.unsplash.com/photo-1627485695003-3380847a461a?w=400', 'supplements', ARRAY['omega-3', 'heart-health', 'fish-oil'], true),
+  ('Thrive Market', 'Organic Green Tea', 'organic-green-tea', 'Premium organic green tea for wellness', 19.99, 'https://thrivemarket.com/example4', 'https://images.unsplash.com/photo-1576092762791-d67b99ea27b2?w=400', 'wellness', ARRAY['tea', 'organic', 'antioxidants'], true)
+) AS v(program_name, name, slug, description, price, original_url, image_url, category, tags, is_active)
 JOIN affiliate_programs p ON p.name = v.program_name
 WHERE NOT EXISTS (SELECT 1 FROM affiliate_products WHERE affiliate_products.name = v.name);

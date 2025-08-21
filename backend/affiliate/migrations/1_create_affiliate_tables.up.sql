@@ -14,6 +14,7 @@ CREATE TABLE affiliate_products (
   id BIGSERIAL PRIMARY KEY,
   program_id BIGINT REFERENCES affiliate_programs(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
+  slug TEXT NOT NULL UNIQUE,
   description TEXT,
   price DOUBLE PRECISION,
   original_url TEXT NOT NULL,
@@ -58,6 +59,7 @@ CREATE TABLE affiliate_conversions (
   converted_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+CREATE INDEX idx_affiliate_products_slug ON affiliate_products(slug);
 CREATE INDEX idx_affiliate_links_short_code ON affiliate_links(short_code);
 CREATE INDEX idx_affiliate_clicks_link_id ON affiliate_clicks(link_id);
 CREATE INDEX idx_affiliate_clicks_clicked_at ON affiliate_clicks(clicked_at DESC);

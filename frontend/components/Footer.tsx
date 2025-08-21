@@ -64,22 +64,6 @@ export function Footer() {
               nutrition, fitness, and mindfulness through personalized insights and expert-curated content.
             </p>
             
-            {/* Contact Info */}
-            <div className="space-y-3 mb-8">
-              <div className="flex items-center gap-3 text-slate-300">
-                <Mail className="h-5 w-5 text-green-400" />
-                <span>hello@purelivingpro.com</span>
-              </div>
-              <div className="flex items-center gap-3 text-slate-300">
-                <Phone className="h-5 w-5 text-green-400" />
-                <span>+1 (555) 123-PURE</span>
-              </div>
-              <div className="flex items-center gap-3 text-slate-300">
-                <MapPin className="h-5 w-5 text-green-400" />
-                <span>San Francisco, CA</span>
-              </div>
-            </div>
-            
             {/* Social Links */}
             <div className="flex space-x-4">
               <a href="#" className="w-12 h-12 bg-slate-800/80 hover:bg-green-600 rounded-xl flex items-center justify-center transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110">
@@ -107,42 +91,27 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
-                  Expert Articles
+                <Link to="/insights" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
+                  Insights
                 </Link>
               </li>
               <li>
-                <Link to="/products" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
-                  Premium Products
+                <Link to="/picks" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
+                  Our Picks
                 </Link>
               </li>
               <li>
-                <Link to="/wellness-plan" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
-                  AI Wellness Plans
-                </Link>
-              </li>
-              <li>
-                <Link to="/dashboard" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
-                  Personal Dashboard
+                <Link to="/about" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
+                  About Us
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Legal */}
           <div>
-            <h3 className="text-xl font-black mb-8 text-white">Resources</h3>
+            <h3 className="text-xl font-black mb-8 text-white">Legal</h3>
             <ul className="space-y-4">
-              <li>
-                <Link to="/about" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
-                  About Our Mission
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
-                  Contact Support
-                </Link>
-              </li>
               <li>
                 <Link to="/privacy" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
                   Privacy Policy
@@ -154,13 +123,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/sitemap.xml" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
-                  Sitemap
-                </Link>
-              </li>
-              <li>
-                <Link to="/admin" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
-                  Admin Portal
+                <Link to="/affiliate-disclosure" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
+                  Affiliate Disclosure
                 </Link>
               </li>
               <li>
@@ -176,28 +140,12 @@ export function Footer() {
         <div className="border-t border-slate-700/50 mt-16 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-slate-400 text-base">
-              © {new Date().getFullYear()} Pure Living Pro. All rights reserved. Transforming lives through wellness technology.
+              © {new Date().getFullYear()} Pure Living Pro. All rights reserved.
             </p>
             <div className="flex items-center space-x-3 mt-4 md:mt-0">
               <span className="text-slate-400 text-sm">Crafted with</span>
               <Heart className="h-5 w-5 text-red-400 animate-pulse" />
               <span className="text-slate-400 text-sm">for your wellness journey</span>
-            </div>
-          </div>
-          
-          {/* Trust Badges */}
-          <div className="flex justify-center items-center gap-8 mt-8 pt-8 border-t border-slate-700/30">
-            <div className="text-center">
-              <div className="text-sm text-slate-400">🔒 SSL Secured</div>
-            </div>
-            <div className="text-center">
-              <div className="text-sm text-slate-400">🏆 Award Winning</div>
-            </div>
-            <div className="text-center">
-              <div className="text-sm text-slate-400">⚡ AI Powered</div>
-            </div>
-            <div className="text-center">
-              <div className="text-sm text-slate-400">🌱 Eco Friendly</div>
             </div>
           </div>
         </div>

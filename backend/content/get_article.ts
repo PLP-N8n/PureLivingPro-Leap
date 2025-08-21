@@ -8,7 +8,7 @@ interface GetArticleParams {
 
 // Retrieves a single article by slug and increments view count.
 export const getArticle = api<GetArticleParams, Article>(
-  { expose: true, method: "GET", path: "/articles/:slug" },
+  { expose: true, method: "GET", path: "/articles/by-slug/:slug" },
   async ({ slug }) => {
     // Get article with category
     const article = await contentDB.queryRow<Article & { categoryName?: string; categorySlug?: string }>`

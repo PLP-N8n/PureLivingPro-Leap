@@ -7,7 +7,7 @@ interface DeleteArticleParams {
 
 // Deletes an article.
 export const deleteArticle = api<DeleteArticleParams, void>(
-  { expose: true, method: "DELETE", path: "/articles/:id" },
+  { expose: true, method: "DELETE", path: "/articles/by-id/:id" },
   async ({ id }) => {
     const result = await contentDB.queryRow`
       DELETE FROM articles WHERE id = ${id} RETURNING id

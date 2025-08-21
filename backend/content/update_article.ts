@@ -8,7 +8,7 @@ interface UpdateArticleParams {
 
 // Updates an existing article.
 export const updateArticle = api<UpdateArticleParams & UpdateArticleRequest, Article>(
-  { expose: true, method: "PUT", path: "/articles/:id" },
+  { expose: true, method: "PUT", path: "/articles/by-id/:id" },
   async ({ id, ...req }) => {
     // Check if article exists
     const existingArticle = await contentDB.queryRow`

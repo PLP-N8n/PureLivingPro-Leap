@@ -12,7 +12,7 @@ interface GetRelatedArticlesRequest {
 
 // Retrieves articles related to the given article based on category and tags.
 export const getRelatedArticles = api<GetRelatedArticlesParams & GetRelatedArticlesRequest, ListArticlesResponse>(
-  { expose: true, method: "GET", path: "/articles/:slug/related" },
+  { expose: true, method: "GET", path: "/articles/by-slug/:slug/related" },
   async ({ slug, limit = 5 }) => {
     // First get the current article's category and tags
     const currentArticle = await contentDB.queryRow<{ id: number; categoryId?: number }>`

@@ -216,15 +216,15 @@ export function ArticlePage() {
         {recommendedProducts?.products && recommendedProducts.products.length > 0 && (
           <div className="my-12 p-6 bg-green-50 rounded-lg border border-green-200">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Recommended Products</h3>
-            <p className="text-gray-600 mb-6">
-              Products that complement this article and support your wellness journey
+            <p className="text-gray-600 mb-2">
+              Products that complement this article and support your wellness journey.
             </p>
+            <AffiliateDisclosure variant="inline" className="mb-6" />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {recommendedProducts.products.map((product) => (
                 <ProductCard key={product.id} product={product} contentId={article.slug} />
               ))}
             </div>
-            <AffiliateDisclosure className="mt-6" />
           </div>
         )}
 

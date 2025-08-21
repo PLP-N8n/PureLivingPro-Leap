@@ -118,7 +118,14 @@ export function ProductCard({
             asChild
             className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-300 h-14 text-base font-bold rounded-xl transform hover:scale-105"
           >
-            <a href={product.affiliateUrl} onClick={handleAffiliateLinkClick} target="_blank" rel="nofollow sponsored">
+            <a 
+              href={product.affiliateUrl} 
+              onClick={handleAffiliateLinkClick} 
+              target="_blank" 
+              rel="nofollow sponsored noopener"
+              data-product-id={product.id}
+              {...(contentId && { 'data-content-id': contentId })}
+            >
               <ShoppingBag className="h-5 w-5 mr-3" />
               View on Amazon
             </a>

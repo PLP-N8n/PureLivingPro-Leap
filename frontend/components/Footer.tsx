@@ -35,23 +35,23 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/category/nutrition" className="text-gray-400 hover:text-white transition-colors">
-                  Nutrition
+                <Link to="/blog" className="text-gray-400 hover:text-white transition-colors">
+                  Blog
                 </Link>
               </li>
               <li>
-                <Link to="/category/fitness" className="text-gray-400 hover:text-white transition-colors">
-                  Fitness
+                <Link to="/products" className="text-gray-400 hover:text-white transition-colors">
+                  Products
                 </Link>
               </li>
               <li>
-                <Link to="/category/wellness" className="text-gray-400 hover:text-white transition-colors">
-                  Wellness
+                <Link to="/wellness-plan" className="text-gray-400 hover:text-white transition-colors">
+                  Wellness Plan
                 </Link>
               </li>
               <li>
-                <Link to="/category/recipes" className="text-gray-400 hover:text-white transition-colors">
-                  Recipes
+                <Link to="/dashboard" className="text-gray-400 hover:text-white transition-colors">
+                  Dashboard
                 </Link>
               </li>
             </ul>
@@ -62,24 +62,29 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-4">Resources</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  About Us
-                </a>
+                <Link to="/about" className="text-gray-400 hover:text-white transition-colors">
+                  About
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/contact" className="text-gray-400 hover:text-white transition-colors">
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  Privacy Policy
-                </a>
+                <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">
+                  Privacy
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  Terms of Service
-                </a>
+                <Link to="/terms" className="text-gray-400 hover:text-white transition-colors">
+                  Terms
+                </Link>
+              </li>
+              <li>
+                <Link to="/sitemap.xml" className="text-gray-400 hover:text-white transition-colors">
+                  Sitemap
+                </Link>
               </li>
               <li>
                 <Link to="/admin" className="text-gray-400 hover:text-white transition-colors">

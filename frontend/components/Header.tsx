@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Leaf, Search, Menu } from "lucide-react";
+import { Leaf, Search, Menu, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
@@ -23,17 +23,17 @@ export function Header() {
             <Link to="/" className="text-gray-700 hover:text-green-600 transition-colors">
               Home
             </Link>
-            <Link to="/category/nutrition" className="text-gray-700 hover:text-green-600 transition-colors">
-              Nutrition
+            <Link to="/blog" className="text-gray-700 hover:text-green-600 transition-colors">
+              Blog
             </Link>
-            <Link to="/category/fitness" className="text-gray-700 hover:text-green-600 transition-colors">
-              Fitness
+            <Link to="/products" className="text-gray-700 hover:text-green-600 transition-colors">
+              Products
             </Link>
-            <Link to="/category/wellness" className="text-gray-700 hover:text-green-600 transition-colors">
-              Wellness
+            <Link to="/wellness-plan" className="text-gray-700 hover:text-green-600 transition-colors">
+              Wellness Plan
             </Link>
-            <Link to="/category/recipes" className="text-gray-700 hover:text-green-600 transition-colors">
-              Recipes
+            <Link to="/dashboard" className="text-gray-700 hover:text-green-600 transition-colors">
+              Dashboard
             </Link>
           </nav>
 
@@ -50,6 +50,7 @@ export function Header() {
             
             <Link to="/admin">
               <Button variant="outline" size="sm">
+                <User className="h-4 w-4 mr-2" />
                 Admin
               </Button>
             </Link>
@@ -66,17 +67,17 @@ export function Header() {
                   <Link to="/" className="text-gray-700 hover:text-green-600 transition-colors">
                     Home
                   </Link>
-                  <Link to="/category/nutrition" className="text-gray-700 hover:text-green-600 transition-colors">
-                    Nutrition
+                  <Link to="/blog" className="text-gray-700 hover:text-green-600 transition-colors">
+                    Blog
                   </Link>
-                  <Link to="/category/fitness" className="text-gray-700 hover:text-green-600 transition-colors">
-                    Fitness
+                  <Link to="/products" className="text-gray-700 hover:text-green-600 transition-colors">
+                    Products
                   </Link>
-                  <Link to="/category/wellness" className="text-gray-700 hover:text-green-600 transition-colors">
-                    Wellness
+                  <Link to="/wellness-plan" className="text-gray-700 hover:text-green-600 transition-colors">
+                    Wellness Plan
                   </Link>
-                  <Link to="/category/recipes" className="text-gray-700 hover:text-green-600 transition-colors">
-                    Recipes
+                  <Link to="/dashboard" className="text-gray-700 hover:text-green-600 transition-colors">
+                    Dashboard
                   </Link>
                   <Button
                     variant="ghost"

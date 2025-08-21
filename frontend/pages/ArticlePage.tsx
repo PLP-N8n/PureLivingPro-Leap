@@ -1,19 +1,21 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import backend from "~backend/client";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { RelatedArticles } from "../components/RelatedArticles";
+import { ProductCard } from "../components/ProductCard";
 import { SEOHead } from "../components/SEOHead";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Eye, User, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Calendar, Eye, User, ArrowLeft, Share2, Copy, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAnalytics } from "../hooks/useAnalytics";
+import { useToast } from "@/components/ui/use-toast";
 
 export function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
   const { trackPageView } = useAnalytics();
+  const { toast } = useToast();
 
   const { data: article, isLoading, error } = useQuery({
     queryKey: ["article", slug],
@@ -21,11 +23,51 @@ export function ArticlePage() {
     enabled: !!slug,
   });
 
+  const { data: recommendedProducts } = useQuery({
+    queryKey: ["article-recommended-products", article?.category?.slug],
+    queryFn: () => backend.affiliate.listAffiliateProducts({ 
+      category: article?.category?.slug || "wellness",
+      limit: 3 
+    }),
+    enabled: !!article,
+  });
+
   useEffect(() => {
     if (article) {
       trackPageView(`/article/${slug}`, article.id);
     }
   }, [article, slug, trackPageView]);
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: article?.title,
+          text: article?.excerpt,
+          url: window.location.href,
+        });
+      } catch (error) {
+        console.log('Error sharing:', error);
+      }
+    } else {
+      // Fallback to copying URL
+      handleCopyLink();
+    }
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({ title: "Link copied to clipboard!" });
+    } catch (error) {
+      console.error('Failed to copy link:', error);
+      toast({ title: "Failed to copy link", variant: "destructive" });
+    }
+  };
+
+  const handleAffiliateClick = (productId: number) => {
+    console.log(`Affiliate click tracked for product ${productId} from article ${article?.slug}`);
+  };
 
   if (isLoading) {
     return (
@@ -43,10 +85,10 @@ export function ArticlePage() {
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Article Not Found</h1>
             <p className="text-gray-600 mb-8">The article you're looking for doesn't exist.</p>
-            <Link to="/">
+            <Link to="/blog">
               <Button>
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Home
+                Back to Blog
               </Button>
             </Link>
           </div>
@@ -86,14 +128,46 @@ export function ArticlePage() {
       />
 
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Back Button */}
-        <Link to="/" className="inline-flex items-center text-green-600 hover:text-green-700 mb-8">
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Articles
-        </Link>
+        {/* Breadcrumbs */}
+        <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
+          <Link to="/" className="hover:text-green-600">Home</Link>
+          <span>/</span>
+          <Link to="/blog" className="hover:text-green-600">Blog</Link>
+          {article.category && (
+            <>
+              <span>/</span>
+              <Link to={`/blog?category=${article.category.id}`} className="hover:text-green-600">
+                {article.category.name}
+              </Link>
+            </>
+          )}
+          <span>/</span>
+          <span className="text-gray-900">{article.title}</span>
+        </nav>
 
         {/* Article Header */}
         <header className="mb-8">
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
+            {article.title}
+          </h1>
+
+          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-6">
+            <div className="flex items-center gap-1">
+              <User className="h-4 w-4" />
+              {article.authorName}
+            </div>
+            <div className="flex items-center gap-1">
+              <Calendar className="h-4 w-4" />
+              {formatDate(article.createdAt)}
+            </div>
+            <div className="flex items-center gap-1">
+              <Eye className="h-4 w-4" />
+              {article.viewCount} views
+            </div>
+            <span>•</span>
+            <span>5 min read</span>
+          </div>
+
           {article.featuredImageUrl && (
             <div className="relative h-64 md:h-96 rounded-lg overflow-hidden mb-8">
               <img
@@ -109,38 +183,26 @@ export function ArticlePage() {
             </div>
           )}
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-4">
-            {article.category && (
-              <Badge variant="secondary">
-                {article.category.name}
-              </Badge>
-            )}
-            <div className="flex items-center gap-1">
-              <Calendar className="h-4 w-4" />
-              {formatDate(article.createdAt)}
-            </div>
-            <div className="flex items-center gap-1">
-              <Eye className="h-4 w-4" />
-              {article.viewCount} views
-            </div>
-            <div className="flex items-center gap-1">
-              <User className="h-4 w-4" />
-              {article.authorName}
-            </div>
+          {/* Share Buttons */}
+          <div className="flex items-center gap-2 mb-6">
+            <Button variant="outline" size="sm" onClick={handleShare}>
+              <Share2 className="h-4 w-4 mr-2" />
+              Share
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleCopyLink}>
+              <Copy className="h-4 w-4 mr-2" />
+              Copy Link
+            </Button>
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
-            {article.title}
-          </h1>
-
           {article.excerpt && (
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-xl text-gray-600 leading-relaxed mb-6 p-4 bg-gray-50 rounded-lg border-l-4 border-green-600">
               {article.excerpt}
             </p>
           )}
 
           {article.tags && article.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-6">
+            <div className="flex flex-wrap gap-2 mb-6">
               {article.tags.map((tag) => (
                 <Badge key={tag.id} variant="outline">
                   {tag.name}
@@ -151,22 +213,78 @@ export function ArticlePage() {
         </header>
 
         {/* Article Content */}
-        <div className="prose prose-lg max-w-none">
+        <div className="prose prose-lg max-w-none mb-8">
           <div 
             dangerouslySetInnerHTML={{ __html: article.content }}
             className="text-gray-800 leading-relaxed"
           />
         </div>
 
+        {/* Recommended Products Section */}
+        {recommendedProducts?.products && recommendedProducts.products.length > 0 && (
+          <div className="my-12 p-6 bg-green-50 rounded-lg border border-green-200">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Recommended Products</h3>
+            <p className="text-gray-600 mb-6">
+              Products that complement this article and support your wellness journey
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {recommendedProducts.products.map((product) => (
+                <div key={product.id} className="bg-white rounded-lg p-4 border">
+                  {product.imageUrl && (
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="w-full h-32 object-cover rounded-md mb-3"
+                    />
+                  )}
+                  <h4 className="font-medium text-gray-900 mb-2">{product.name}</h4>
+                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                    {product.description}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    {product.price && (
+                      <span className="font-semibold text-green-600">
+                        ${product.price.toFixed(2)}
+                      </span>
+                    )}
+                    <Button
+                      size="sm"
+                      onClick={() => handleAffiliateClick(product.id)}
+                      className="bg-green-600 hover:bg-green-700"
+                    >
+                      View Product
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="flex justify-between items-center py-8 border-t border-gray-200">
+          <Button variant="outline" className="flex items-center gap-2">
+            <ChevronLeft className="h-4 w-4" />
+            Previous Post
+          </Button>
+          <Button variant="outline" className="flex items-center gap-2">
+            Next Post
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+
         {/* Author Info */}
         <footer className="mt-12 pt-8 border-t border-gray-200">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-              <User className="h-6 w-6 text-green-600" />
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+              <User className="h-8 w-8 text-green-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">{article.authorName}</h3>
+              <h3 className="font-semibold text-gray-900 text-lg">{article.authorName}</h3>
               <p className="text-gray-600">{article.authorEmail}</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Health and wellness expert passionate about helping others live their best lives.
+              </p>
             </div>
           </div>
         </footer>

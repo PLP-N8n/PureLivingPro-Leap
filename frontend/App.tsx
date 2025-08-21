@@ -6,10 +6,13 @@ import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { AIAssistant } from "./components/AIAssistant";
 import { HomePage } from "./pages/HomePage";
+import { BlogPage } from "./pages/BlogPage";
 import { ArticlePage } from "./pages/ArticlePage";
 import { CategoryPage } from "./pages/CategoryPage";
 import { SearchPage } from "./pages/SearchPage";
 import { ProductsPage } from "./pages/ProductsPage";
+import { WellnessPlanPage } from "./pages/WellnessPlanPage";
+import { DashboardPage } from "./pages/DashboardPage";
 import { AdminPage } from "./pages/AdminPage";
 
 const queryClient = new QueryClient();
@@ -24,11 +27,14 @@ export default function App() {
             <main className="flex-1">
               <Routes>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/blog" element={<BlogPage />} />
                 <Route path="/article/:slug" element={<ArticlePage />} />
                 <Route path="/category/:slug" element={<CategoryPage />} />
                 <Route path="/search" element={<SearchPage />} />
                 <Route path="/products" element={<ProductsPage />} />
                 <Route path="/products/:category" element={<ProductsPage />} />
+                <Route path="/wellness-plan" element={<WellnessPlanPage />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/admin" element={<AdminPage />} />
               </Routes>
             </main>

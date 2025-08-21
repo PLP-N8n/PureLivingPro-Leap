@@ -8,6 +8,7 @@ import {
   Settings,
   LineChart,
   LifeBuoy,
+  Sparkles,
 } from "lucide-react";
 import { SEOHead } from "../components/SEOHead";
 import { Link } from "react-router-dom";
@@ -58,23 +59,19 @@ export function AdminPage() {
   return (
     <>
       <SEOHead title="Admin Dashboard" />
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
         <div className="flex">
           {/* Sidebar */}
-          <aside className="w-64 bg-gray-800 text-white min-h-screen p-4 flex flex-col justify-between">
+          <aside className="w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white min-h-screen p-4 flex flex-col justify-between shadow-2xl">
             <div>
-              <div className="mb-8">
-                <img 
-                  src="/logo.png" 
-                  alt="Pure Living Pro" 
-                  className="h-8 w-auto mb-2"
-                  onError={(e) => {
-                    // Fallback to text if logo fails to load
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling!.style.display = 'block';
-                  }}
-                />
-                <h2 className="text-xl font-bold hidden">Admin Panel</h2>
+              <div className="mb-8 flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-lime-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Sparkles className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-green-400 to-lime-400 bg-clip-text text-transparent">Admin Panel</h2>
+                  <div className="text-xs text-slate-400">Pure Living Pro</div>
+                </div>
               </div>
               <nav className="space-y-2">
                 {navItems.map((item) => (
@@ -84,8 +81,8 @@ export function AdminPage() {
                     className={cn(
                       "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
                       activeTab === item.href
-                        ? "bg-green-600 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                        ? "bg-gradient-to-r from-green-600 to-lime-600 text-white shadow-lg"
+                        : "text-gray-300 hover:bg-slate-700 hover:text-white"
                     )}
                   >
                     <item.icon className="h-5 w-5" />
@@ -97,7 +94,7 @@ export function AdminPage() {
             <div>
               <Link
                 to="/help"
-                className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-slate-700 hover:text-white"
               >
                 <LifeBuoy className="h-5 w-5" />
                 Help & Support

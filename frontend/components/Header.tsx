@@ -15,29 +15,16 @@ export function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
-              <img 
-                src="/logo.svg" 
-                alt="Pure Living Pro - Your Ultimate Wellness Companion" 
-                className="h-12 w-auto transition-all duration-300 group-hover:scale-110 drop-shadow-lg"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.nextElementSibling!.style.display = 'flex';
-                }}
-              />
-              <div className="hidden items-center space-x-3">
-                <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 via-green-600 to-lime-600 rounded-2xl flex items-center justify-center shadow-xl transform rotate-3 group-hover:rotate-6 transition-transform duration-300">
-                    <Sparkles className="h-7 w-7 text-white animate-pulse" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-lime-400 to-green-400 rounded-full animate-bounce"></div>
-                </div>
-                <div>
-                  <span className="text-2xl font-bold bg-gradient-to-r from-green-600 via-green-700 to-lime-600 bg-clip-text text-transparent">
-                    Pure Living Pro
-                  </span>
-                  <div className="text-xs text-slate-500 font-medium">Wellness Redefined</div>
-                </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 via-green-600 to-lime-600 rounded-2xl flex items-center justify-center shadow-xl transform rotate-3 group-hover:rotate-6 transition-transform duration-300">
+                <Sparkles className="h-7 w-7 text-white animate-pulse" />
               </div>
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-lime-400 to-green-400 rounded-full animate-bounce"></div>
+            </div>
+            <div>
+              <span className="text-2xl font-bold bg-gradient-to-r from-green-600 via-green-700 to-lime-600 bg-clip-text text-transparent">
+                Pure Living Pro
+              </span>
+              <div className="text-xs text-slate-500 font-medium">Wellness Redefined</div>
             </div>
           </Link>
 

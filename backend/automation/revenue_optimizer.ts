@@ -202,9 +202,9 @@ function generateProductSuggestions(product: any): string[] {
   return suggestions;
 }
 
-// Automatically implements optimization actions.
-export const implementOptimizations = api<{ actions: string[] }, { implemented: number; failed: number }>(
-  { expose: true, method: "POST", path: "/automation/implement-optimizations" },
+// Automatically implements revenue optimization actions.
+export const implementRevenueOptimizations = api<{ actions: string[] }, { implemented: number; failed: number }>(
+  { expose: true, method: "POST", path: "/automation/implement-revenue-optimizations" },
   async (req) => {
     let implemented = 0;
     let failed = 0;

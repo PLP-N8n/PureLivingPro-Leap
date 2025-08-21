@@ -163,6 +163,11 @@ export function Footer() {
                   Admin Portal
                 </Link>
               </li>
+              <li>
+                <Link to="/theme" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
+                  Theme Switcher
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

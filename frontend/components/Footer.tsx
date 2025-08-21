@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Youtube, Sparkles, Heart, Mail, Phone, MapPin } from "lucide-react";
+import { EmailSignupForm } from "./EmailSignupForm";
 
 export function Footer() {
   return (
@@ -15,6 +16,17 @@ export function Footer() {
       </div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        {/* Newsletter Signup */}
+        <div className="bg-white/10 backdrop-blur-md p-10 rounded-3xl mb-20 text-center border border-white/10 shadow-2xl">
+          <h2 className="text-4xl font-black text-white mb-4">Join the Wellness Circle</h2>
+          <p className="text-slate-300 max-w-2xl mx-auto mb-8 text-lg">
+            Get exclusive wellness tips, product recommendations, and early access to content delivered straight to your inbox.
+          </p>
+          <div className="flex justify-center">
+            <EmailSignupForm />
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2">

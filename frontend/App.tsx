@@ -14,6 +14,7 @@ import { ProductsPage } from "./pages/ProductsPage";
 import { WellnessPlanPage } from "./pages/WellnessPlanPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { AdminPage } from "./pages/AdminPage";
+import { AboutPage } from "./pages/AboutPage";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ export default function App() {
                 <Route path="/wellness-plan" element={<WellnessPlanPage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/admin" element={<AdminPage />} />
+                <Route path="/about" element={<AboutPage />} />
               </Routes>
             </main>
             <Footer />

@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Eye, User, ArrowLeft, Share2, Copy, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAnalytics } from "../hooks/useAnalytics";
 import { useToast } from "@/components/ui/use-toast";
+import { ReadingProgressBar } from "../components/ReadingProgressBar";
+import { AffiliateDisclosure } from "../components/AffiliateDisclosure";
 
 export function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -126,6 +128,7 @@ export function ArticlePage() {
         author={article.authorName}
         section={article.category?.name}
       />
+      <ReadingProgressBar />
 
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumbs */}
@@ -258,6 +261,7 @@ export function ArticlePage() {
                 </div>
               ))}
             </div>
+            <AffiliateDisclosure className="mt-6" />
           </div>
         )}
 

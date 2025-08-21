@@ -1,10 +1,11 @@
 import { api } from "encore.dev/api";
+import { Query } from "encore.dev/api";
 import { contentDB } from "./db";
 import type { ListArticlesResponse, Article } from "./types";
 
 interface GetPopularArticlesRequest {
-  limit?: number;
-  days?: number;
+  limit?: Query<number>;
+  days?: Query<number>;
 }
 
 // Retrieves the most popular articles based on view count within a specified time period.
@@ -14,7 +15,11 @@ export const getPopularArticles = api<GetPopularArticlesRequest, ListArticlesRes
     const limit = req.limit || 10;
     const days = req.days || 30;
 
-    const articles = await contentDB.rawQueryAll<Article & { categoryName?: string; categorySlug?: string }>`
+    // Calculate the date threshold
+    const dateThreshold = new Date();
+    dateThreshold.setDate(dateThreshold.getDate() - days);
+
+    const articles = await contentDB.queryAll<Article & { categoryName?: string; categorySlug?: string }>`
       SELECT 
         a.id, a.title, a.slug, a.content, a.excerpt,
         a.featured_image_url as "featuredImageUrl", a.category_id as "categoryId",
@@ -25,7 +30,7 @@ export const getPopularArticles = api<GetPopularArticlesRequest, ListArticlesRes
       FROM articles a
       LEFT JOIN categories c ON a.category_id = c.id
       WHERE a.published = true 
-        AND a.created_at >= NOW() - INTERVAL '${days} days'
+        AND a.created_at >= ${dateThreshold.toISOString()}
       ORDER BY a.view_count DESC, a.created_at DESC
       LIMIT ${limit}
     `;

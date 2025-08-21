@@ -33,8 +33,8 @@ export function buildAffiliateUrl(shortCode: string, options: AffiliateUrlOption
  */
 export function trackAffiliateClick(productId: number, shortCode: string, contentId?: string) {
   // Track the click event
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'affiliate_click', {
+  if (typeof window !== 'undefined' && 'gtag' in window) {
+    (window as any).gtag('event', 'affiliate_click', {
       product_id: productId,
       short_code: shortCode,
       content_id: contentId,

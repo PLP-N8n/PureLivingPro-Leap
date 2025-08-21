@@ -14,10 +14,14 @@ interface RedirectRequest {
   referrer?: Header<"Referer">;
 }
 
+interface RedirectResponse {
+  redirectUrl: string;
+}
+
 // Handles affiliate link redirects with tracking (matches /r/:id pattern from original architecture).
-export const handleRedirect = api<RedirectParams & RedirectRequest, void>(
+export const handleRedirect = api<RedirectParams & RedirectRequest, RedirectResponse>(
   { expose: true, method: "GET", path: "/r/:shortCode" },
-  async (req, res) => {
+  async (req) => {
     const { shortCode, contentId, sessionId, userAgent, xForwardedFor, referrer } = req;
     
     try {
@@ -53,7 +57,7 @@ export const handleRedirect = api<RedirectParams & RedirectRequest, void>(
         )
       `;
 
-      // Return redirect response (Encore.ts will handle the 302)
+      // Return redirect response
       return {
         redirectUrl: link.originalUrl
       };

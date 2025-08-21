@@ -43,7 +43,7 @@ CREATE TABLE social_media_posts (
 
 CREATE TABLE automation_schedules (
   id BIGSERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
+  name TEXT NOT NULL UNIQUE,
   type TEXT NOT NULL, -- content_generation, link_check, social_posting, analytics_report
   cron_expression TEXT NOT NULL,
   is_active BOOLEAN DEFAULT TRUE,
@@ -55,7 +55,7 @@ CREATE TABLE automation_schedules (
 
 CREATE TABLE revenue_tracking (
   id BIGSERIAL PRIMARY KEY,
-  date DATE NOT NULL,
+  date DATE NOT NULL UNIQUE,
   affiliate_clicks INTEGER DEFAULT 0,
   affiliate_conversions INTEGER DEFAULT 0,
   estimated_revenue DOUBLE PRECISION DEFAULT 0.0,

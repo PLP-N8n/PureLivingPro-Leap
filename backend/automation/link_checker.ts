@@ -32,11 +32,18 @@ export const checkAffiliateLinks = api<void, LinkHealthReport>(
     for (const link of links) {
       try {
         const startTime = Date.now();
+        
+        // Use fetch with proper timeout handling
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        
         const response = await fetch(link.originalUrl, {
           method: 'HEAD',
-          timeout: 10000,
+          signal: controller.signal,
           redirect: 'follow'
         });
+        
+        clearTimeout(timeoutId);
         const responseTime = Date.now() - startTime;
 
         const isWorking = response.ok;
@@ -87,11 +94,13 @@ export const checkAffiliateLinks = api<void, LinkHealthReport>(
       } catch (error) {
         brokenLinks++;
         
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        
         await automationDB.exec`
           INSERT INTO affiliate_link_health (
             affiliate_link_id, status_code, is_working, error_message, consecutive_failures
           ) VALUES (
-            ${link.id}, 0, false, ${error.message}, 
+            ${link.id}, 0, false, ${errorMessage}, 
             COALESCE((
               SELECT consecutive_failures + 1 
               FROM affiliate_link_health 
@@ -146,7 +155,7 @@ export const getLinkHealthReport = api<void, {
       SELECT 
         al.id, al.short_code as "shortCode", al.original_url as "originalUrl",
         alh.consecutive_failures as "consecutiveFailures",
-        alh.error_message as "lastError"
+        COALESCE(alh.error_message, 'Unknown error') as "lastError"
       FROM affiliate_links al
       JOIN affiliate_link_health alh ON al.id = alh.affiliate_link_id
       WHERE alh.is_working = false
@@ -172,6 +181,7 @@ export const getLinkHealthReport = api<void, {
       JOIN affiliate_link_health alh ON al.id = alh.affiliate_link_id
       WHERE alh.last_checked_at >= NOW() - INTERVAL '7 days'
       AND alh.is_working = true
+      AND alh.response_time_ms IS NOT NULL
       GROUP BY al.id, al.short_code
       HAVING AVG(alh.response_time_ms) > 3000
       ORDER BY "averageResponseTime" DESC

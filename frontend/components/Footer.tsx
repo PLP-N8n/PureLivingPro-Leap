@@ -108,9 +108,9 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Legal & Dev */}
           <div>
-            <h3 className="text-xl font-black mb-8 text-white">Legal</h3>
+            <h3 className="text-xl font-black mb-8 text-white">Resources</h3>
             <ul className="space-y-4">
               <li>
                 <Link to="/privacy" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
@@ -130,6 +130,11 @@ export function Footer() {
               <li>
                 <Link to="/theme" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
                   Theme Switcher
+                </Link>
+              </li>
+              <li>
+                <Link to="/diagnostics" className="text-slate-300 hover:text-green-400 transition-colors duration-300 text-base font-medium hover:translate-x-1 transform inline-block">
+                  Diagnostics
                 </Link>
               </li>
             </ul>

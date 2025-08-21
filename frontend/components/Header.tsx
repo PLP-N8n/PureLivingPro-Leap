@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Leaf, Search, Menu, User } from "lucide-react";
+import { Search, Menu, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
@@ -13,9 +13,18 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <Leaf className="h-8 w-8 text-green-600" />
-            <span className="text-xl font-bold text-gray-900">Pure Living Pro</span>
+          <Link to="/" className="flex items-center space-x-3">
+            <img 
+              src="/logo.png" 
+              alt="Pure Living Pro" 
+              className="h-10 w-auto"
+              onError={(e) => {
+                // Fallback to text if logo fails to load
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling!.style.display = 'block';
+              }}
+            />
+            <span className="text-xl font-bold text-gray-900 hidden">Pure Living Pro</span>
           </Link>
 
           {/* Desktop Navigation */}

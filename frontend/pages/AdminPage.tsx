@@ -63,7 +63,19 @@ export function AdminPage() {
           {/* Sidebar */}
           <aside className="w-64 bg-gray-800 text-white min-h-screen p-4 flex flex-col justify-between">
             <div>
-              <h2 className="text-2xl font-bold mb-8">Admin Panel</h2>
+              <div className="mb-8">
+                <img 
+                  src="/logo.png" 
+                  alt="Pure Living Pro" 
+                  className="h-8 w-auto mb-2"
+                  onError={(e) => {
+                    // Fallback to text if logo fails to load
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.nextElementSibling!.style.display = 'block';
+                  }}
+                />
+                <h2 className="text-xl font-bold hidden">Admin Panel</h2>
+              </div>
               <nav className="space-y-2">
                 {navItems.map((item) => (
                   <Link

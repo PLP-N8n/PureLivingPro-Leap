@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Leaf, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
 
 export function Footer() {
   return (
@@ -8,9 +8,18 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="flex items-center space-x-2 mb-4">
-              <Leaf className="h-8 w-8 text-green-500" />
-              <span className="text-xl font-bold">Pure Living Pro</span>
+            <Link to="/" className="flex items-center space-x-3 mb-4">
+              <img 
+                src="/logo.png" 
+                alt="Pure Living Pro" 
+                className="h-10 w-auto"
+                onError={(e) => {
+                  // Fallback to text if logo fails to load
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.nextElementSibling!.style.display = 'block';
+                }}
+              />
+              <span className="text-xl font-bold hidden">Pure Living Pro</span>
             </Link>
             <p className="text-gray-400 mb-6 max-w-md">
               Your trusted source for healthy living, nutrition tips, fitness guidance, 

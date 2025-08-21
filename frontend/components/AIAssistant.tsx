@@ -79,7 +79,7 @@ export function AIAssistant() {
     return (
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 rounded-full w-16 h-16 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-2xl hover:shadow-3xl transition-all duration-300 z-50 group"
+        className="fixed bottom-6 right-6 rounded-full w-16 h-16 bg-gradient-to-r from-green-600 to-lime-600 hover:from-green-700 hover:to-lime-700 text-white border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 z-50 group"
       >
         <MessageCircle className="h-7 w-7 group-hover:scale-110 transition-transform" />
       </Button>
@@ -88,7 +88,7 @@ export function AIAssistant() {
 
   return (
     <Card className="fixed bottom-6 right-6 w-96 h-[600px] shadow-2xl z-50 flex flex-col border-0 bg-white/95 backdrop-blur-md">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-t-xl">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 bg-gradient-to-r from-green-600 to-lime-600 text-white rounded-t-xl">
         <CardTitle className="text-lg flex items-center gap-3">
           <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
             <Sparkles className="h-5 w-5" />
@@ -114,20 +114,20 @@ export function AIAssistant() {
                 className={`flex gap-3 ${message.isUser ? 'justify-end' : 'justify-start'}`}
               >
                 {!message.isUser && (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center flex-shrink-0">
-                    <Bot className="h-4 w-4 text-emerald-600" />
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-100 to-lime-100 flex items-center justify-center flex-shrink-0">
+                    <Bot className="h-4 w-4 text-green-600" />
                   </div>
                 )}
                 
                 <div
                   className={`max-w-[80%] p-4 rounded-2xl ${
                     message.isUser
-                      ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-br-md'
+                      ? 'bg-gradient-to-r from-green-600 to-lime-600 text-white rounded-br-md'
                       : 'bg-slate-100 text-slate-900 rounded-bl-md'
                   }`}
                 >
                   <p className="text-sm leading-relaxed">{message.content}</p>
-                  <p className={`text-xs mt-2 ${message.isUser ? 'text-emerald-100' : 'text-slate-500'}`}>
+                  <p className={`text-xs mt-2 ${message.isUser ? 'text-green-100' : 'text-slate-500'}`}>
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
@@ -142,8 +142,8 @@ export function AIAssistant() {
             
             {chatMutation.isPending && (
               <div className="flex gap-3 justify-start">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center flex-shrink-0">
-                  <Bot className="h-4 w-4 text-emerald-600" />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-100 to-lime-100 flex items-center justify-center flex-shrink-0">
+                  <Bot className="h-4 w-4 text-green-600" />
                 </div>
                 <div className="bg-slate-100 p-4 rounded-2xl rounded-bl-md">
                   <div className="flex space-x-1">
@@ -164,13 +164,13 @@ export function AIAssistant() {
               onChange={(e) => setInputMessage(e.target.value)}
               placeholder="Ask about health, nutrition, fitness..."
               disabled={chatMutation.isPending}
-              className="flex-1 border-2 border-slate-200 focus:border-emerald-500 rounded-xl"
+              className="flex-1 border-2 border-slate-200 focus:border-green-500 rounded-xl"
             />
             <Button 
               type="submit" 
               size="sm"
               disabled={chatMutation.isPending || !inputMessage.trim()}
-              className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 h-10 w-10 p-0 rounded-xl"
+              className="bg-gradient-to-r from-green-600 to-lime-600 hover:from-green-700 hover:to-lime-700 h-10 w-10 p-0 rounded-xl"
             >
               <Send className="h-4 w-4" />
             </Button>

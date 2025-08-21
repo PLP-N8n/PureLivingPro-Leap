@@ -96,7 +96,7 @@ export function ProductCard({
   return (
     <Card className="group hover:shadow-2xl transition-all duration-500 border-0 bg-white/90 backdrop-blur-sm hover:bg-white hover:-translate-y-3 transform perspective-1000 hover:rotate-x-1 relative overflow-hidden">
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-lime-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       
       <CardHeader className="p-0 relative">
         <div className="relative h-64 overflow-hidden rounded-t-2xl">
@@ -116,7 +116,7 @@ export function ProductCard({
           )}
           
           {confidenceScore && confidenceScore > 0.8 && (
-            <Badge className="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white border-0 shadow-xl animate-pulse">
+            <Badge className="absolute top-4 right-4 bg-gradient-to-r from-green-500 to-lime-600 text-white border-0 shadow-xl animate-pulse">
               <Star className="h-3 w-3 mr-1" />
               Top Pick
             </Badge>
@@ -128,12 +128,12 @@ export function ProductCard({
           </button>
           
           {/* Hover overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-green-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         </div>
       </CardHeader>
       
       <CardContent className="p-8 relative z-10">
-        <h3 className="font-black text-xl text-slate-900 mb-4 group-hover:text-blue-600 transition-colors leading-tight">
+        <h3 className="font-black text-xl text-slate-900 mb-4 group-hover:text-green-600 transition-colors leading-tight">
           {product.name}
         </h3>
 
@@ -144,9 +144,9 @@ export function ProductCard({
         )}
 
         {reason && (
-          <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-400"></div>
-            <p className="text-sm text-blue-800 relative z-10">
+          <div className="mb-6 p-4 bg-gradient-to-r from-green-50 to-lime-50 rounded-xl border border-green-100 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-lime-400"></div>
+            <p className="text-sm text-green-800 relative z-10">
               <strong className="font-bold flex items-center gap-2">
                 <Zap className="h-4 w-4" />
                 Why we recommend this:
@@ -158,7 +158,7 @@ export function ProductCard({
 
         <div className="flex items-center justify-between mb-8">
           {product.price && (
-            <div className="flex items-center text-emerald-600 font-black text-2xl">
+            <div className="flex items-center text-green-600 font-black text-2xl">
               <DollarSign className="h-6 w-6" />
               {product.price.toFixed(2)}
             </div>
@@ -173,7 +173,7 @@ export function ProductCard({
 
         <Button 
           onClick={handleClick}
-          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 shadow-xl hover:shadow-2xl transition-all duration-300 h-14 text-base font-bold rounded-xl transform hover:scale-105 group/btn relative overflow-hidden"
+          className="w-full bg-gradient-to-r from-green-600 to-lime-600 hover:from-green-700 hover:to-lime-700 text-white border-0 shadow-xl hover:shadow-2xl transition-all duration-300 h-14 text-base font-bold rounded-xl transform hover:scale-105 group/btn relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
           <span className="relative z-10 flex items-center justify-center">
@@ -187,7 +187,7 @@ export function ProductCard({
             <div className="flex items-center justify-center gap-3">
               <div className="flex-1 bg-slate-200 rounded-full h-3 overflow-hidden">
                 <div 
-                  className="bg-gradient-to-r from-emerald-500 to-teal-600 h-3 rounded-full transition-all duration-700 shadow-sm"
+                  className="bg-gradient-to-r from-green-500 to-lime-600 h-3 rounded-full transition-all duration-700 shadow-sm"
                   style={{ width: `${confidenceScore * 100}%` }}
                 ></div>
               </div>

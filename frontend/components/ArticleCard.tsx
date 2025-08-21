@@ -75,7 +75,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
   return (
     <Card className={`group hover:shadow-2xl transition-all duration-500 border-0 bg-white/90 backdrop-blur-sm hover:bg-white hover:-translate-y-2 transform perspective-1000 hover:rotate-x-1 relative overflow-hidden ${featured ? "md:col-span-2" : ""}`}>
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-lime-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       
       <CardHeader className="p-0 relative">
         <div className={`relative overflow-hidden rounded-t-2xl ${featured ? "h-80" : "h-64"}`}>
@@ -88,7 +88,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
           
           {/* Floating elements */}
           {article.featured && (
-            <Badge className="absolute top-4 left-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-0 shadow-xl backdrop-blur-sm animate-pulse">
+            <Badge className="absolute top-4 left-4 bg-gradient-to-r from-green-500 to-lime-600 text-white border-0 shadow-xl backdrop-blur-sm animate-pulse">
               <Bookmark className="h-3 w-3 mr-1" />
               Featured
             </Badge>
@@ -103,7 +103,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
           </div>
           
           {/* Hover overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-emerald-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-green-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         </div>
       </CardHeader>
       
@@ -124,7 +124,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
         </div>
 
         <Link to={`/article/${article.slug}`}>
-          <h3 className={`font-black text-slate-900 group-hover:text-emerald-600 transition-colors mb-6 leading-tight ${
+          <h3 className={`font-black text-slate-900 group-hover:text-green-600 transition-colors mb-6 leading-tight ${
             featured ? "text-3xl" : "text-xl"
           }`}>
             {article.title}
@@ -139,8 +139,8 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full flex items-center justify-center shadow-lg">
-              <User className="h-6 w-6 text-emerald-600" />
+            <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-lime-100 rounded-full flex items-center justify-center shadow-lg">
+              <User className="h-6 w-6 text-green-600" />
             </div>
             <div>
               <p className="font-bold text-slate-900 text-sm">{article.authorName}</p>
@@ -150,7 +150,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
           
           <Link
             to={`/article/${article.slug}`}
-            className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-bold text-sm transition-all duration-300 group/link bg-emerald-50 hover:bg-emerald-100 px-4 py-2 rounded-full"
+            className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-bold text-sm transition-all duration-300 group/link bg-green-50 hover:bg-green-100 px-4 py-2 rounded-full"
           >
             Read More
             <ArrowRight className="h-4 w-4 group-hover/link:translate-x-1 transition-transform duration-300" />

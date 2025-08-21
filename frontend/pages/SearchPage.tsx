@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import backend from "~backend/client";
-import { ArticleCard } from "../components/ArticleCard";
+import { InsightCard } from "../components/InsightCard";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,7 +66,7 @@ export function SearchPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
-        <Link to="/" className="inline-flex items-center text-green-600 hover:text-green-700 mb-8">
+        <Link to="/" className="inline-flex items-center text-primary hover:text-primary/80 mb-8">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Home
         </Link>
@@ -127,7 +127,7 @@ export function SearchPage() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {searchResults.articles.map((article) => (
-                <ArticleCard key={article.id} article={article} />
+                <InsightCard key={article.id} article={article} />
               ))}
             </div>
 

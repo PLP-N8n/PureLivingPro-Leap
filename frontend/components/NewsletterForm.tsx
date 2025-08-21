@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Mail, ArrowRight } from 'lucide-react';
 
-export function EmailSignupForm() {
+export function NewsletterForm() {
   const [email, setEmail] = useState('');
   const { toast } = useToast();
 

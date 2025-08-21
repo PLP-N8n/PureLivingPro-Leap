@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Youtube, Sparkles, Heart, Mail, Phone, MapPin } from "lucide-react";
-import { EmailSignupForm } from "./EmailSignupForm";
+import { NewsletterForm } from "./NewsletterForm";
 
 export function Footer() {
   return (
@@ -23,7 +23,7 @@ export function Footer() {
             Get exclusive wellness tips, product recommendations, and early access to content delivered straight to your inbox.
           </p>
           <div className="flex justify-center">
-            <EmailSignupForm />
+            <NewsletterForm />
           </div>
         </div>
 

@@ -58,7 +58,8 @@ frontend/
 ├── components/          # Reusable UI components
 │   ├── ui/             # shadcn/ui components
 │   ├── admin/          # Admin dashboard components
-│   └── design-system/  # Core design system components
+│   ├── design-system/  # Core design system components
+│   └── COMPONENTS.md   # Detailed component specifications
 ├── pages/              # Page components
 │   ├── HomePage.tsx    # Landing page
 │   ├── BlogPage.tsx    # Insights index (/insights)
@@ -74,16 +75,8 @@ frontend/
 └── App.tsx             # Main app component with routing
 ```
 
-### Key Components
-
-#### `ArticlePage.tsx`
-- Optimized for readability with features like a reading progress bar, table of contents, breadcrumbs, and clear typographic hierarchy to keep users engaged.
-
-#### `BlogPage.tsx` (Insights)
-- Features client-side search and filtering by category, with sorting options for "Newest," "Most Read," and "Editor's Pick." An infinite scroll or pagination is used for loading articles.
-
-#### `ProductsPage.tsx` (Our Picks)
-- A filterable grid of affiliate products. Users can filter by category, tags (e.g., "budget-friendly"), and availability.
+### Key Components & Documentation
+Detailed specifications for all major components, including props, variants, accessibility notes, and motion contracts, are documented in `frontend/components/COMPONENTS.md`.
 
 ### Motion & Animation System
 - **Library**: `framer-motion` is used for all animations.

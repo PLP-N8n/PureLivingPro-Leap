@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import backend from "~backend/client";
 import { SEOHead } from "../components/SEOHead";
-import { ArticleCard } from "../components/ArticleCard";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

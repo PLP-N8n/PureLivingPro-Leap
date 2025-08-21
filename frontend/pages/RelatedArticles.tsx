@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import backend from "~backend/client";
-import { InsightCard } from "./InsightCard";
-import { LoadingSpinner } from "./LoadingSpinner";
+import { InsightCard } from "../components/InsightCard";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 interface RelatedArticlesProps {
   articleSlug: string;

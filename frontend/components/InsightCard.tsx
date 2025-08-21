@@ -7,12 +7,12 @@ import { motion } from "framer-motion";
 import { useMotion } from "../providers/MotionProvider";
 import { motionContract } from "../lib/motion";
 
-interface ArticleCardProps {
+interface InsightCardProps {
   article: Article;
   featured?: boolean;
 }
 
-export function ArticleCard({ article, featured = false }: ArticleCardProps) {
+export function InsightCard({ article, featured = false }: InsightCardProps) {
   const { isReducedMotion } = useMotion();
 
   const formatDate = (date: Date) => {
@@ -85,7 +85,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
               <span className="font-medium">{estimatedReadTime} min read</span>
             </div>
           </div>
-          <Link to={`/article/${article.slug}`} className="group">
+          <Link to={`/insights/${article.slug}`} className="group">
             <h3 className={`font-black text-slate-900 group-hover:text-primary transition-colors mb-6 leading-tight ${featured ? "text-3xl" : "text-xl"}`}>
               {article.title}
             </h3>
@@ -105,7 +105,7 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
                 <p className="text-slate-500 text-xs">Wellness Expert</p>
               </div>
             </div>
-            <Link to={`/article/${article.slug}`} className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-bold text-sm transition-all duration-300 group/link">
+            <Link to={`/insights/${article.slug}`} className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-bold text-sm transition-all duration-300 group/link">
               Read More
               <div className="group-hover/link:translate-x-1 transition-transform duration-300">
                 <ArrowRight className="h-4 w-4" />

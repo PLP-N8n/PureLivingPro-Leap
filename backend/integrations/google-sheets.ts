@@ -1,87 +1,42 @@
-interface SheetRow {
-  status: string;
-  title: string;
-  category: string;
-  angle: string;
-  keywords: string;
-  cta: string;
-  affiliateLink: string;
-  productName: string;
-  imageUrl: string;
-  description: string;
-  targetDate: string;
-  draftUrl: string;
-  liveUrl: string;
-  batchId: string;
-}
+import { google } from 'googleapis';
+import { googleClientEmail, googlePrivateKey } from '../automation/secrets';
+import type { SheetRow } from '../automation/types';
 
-export async function fetchSheetData(apiKey: string, spreadsheetId: string, range: string): Promise<SheetRow[]> {
-  if (!apiKey) {
-    throw new Error("Google Sheets API key not configured");
+const auth = new google.auth.GoogleAuth({
+  credentials: {
+    client_email: googleClientEmail(),
+    private_key: googlePrivateKey().replace(/\\n/g, '\n'),
+  },
+  scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+});
+
+export async function fetchSheetData(range: string): Promise<SheetRow[]> {
+  const sheets = google.sheets({ version: 'v4', auth: await auth.getClient() });
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: process.env.GOOGLE_SHEETS_ID!,
+    range,
+  });
+
+  const [header, ...rows] = (res.data.values || []) as string[][];
+  if (!header) {
+    return [];
   }
+  const idx = (k: string) => header.indexOf(k);
 
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
-  
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Google Sheets API error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    const rows = data.values || [];
-    
-    // Skip header row
-    return rows.slice(1).map((row: string[]) => ({
-      status: row[0] || '',
-      title: row[1] || '',
-      category: row[2] || '',
-      angle: row[3] || '',
-      keywords: row[4] || '',
-      cta: row[5] || '',
-      affiliateLink: row[6] || '',
-      productName: row[7] || '',
-      imageUrl: row[8] || '',
-      description: row[9] || '',
-      targetDate: row[10] || '',
-      draftUrl: row[11] || '',
-      liveUrl: row[12] || '',
-      batchId: row[13] || ''
-    }));
-  } catch (error) {
-    console.error('Failed to fetch Google Sheets data:', error);
-    throw error;
-  }
-}
-
-export async function updateSheetRow(
-  apiKey: string,
-  spreadsheetId: string, 
-  range: string, 
-  values: string[][]
-): Promise<void> {
-  if (!apiKey) {
-    throw new Error("Google Sheets API key not configured");
-  }
-
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?valueInputOption=RAW&key=${apiKey}`;
-  
-  try {
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        values
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`Google Sheets API error: ${response.status}`);
-    }
-  } catch (error) {
-    console.error('Failed to update Google Sheets:', error);
-    throw error;
-  }
+  return rows.map((r) => ({
+    Status: r[idx('Status')] as SheetRow['Status'],
+    Title: r[idx('Title')],
+    Category: r[idx('Category')] as SheetRow['Category'],
+    'Angle / Notes': r[idx('Angle / Notes')],
+    Keywords: r[idx('Keywords')],
+    'Call to Action': r[idx('Call to Action')],
+    'Affiliate Link': r[idx('Affiliate Link')],
+    'Product Name': r[idx('Product Name')],
+    'Image URL': r[idx('Image URL')],
+    'Brief Description or Benefit': r[idx('Brief Description or Benefit')],
+    'Target Date': r[idx('Target Date')],
+    'Draft URL': r[idx('Draft URL')],
+    'Live URL': r[idx('Live URL')],
+    'Batch ID': r[idx('Batch ID')],
+  })) as SheetRow[];
 }

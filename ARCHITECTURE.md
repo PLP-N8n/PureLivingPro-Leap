@@ -6,20 +6,22 @@ PureLivingPro is a comprehensive affiliate marketing website built with **Encore
 
 ### Key Features
 - 🏥 Health & wellness content management
-- 🤖 AI-powered product recommendations
-- 🔗 Affiliate link tracking and analytics
-- 📊 Comprehensive analytics dashboard
+- 🤖 AI-powered product recommendations and content generation
+- 🔗 Affiliate link tracking, health checks, and analytics
+- 📊 Comprehensive analytics dashboard and reporting
 - 🔍 Full-text search capabilities
 - 📱 Responsive design with mobile optimization
 - 🚀 SEO-optimized with dynamic sitemaps
+- 🔄 Automated content pipeline: Google Sheets -> AI Draft -> WordPress/Medium
 
 ## Architecture Principles
 
-1. **Microservices with Encore.ts**: Each domain (content, affiliate, analytics, AI) is a separate service
+1. **Microservices with Encore.ts**: Each domain (content, affiliate, analytics, AI, automation, seo) is a separate service
 2. **Type Safety**: End-to-end TypeScript with shared types between frontend and backend
 3. **Graceful Degradation**: System works without external API keys (AI, payments)
 4. **Performance First**: Optimized queries, caching, and lazy loading
 5. **SEO Optimized**: Server-side sitemap generation and meta tag management
+6. **Automation-driven**: Cron jobs for ingestion, publishing, monitoring, and optimization.
 
 ## Backend Architecture (Encore.ts)
 
@@ -30,8 +32,9 @@ backend/
 ├── content/          # Content management service
 ├── affiliate/        # Affiliate tracking and management
 ├── analytics/        # User behavior and performance analytics
-├── ai/              # AI-powered recommendations and chat
-└── seo/             # SEO utilities (sitemap, robots.txt)
+├── ai/               # AI-powered recommendations and chat
+├── automation/       # Automation workflows, scheduling, and integrations
+└── seo/              # SEO utilities (sitemap, robots.txt)
 ```
 
 ### Core Services
@@ -45,12 +48,15 @@ backend/
   - Related article recommendations
   - View count tracking
   - SEO-friendly URLs
+  - Publishing to WordPress and Medium
 
 **Key Endpoints**:
 - `GET /articles` - List articles with filtering and pagination
 - `GET /articles/:slug` - Get single article by slug
 - `POST /articles` - Create new article
 - `GET /articles/search` - Full-text search with relevance scoring
+- `POST /content/publish-to-wordpress` - Publish article to WordPress
+- `POST /content/publish-to-medium` - Publish article to Medium
 
 #### Affiliate Service (`backend/affiliate/`)
 - **Purpose**: Manages affiliate programs, products, and click tracking
@@ -95,6 +101,20 @@ backend/
 - `POST /ai/chat` - AI chat assistant
 - `POST /ai/recommendations` - Get product recommendations
 
+#### Automation Service (`backend/automation/`)
+- **Purpose**: Manages all automated workflows and integrations.
+- **Key Features**:
+  - Google Sheets content ingestion
+  - Automated content generation and publishing pipeline
+  - Scheduled affiliate link health checks
+  - SEO performance tracking
+  - Weekly performance reporting
+
+**Key Endpoints**:
+- `POST /automation/ingest/sheets` - Ingest content ideas from Google Sheets
+- `POST /automation/run-tasks` - Manually trigger scheduled tasks
+- `GET /automation/weekly-report` - Generate weekly performance report
+
 #### SEO Service (`backend/seo/`)
 - **Purpose**: SEO optimization utilities
 - **Key Features**:
@@ -112,86 +132,75 @@ backend/
 #### Content Tables
 ```sql
 -- Categories for organizing content
-CREATE TABLE categories (
-  id BIGSERIAL PRIMARY KEY,
-  name TEXT NOT NULL UNIQUE,
-  description TEXT,
-  slug TEXT NOT NULL UNIQUE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+CREATE TABLE categories ( ... );
 
 -- Main articles/blog posts
 CREATE TABLE articles (
-  id BIGSERIAL PRIMARY KEY,
-  title TEXT NOT NULL,
-  slug TEXT NOT NULL UNIQUE,
-  content TEXT NOT NULL,
-  excerpt TEXT,
-  featured_image_url TEXT,
-  category_id BIGINT REFERENCES categories(id),
-  author_name TEXT NOT NULL,
-  author_email TEXT NOT NULL,
-  published BOOLEAN DEFAULT FALSE,
-  featured BOOLEAN DEFAULT FALSE,
-  view_count INTEGER DEFAULT 0,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  -- ... existing columns ...
+  wp_post_id BIGINT,
+  medium_post_id TEXT,
+  seo_meta JSONB,
+  affiliate_blocks JSONB
 );
 ```
 
 #### Affiliate Tables
 ```sql
 -- Affiliate programs (Amazon, iHerb, etc.)
-CREATE TABLE affiliate_programs (
-  id BIGSERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  commission_rate DOUBLE PRECISION NOT NULL DEFAULT 0.0,
-  cookie_duration INTEGER DEFAULT 30,
-  is_active BOOLEAN DEFAULT TRUE
-);
+CREATE TABLE affiliate_programs ( ... );
 
 -- Products from affiliate programs
-CREATE TABLE affiliate_products (
-  id BIGSERIAL PRIMARY KEY,
-  program_id BIGINT REFERENCES affiliate_programs(id),
-  name TEXT NOT NULL,
-  description TEXT,
-  price DOUBLE PRECISION,
-  original_url TEXT NOT NULL,
-  category TEXT,
-  is_active BOOLEAN DEFAULT TRUE
-);
+CREATE TABLE affiliate_products ( ... );
 
 -- Short links for tracking
 CREATE TABLE affiliate_links (
-  id BIGSERIAL PRIMARY KEY,
-  product_id BIGINT REFERENCES affiliate_products(id),
-  short_code TEXT NOT NULL UNIQUE,
-  original_url TEXT NOT NULL,
-  is_active BOOLEAN DEFAULT TRUE
+  -- ... existing columns ...
+  last_status TEXT,
+  last_status_code INT,
+  last_checked TIMESTAMPTZ,
+  ctr_14d NUMERIC DEFAULT 0,
+  revenue_14d NUMERIC DEFAULT 0
 );
 
 -- Click tracking
-CREATE TABLE affiliate_clicks (
+CREATE TABLE affiliate_clicks ( ... );
+```
+
+#### Automation Tables
+```sql
+-- Content publishing pipeline
+CREATE TABLE content_pipeline (
+  -- ... existing columns ...
+  last_error TEXT,
+  attempts INT NOT NULL DEFAULT 0
+);
+
+-- Affiliate link health checks
+CREATE TABLE affiliate_link_health ( ... );
+
+-- Google Sheets ingestion history
+CREATE TABLE sheets_ingest_runs (
   id BIGSERIAL PRIMARY KEY,
-  link_id BIGINT REFERENCES affiliate_links(id),
-  ip_address INET,
-  user_agent TEXT,
-  device_type TEXT,
-  content_id TEXT,
-  clicked_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  sheet_id TEXT NOT NULL,
+  range TEXT NOT NULL,
+  imported_rows INT NOT NULL DEFAULT 0,
+  errors JSONB,
+  ran_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 ```
 
-### Environment Variables
+### Environment Variables & Secrets
 
 #### Required
 - `SESSION_SECRET` - Session encryption key (32+ characters)
-
-#### Optional
 - `OpenAIKey` - OpenAI API key for AI features
-- `DATABASE_URL` - PostgreSQL connection string
-- `PORT` - Server port (default: 4000)
+- `GoogleSheetsId` - Google Sheet ID for content ingestion
+- `GoogleClientEmail` - Google Service Account client email
+- `GooglePrivateKey` - Google Service Account private key
+- `WordPressUrl` - Base URL for WordPress site
+- `WordPressUsername` - WordPress application username
+- `WordPressPassword` - WordPress application password
+- `MediumToken` - Medium integration token
 
 ## Frontend Architecture (React + Vite)
 
@@ -220,7 +229,7 @@ frontend/
 - **Overview**: Displays KPIs, quick actions, and recent activity.
 - **Blog Management**: Table view for posts with search/filter, and a modal-based editor with AI helper placeholders.
 - **Product Management**: Table view for affiliate products, and a modal-based editor for CRUD operations.
-- **Placeholders**: Includes placeholders for future Automation and Settings sections.
+- **Automation Hub**: Control panel for content ingestion, publishing pipelines, and monitoring automated tasks.
 
 #### AIAssistant (`frontend/components/AIAssistant.tsx`)
 - Floating chat widget for health advice
@@ -233,76 +242,27 @@ frontend/
 - **React Router**: Client-side routing
 - **React Hooks**: Local component state
 
-### Affiliate Tracking
-
-The frontend includes sophisticated affiliate tracking:
-
-```typescript
-// Generate tracking URLs
-const trackingUrl = buildAffiliateUrl(shortCode, {
-  contentId: 'ai_recommendations',
-  campaign: 'product_recommendation',
-  source: 'product_card'
-});
-
-// Track clicks with analytics
-trackAffiliateClick(productId, shortCode, contentId);
-```
-
 ## Data Flow
 
-### Admin Flow
-1. **Admin navigates to `/admin`** → `AdminPage` renders the shell with sidebar.
-2. **Selects a section (e.g., Blog)** → `BlogManagement` component is rendered in the main panel.
-3. **Clicks "New Post"** → A dialog with the `BlogEditor` form is displayed.
-4. **Submits form** → `createArticle` API in the Content Service is called.
-5. **Data is saved** → The table in `BlogManagement` is automatically refreshed via TanStack Query.
+### Content Automation Flow
+1. **Content idea added to Google Sheet** with status "Planned".
+2. **Hourly cron job** (`ingest_from_sheets`) runs, fetching new rows.
+3. **New rows are added** to the `content_pipeline` table in the `automation` database with status `scheduled`.
+4. **5-minute cron job** (`process_scheduled_content`) picks up due items from the pipeline.
+5. **AI service generates** a full article draft from the topic and keywords.
+6. **Article is saved** to the `articles` table as a draft.
+7. **SEO and affiliate optimization** steps are applied (can be manual or automated).
+8. **Article is published** to WordPress and cross-posted to Medium.
+9. **Article record is updated** with WordPress/Medium post IDs.
+10. **Pipeline status is marked** as `published`.
 
-### Affiliate Flow
-1. **Product recommendation** → AI Service → Product matching
-2. **User clicks product** → Affiliate tracking → Click recorded
-3. **Redirect to merchant** → Commission tracking → Analytics
-4. **Purchase conversion** → Webhook → Commission calculation
-
-## Deployment
-
-### Build Process
-1. **Frontend**: Vite builds React app to `dist/`
-2. **Backend**: Encore.ts compiles services
-3. **Database**: Migrations run automatically
-4. **Assets**: Static files served by Encore.ts
-
-### Health Monitoring
-- **Health Check**: `GET /healthz` returns service status
-- **Database**: Connection health monitoring
-- **AI Services**: API key validation
-- **Affiliate System**: Link validation
-
-## Security
-
-### Data Protection
-- **Input Validation**: All API inputs validated
-- **SQL Injection**: Parameterized queries only
-- **XSS Protection**: Content sanitization
-- **CORS**: Configured for production domain
-
-### Privacy
-- **IP Anonymization**: Last octet removed from stored IPs
-- **Session Management**: Secure session handling
-- **Data Retention**: Configurable analytics retention
-
-## Performance
-
-### Backend Optimizations
-- **Database Indexing**: Optimized queries with proper indexes
-- **Caching**: Query result caching where appropriate
-- **Connection Pooling**: Efficient database connections
-
-### Frontend Optimizations
-- **Code Splitting**: Lazy loading of admin components
-- **Image Optimization**: Lazy loading and responsive images
-- **Bundle Optimization**: Tree shaking and minification
+### Affiliate Link Health Flow
+1. **Daily cron job** (`check_affiliate_links`) runs.
+2. **Each active affiliate link** is checked via a HEAD request.
+3. **Result is stored** in `affiliate_link_health` table.
+4. **Link status is updated** on the `affiliate_links` table.
+5. **Broken links are flagged** in the admin dashboard for review.
 
 ---
 
-This architecture provides a solid foundation for a profitable affiliate marketing website while maintaining flexibility for future growth and feature additions.
+This architecture provides a solid foundation for a profitable, highly-automated affiliate marketing website while maintaining flexibility for future growth.

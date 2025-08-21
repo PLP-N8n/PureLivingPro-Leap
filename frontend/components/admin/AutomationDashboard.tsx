@@ -24,10 +24,12 @@ import {
   BarChart3,
   Sparkles,
   Clock,
-  DollarSign
+  DollarSign,
+  Upload
 } from "lucide-react";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { useToast } from "@/components/ui/use-toast";
+import { RevenueOptimizer } from "./RevenueOptimizer";
 
 export function AutomationDashboard() {
   const queryClient = useQueryClient();
@@ -79,25 +81,21 @@ export function AutomationDashboard() {
     },
   });
 
-  const processScheduledMutation = useMutation({
-    mutationFn: () => backend.automation.processScheduledContent(),
+  const ingestMutation = useMutation({
+    mutationFn: () => backend.automation.ingestFromSheets({ spreadsheetId: "" }), // spreadsheetId will be from secrets
     onSuccess: (result) => {
-      toast({ 
-        title: "Content processed", 
-        description: `${result.processed} articles published, ${result.failed} failed` 
+      toast({
+        title: "Sheet Ingestion Complete",
+        description: `${result.ingested} new items ingested.`,
       });
-      queryClient.invalidateQueries({ queryKey: ["automation"] });
+      queryClient.invalidateQueries({ queryKey: ["automation", "content-schedule"] });
     },
-  });
-
-  const implementOptimizationsMutation = useMutation({
-    mutationFn: (data: any) => backend.automation.implementOptimizations(data),
-    onSuccess: (result) => {
-      toast({ 
-        title: "Optimizations applied", 
-        description: `${result.implemented} optimizations implemented, estimated impact: $${result.estimatedImpact.toFixed(2)}` 
+    onError: (err) => {
+      toast({
+        title: "Sheet Ingestion Failed",
+        description: err.message,
+        variant: "destructive",
       });
-      queryClient.invalidateQueries({ queryKey: ["automation"] });
     },
   });
 
@@ -129,22 +127,22 @@ export function AutomationDashboard() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <Button 
-          onClick={() => runTasksMutation.mutate()}
-          disabled={runTasksMutation.isPending}
+          onClick={() => ingestMutation.mutate()}
+          disabled={ingestMutation.isPending}
           className="h-20 flex flex-col gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
         >
-          <Play className="h-5 w-5" />
-          Run All Tasks
+          <Upload className="h-5 w-5" />
+          Ingest from Sheets
         </Button>
         
         <Button 
-          onClick={() => processScheduledMutation.mutate()}
-          disabled={processScheduledMutation.isPending}
+          onClick={() => runTasksMutation.mutate()}
+          disabled={runTasksMutation.isPending}
           variant="outline"
           className="h-20 flex flex-col gap-2 border-2 border-blue-200 hover:border-blue-500 hover:bg-blue-50"
         >
-          <FileText className="h-5 w-5" />
-          Process Content
+          <Play className="h-5 w-5" />
+          Run Pipeline
         </Button>
         
         <Button 
@@ -186,8 +184,8 @@ export function AutomationDashboard() {
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="content">Content Pipeline</TabsTrigger>
           <TabsTrigger value="optimization">AI Optimization</TabsTrigger>
+          <TabsTrigger value="revenue">Revenue</TabsTrigger>
           <TabsTrigger value="seo">SEO Tracking</TabsTrigger>
-          <TabsTrigger value="performance">Performance</TabsTrigger>
           <TabsTrigger value="schedules">Schedules</TabsTrigger>
         </TabsList>
 
@@ -211,7 +209,7 @@ export function AutomationDashboard() {
 
             <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-indigo-50">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Content Scheduled</CardTitle>
+                <CardTitle className="text-sm font-medium">Content in Pipeline</CardTitle>
                 <Calendar className="h-4 w-4 text-blue-600" />
               </CardHeader>
               <CardContent>
@@ -278,71 +276,6 @@ export function AutomationDashboard() {
               </CardContent>
             </Card>
           )}
-
-          {/* Quick Stats Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-green-600" />
-                  Optimization Targets
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Low-performing articles</span>
-                    <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
-                      {optimizationTargets?.lowPerformingArticles.length || 0}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Keyword opportunities</span>
-                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                      {optimizationTargets?.keywordGaps.length || 0}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Affiliate opportunities</span>
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                      {optimizationTargets?.affiliateOpportunities.length || 0}
-                    </Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-purple-600" />
-                  Performance Metrics
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Content optimizations</span>
-                    <Badge className="bg-purple-600 text-white">
-                      {performanceAnalysis?.contentOptimizations.length || 0}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Affiliate optimizations</span>
-                    <Badge className="bg-indigo-600 text-white">
-                      {performanceAnalysis?.affiliateOptimizations.length || 0}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">SEO improvements</span>
-                    <Badge className="bg-green-600 text-white">
-                      {seoReport?.rankImprovements || 0}
-                    </Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
         </TabsContent>
 
         <TabsContent value="content" className="space-y-6">
@@ -356,7 +289,7 @@ export function AutomationDashboard() {
 
           <Card className="border-0 shadow-lg">
             <CardHeader>
-              <CardTitle>Scheduled Content</CardTitle>
+              <CardTitle>Publish Queue</CardTitle>
             </CardHeader>
             <CardContent>
               {contentSchedule?.scheduledContent ? (
@@ -486,49 +419,10 @@ export function AutomationDashboard() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
 
-          {/* Performance Analysis */}
-          {performanceAnalysis && (
-            <Card className="border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-green-600" />
-                  Optimization Recommendations
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-medium mb-3">Content Optimizations</h4>
-                    <div className="space-y-2">
-                      {performanceAnalysis.contentOptimizations.slice(0, 3).map((opt, index) => (
-                        <div key={index} className="p-3 bg-green-50 rounded-lg">
-                          <h5 className="font-medium text-sm">{opt.title}</h5>
-                          <p className="text-xs text-gray-600">
-                            Potential increase: £{(opt.potentialRevenue - opt.currentRevenue).toFixed(2)}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-medium mb-3">Keyword Opportunities</h4>
-                    <div className="space-y-2">
-                      {performanceAnalysis.keywordOpportunities.slice(0, 3).map((kw, index) => (
-                        <div key={index} className="p-3 bg-blue-50 rounded-lg">
-                          <h5 className="font-medium text-sm">{kw.keyword}</h5>
-                          <p className="text-xs text-gray-600">
-                            Volume: {kw.searchVolume} • Difficulty: {kw.difficulty}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+        <TabsContent value="revenue">
+          <RevenueOptimizer />
         </TabsContent>
 
         <TabsContent value="seo" className="space-y-6">
@@ -571,107 +465,7 @@ export function AutomationDashboard() {
                   </CardContent>
                 </Card>
               </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card className="border-0 shadow-lg">
-                  <CardHeader>
-                    <CardTitle>Top Performing Keywords</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {seoReport.topKeywords.map((keyword, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                          <div>
-                            <h4 className="font-medium text-sm">{keyword.keyword}</h4>
-                            <p className="text-xs text-gray-600">Volume: {keyword.searchVolume}</p>
-                          </div>
-                          <Badge className="bg-green-600 text-white">
-                            #{keyword.currentRank}
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-0 shadow-lg">
-                  <CardHeader>
-                    <CardTitle>Opportunity Keywords</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {seoReport.opportunityKeywords.map((keyword, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-                          <div>
-                            <h4 className="font-medium text-sm">{keyword.keyword}</h4>
-                            <p className="text-xs text-gray-600">Volume: {keyword.searchVolume}</p>
-                          </div>
-                          <Badge variant="outline" className="border-yellow-300 text-yellow-700">
-                            #{keyword.currentRank}
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
             </>
-          )}
-        </TabsContent>
-
-        <TabsContent value="performance" className="space-y-6">
-          <h2 className="text-2xl font-bold">Performance Analytics</h2>
-          
-          {performanceAnalysis && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <CardTitle>Content Performance</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {performanceAnalysis.contentOptimizations.slice(0, 5).map((content, index) => (
-                      <div key={index} className="p-4 border rounded-lg">
-                        <h4 className="font-medium mb-2">{content.title}</h4>
-                        <div className="flex items-center justify-between text-sm">
-                          <span>Current: £{content.currentRevenue.toFixed(2)}</span>
-                          <span>Potential: £{content.potentialRevenue.toFixed(2)}</span>
-                        </div>
-                        <div className="mt-2">
-                          {content.recommendations.slice(0, 2).map((rec, i) => (
-                            <p key={i} className="text-xs text-gray-600">• {rec}</p>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <CardTitle>Affiliate Performance</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {performanceAnalysis.affiliateOptimizations.slice(0, 5).map((affiliate, index) => (
-                      <div key={index} className="p-4 border rounded-lg">
-                        <h4 className="font-medium mb-2">{affiliate.productName}</h4>
-                        <div className="flex items-center justify-between text-sm mb-2">
-                          <span>CTR: {affiliate.currentCTR.toFixed(2)}%</span>
-                          <Badge variant="outline">Needs Optimization</Badge>
-                        </div>
-                        <div>
-                          {affiliate.recommendedActions.slice(0, 2).map((action, i) => (
-                            <p key={i} className="text-xs text-gray-600">• {action}</p>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
           )}
         </TabsContent>
 

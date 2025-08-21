@@ -1,11 +1,16 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import backend from "~backend/client";
 import { ArticleCard } from "../components/ArticleCard";
 import { PopularArticles } from "../components/PopularArticles";
+import { ProductRecommendations } from "../components/ProductRecommendations";
+import { AffiliateDisclosure } from "../components/AffiliateDisclosure";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { SEOHead } from "../components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Leaf, Heart, Dumbbell, Brain, Sparkles } from "lucide-react";
 import { useAnalytics } from "../hooks/useAnalytics";
 import { useState } from "react";
 
@@ -45,6 +50,13 @@ export function HomePage() {
     );
   }
 
+  const categoryIcons = {
+    nutrition: Heart,
+    fitness: Dumbbell,
+    wellness: Brain,
+    recipes: Leaf,
+  };
+
   return (
     <>
       <SEOHead />
@@ -57,15 +69,37 @@ export function HomePage() {
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Discover the secrets to a healthier, more balanced lifestyle through our expert-curated 
-            content on nutrition, fitness, wellness, and sustainable living.
+            content on nutrition, fitness, wellness, and sustainable living. Get personalized 
+            product recommendations powered by AI.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            {categories?.categories.slice(0, 4).map((category) => (
-              <Button key={category.id} variant="outline" size="lg">
-                {category.name}
-              </Button>
-            ))}
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            {categories?.categories.slice(0, 4).map((category) => {
+              const IconComponent = categoryIcons[category.slug as keyof typeof categoryIcons] || Leaf;
+              return (
+                <Link key={category.id} to={`/category/${category.slug}`}>
+                  <Button variant="outline" size="lg" className="flex items-center gap-2">
+                    <IconComponent className="h-5 w-5" />
+                    {category.name}
+                  </Button>
+                </Link>
+              );
+            })}
           </div>
+          
+          <Link to="/products">
+            <Button size="lg" className="bg-green-600 hover:bg-green-700">
+              <Sparkles className="h-5 w-5 mr-2" />
+              Explore Recommended Products
+            </Button>
+          </Link>
+        </section>
+
+        {/* Affiliate Disclosure */}
+        <AffiliateDisclosure className="mb-16" />
+
+        {/* AI Product Recommendations */}
+        <section className="mb-16">
+          <ProductRecommendations />
         </section>
 
         {/* Featured Articles */}
@@ -86,6 +120,31 @@ export function HomePage() {
 
         {/* Popular Articles */}
         <PopularArticles title="Trending This Month" days={30} limit={6} />
+
+        {/* Health Categories */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Explore Health Categories</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {categories?.categories.slice(0, 4).map((category) => {
+              const IconComponent = categoryIcons[category.slug as keyof typeof categoryIcons] || Leaf;
+              return (
+                <Link key={category.id} to={`/category/${category.slug}`}>
+                  <Card className="group hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                    <CardContent className="p-6 text-center">
+                      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition-colors">
+                        <IconComponent className="h-8 w-8 text-green-600" />
+                      </div>
+                      <h3 className="font-semibold text-lg text-gray-900 mb-2">{category.name}</h3>
+                      {category.description && (
+                        <p className="text-gray-600 text-sm">{category.description}</p>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
 
         {/* Recent Articles */}
         <section>

@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import { Trash2, Edit, Plus, BarChart3, TrendingUp, Eye, Search } from "lucide-react";
+import { Trash2, Edit, Plus, BarChart3, TrendingUp, Eye, Search, ExternalLink, DollarSign } from "lucide-react";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { SEOHead } from "../components/SEOHead";
 import type { CreateArticleRequest, CreateCategoryRequest, CreateTagRequest } from "~backend/content/types";
@@ -60,6 +60,16 @@ export function AdminPage() {
   const { data: analytics } = useQuery({
     queryKey: ["admin", "analytics"],
     queryFn: () => backend.analytics.getAnalyticsSummary(),
+  });
+
+  const { data: affiliateStats } = useQuery({
+    queryKey: ["admin", "affiliate-stats"],
+    queryFn: () => backend.affiliate.getAffiliateStats(),
+  });
+
+  const { data: affiliateProducts } = useQuery({
+    queryKey: ["admin", "affiliate-products"],
+    queryFn: () => backend.affiliate.listAffiliateProducts({ limit: 20 }),
   });
 
   // Mutations
@@ -146,12 +156,14 @@ export function AdminPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Admin Dashboard</h1>
 
         <Tabs defaultValue="analytics" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="affiliate">Affiliate</TabsTrigger>
             <TabsTrigger value="articles">Articles</TabsTrigger>
             <TabsTrigger value="create-article">Create Article</TabsTrigger>
             <TabsTrigger value="categories">Categories</TabsTrigger>
             <TabsTrigger value="tags">Tags</TabsTrigger>
+            <TabsTrigger value="products">Products</TabsTrigger>
           </TabsList>
 
           {/* Analytics Dashboard */}
@@ -237,6 +249,107 @@ export function AdminPage() {
                       <div key={index} className="flex items-center justify-between">
                         <span className="text-sm truncate">{page.path}</span>
                         <Badge variant="secondary">{page.views}</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Affiliate Dashboard */}
+          <TabsContent value="affiliate">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Total Clicks</CardTitle>
+                  <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{affiliateStats?.totalClicks || 0}</div>
+                  <p className="text-xs text-muted-foreground">
+                    Last 30 days
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Conversions</CardTitle>
+                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{affiliateStats?.totalConversions || 0}</div>
+                  <p className="text-xs text-muted-foreground">
+                    {affiliateStats?.conversionRate.toFixed(2) || 0}% conversion rate
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Commission Earned</CardTitle>
+                  <DollarSign className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">${affiliateStats?.totalCommission.toFixed(2) || '0.00'}</div>
+                  <p className="text-xs text-muted-foreground">
+                    Last 30 days
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Top Device</CardTitle>
+                  <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {affiliateStats?.deviceBreakdown[0]?.deviceType || 'N/A'}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {affiliateStats?.deviceBreakdown[0]?.percentage.toFixed(1) || 0}% of clicks
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Top Performing Products</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {affiliateStats?.topProducts.slice(0, 5).map((product, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 border rounded">
+                        <div>
+                          <h4 className="font-medium text-sm">{product.productName}</h4>
+                          <p className="text-xs text-gray-500">
+                            {product.clicks} clicks • {product.conversions} conversions
+                          </p>
+                        </div>
+                        <Badge variant="secondary">${product.commission.toFixed(2)}</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Device Breakdown</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    {affiliateStats?.deviceBreakdown.map((device, index) => (
+                      <div key={index} className="flex items-center justify-between">
+                        <span className="text-sm capitalize">{device.deviceType}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm">{device.clicks}</span>
+                          <Badge variant="outline">{device.percentage.toFixed(1)}%</Badge>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -512,6 +625,44 @@ export function AdminPage() {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          {/* Products */}
+          <TabsContent value="products">
+            <Card>
+              <CardHeader>
+                <CardTitle>Affiliate Products</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {affiliateProducts?.products.map((product) => (
+                    <div key={product.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex-1">
+                        <h3 className="font-semibold">{product.name}</h3>
+                        <p className="text-sm text-gray-600">{product.description}</p>
+                        <div className="flex gap-2 mt-2">
+                          {product.category && <Badge variant="outline">{product.category}</Badge>}
+                          {product.price && <Badge variant="secondary">${product.price}</Badge>}
+                          {product.program && (
+                            <Badge variant="default">
+                              {product.program.name} ({product.program.commissionRate}%)
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <ExternalLink className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>

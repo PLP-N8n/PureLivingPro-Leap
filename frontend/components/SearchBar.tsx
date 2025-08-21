@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Search, X, TrendingUp, Sparkles } from "lucide-react";
+import { Search, X, TrendingUp, Sparkles, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -58,7 +58,7 @@ export function SearchBar({ isOpen, onClose }: SearchBarProps) {
               placeholder="Search wellness articles, nutrition tips, fitness guides..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="pl-16 pr-16 h-16 text-lg border-2 border-slate-200 focus:border-emerald-500 rounded-2xl bg-white/90 backdrop-blur-sm shadow-xl focus:shadow-2xl transition-all duration-300"
+              className="pl-16 pr-16 h-16 text-lg border-2 border-slate-200 focus:border-green-500 rounded-2xl bg-white/90 backdrop-blur-sm shadow-xl focus:shadow-2xl transition-all duration-300"
               autoFocus
             />
             <Button
@@ -78,7 +78,7 @@ export function SearchBar({ isOpen, onClose }: SearchBarProps) {
                 {isLoading ? (
                   <div className="p-8 text-center text-slate-500">
                     <div className="flex items-center justify-center gap-3">
-                      <Sparkles className="h-5 w-5 animate-pulse text-emerald-500" />
+                      <Sparkles className="h-5 w-5 animate-pulse text-green-500" />
                       <span className="animate-pulse">Searching wellness content...</span>
                     </div>
                   </div>
@@ -88,7 +88,7 @@ export function SearchBar({ isOpen, onClose }: SearchBarProps) {
                       <div
                         key={article.id}
                         onClick={() => handleArticleClick(article.slug)}
-                        className="p-6 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-teal-50 cursor-pointer border-b border-slate-100 last:border-b-0 transition-all duration-300 group"
+                        className="p-6 hover:bg-gradient-to-r hover:from-green-50 hover:to-lime-50 cursor-pointer border-b border-slate-100 last:border-b-0 transition-all duration-300 group"
                         style={{ animationDelay: `${index * 100}ms` }}
                       >
                         <div className="flex gap-6">
@@ -100,7 +100,7 @@ export function SearchBar({ isOpen, onClose }: SearchBarProps) {
                             />
                           )}
                           <div className="flex-1">
-                            <h4 className="font-bold text-slate-900 group-hover:text-emerald-600 transition-colors mb-3 text-lg leading-tight">
+                            <h4 className="font-bold text-slate-900 group-hover:text-green-600 transition-colors mb-3 text-lg leading-tight">
                               {article.title}
                             </h4>
                             {article.excerpt && (
@@ -108,7 +108,7 @@ export function SearchBar({ isOpen, onClose }: SearchBarProps) {
                             )}
                             <div className="flex items-center gap-4">
                               {article.category && (
-                                <Badge variant="secondary" className="text-xs bg-emerald-100 text-emerald-700 font-semibold">
+                                <Badge variant="secondary" className="text-xs bg-green-100 text-green-700 font-semibold">
                                   {article.category.name}
                                 </Badge>
                               )}
@@ -126,7 +126,7 @@ export function SearchBar({ isOpen, onClose }: SearchBarProps) {
                         <Button
                           variant="outline"
                           onClick={handleViewAllResults}
-                          className="w-full border-2 border-emerald-200 hover:border-emerald-500 hover:bg-emerald-50 h-12 font-semibold rounded-xl transition-all duration-300 hover:scale-105"
+                          className="w-full border-2 border-green-200 hover:border-green-500 hover:bg-green-50 h-12 font-semibold rounded-xl transition-all duration-300 hover:scale-105"
                         >
                           View all {searchResults.total} results
                           <ArrowRight className="h-4 w-4 ml-2" />

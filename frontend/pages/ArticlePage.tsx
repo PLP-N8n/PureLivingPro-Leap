@@ -13,6 +13,7 @@ import { useAnalytics } from "../hooks/useAnalytics";
 import { useToast } from "@/components/ui/use-toast";
 import { ReadingProgressBar } from "../components/ReadingProgressBar";
 import { AffiliateDisclosure } from "../components/AffiliateDisclosure";
+import { Breadcrumbs } from "../components/Breadcrumbs";
 
 export function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -65,10 +66,6 @@ export function ArticlePage() {
       console.error('Failed to copy link:', error);
       toast({ title: "Failed to copy link", variant: "destructive" });
     }
-  };
-
-  const handleAffiliateClick = (productId: number) => {
-    console.log(`Affiliate click tracked for product ${productId} from article ${article?.slug}`);
   };
 
   if (isLoading) {
@@ -131,22 +128,14 @@ export function ArticlePage() {
       <ReadingProgressBar />
 
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumbs */}
-        <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6">
-          <Link to="/" className="hover:text-green-600">Home</Link>
-          <span>/</span>
-          <Link to="/blog" className="hover:text-green-600">Blog</Link>
-          {article.category && (
-            <>
-              <span>/</span>
-              <Link to={`/blog?category=${article.category.id}`} className="hover:text-green-600">
-                {article.category.name}
-              </Link>
-            </>
-          )}
-          <span>/</span>
-          <span className="text-gray-900">{article.title}</span>
-        </nav>
+        <div className="mb-6">
+          <Breadcrumbs items={[
+            { name: "Home", href: "/" },
+            { name: "Insights", href: "/insights" },
+            ...(article.category ? [{ name: article.category.name, href: `/category/${article.category.slug}` }] : []),
+            { name: article.title }
+          ]} />
+        </div>
 
         {/* Article Header */}
         <header className="mb-8">
@@ -232,33 +221,7 @@ export function ArticlePage() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {recommendedProducts.products.map((product) => (
-                <div key={product.id} className="bg-white rounded-lg p-4 border">
-                  {product.imageUrl && (
-                    <img
-                      src={product.imageUrl}
-                      alt={product.name}
-                      className="w-full h-32 object-cover rounded-md mb-3"
-                    />
-                  )}
-                  <h4 className="font-medium text-gray-900 mb-2">{product.name}</h4>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                    {product.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    {product.price && (
-                      <span className="font-semibold text-green-600">
-                        ${product.price.toFixed(2)}
-                      </span>
-                    )}
-                    <Button
-                      size="sm"
-                      onClick={() => handleAffiliateClick(product.id)}
-                      className="bg-green-600 hover:bg-green-700"
-                    >
-                      View Product
-                    </Button>
-                  </div>
-                </div>
+                <ProductCard key={product.id} product={product} contentId={article.slug} />
               ))}
             </div>
             <AffiliateDisclosure className="mt-6" />

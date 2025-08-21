@@ -94,6 +94,41 @@ Detailed specifications for all major components, including props, variants, acc
 - A custom `useAnalytics` hook centralizes tracking logic.
 - Key events tracked: `ai:post_view`, `ai:cta_click`, `ai:affiliate_click`, `ai:newsletter_submit`.
 
+## Testing & Quality Assurance
+
+To ensure high quality, reliability, and accessibility, the project incorporates a suite of automated checks.
+
+### 1. Lighthouse CI
+
+-   **Configuration:** `lighthouserc.js`
+-   **Purpose:** Automatically runs Lighthouse audits against key pages on every push to the main branch.
+-   **Targets:** `/`, `/insights`, `/insights/[slug]`, `/picks`.
+-   **Assertions:** Enforces a minimum score of 90 for Performance, Best Practices, and SEO, and 95 for Accessibility.
+-   **Script:** `npm run test:lhci`
+
+### 2. Accessibility (A11y)
+
+-   **Static Analysis:** The `.eslintrc.cjs` configuration includes the `eslint-plugin-jsx-a11y` plugin to catch common accessibility issues during development.
+-   **End-to-End Testing:** Playwright tests use `@axe-core/playwright` to run Axe accessibility scans on key pages, ensuring no critical violations are introduced.
+-   **Script:** `npm run test:a11y` (for linting)
+
+### 3. End-to-End (E2E) Smoke Tests
+
+-   **Framework:** Playwright
+-   **Configuration:** `playwright.config.ts`
+-   **Tests:** Located in `tests/e2e/`.
+-   **Coverage:**
+    -   **Navigation:** Keyboard traversal of the main navigation and mobile drawer functionality.
+    -   **Core Features:** Table of Contents functionality, affiliate link behavior (`target="_blank"`, `rel` attributes).
+    -   **Accessibility:** Runs Axe scans on critical user flows.
+-   **Script:** `npm run test:e2e`
+
+### 4. Structured Data Validation
+
+-   **Method:** Integrated into Playwright E2E tests.
+-   **Helper:** `tests/e2e/structured-data.helper.ts` uses Zod to validate the JSON-LD schemas.
+-   **Schemas Validated:** `Article`, `BreadcrumbList`, and `Product` schemas are checked on their respective pages to ensure they are present and correctly formatted for search engines.
+
 ## Data Flow
 
 (Data flow documentation remains unchanged)

@@ -6,11 +6,18 @@ interface SEOHeadProps {
   keywords?: string[];
   image?: string;
   url?: string;
-  type?: "website" | "article";
+  type?: "website" | "article" | "product";
   publishedTime?: string;
   modifiedTime?: string;
   author?: string;
   section?: string;
+  productData?: {
+    name: string;
+    description?: string;
+    image?: string;
+    price?: number;
+    currency?: string;
+  };
 }
 
 export function SEOHead({
@@ -29,8 +36,55 @@ export function SEOHead({
   modifiedTime,
   author,
   section,
+  productData,
 }: SEOHeadProps) {
   const fullTitle = title.includes("Pure Living Pro") ? title : `${title} | Pure Living Pro`;
+  const schemaType = type === 'article' ? 'Article' : type === 'product' ? 'Product' : 'WebSite';
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": schemaType,
+    "name": "Pure Living Pro",
+    "description": description,
+    "url": url,
+    "logo": "https://purelivingpro.com/logo.png",
+    "sameAs": [
+      "https://facebook.com/purelivingpro",
+      "https://twitter.com/purelivingpro",
+      "https://instagram.com/purelivingpro"
+    ],
+    ...(type === "article" && {
+      "headline": title,
+      "author": {
+        "@type": "Person",
+        "name": author || "Pure Living Pro Team"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Pure Living Pro",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://purelivingpro.com/logo.png"
+        }
+      },
+      "datePublished": publishedTime,
+      "dateModified": modifiedTime || publishedTime,
+      "image": image,
+      "articleSection": section
+    }),
+    ...(type === "product" && productData && {
+      "name": productData.name,
+      "description": productData.description,
+      "image": productData.image,
+      "offers": {
+        "@type": "Offer",
+        "price": productData.price?.toString(),
+        "priceCurrency": productData.currency || "GBP",
+        "availability": "https://schema.org/InStock",
+        "url": url,
+      }
+    })
+  };
 
   return (
     <Helmet>
@@ -56,38 +110,7 @@ export function SEOHead({
       
       {/* Structured Data for Better SEO */}
       <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": type === "article" ? "Article" : "WebSite",
-          "name": "Pure Living Pro",
-          "description": description,
-          "url": url,
-          "logo": "https://purelivingpro.com/logo.png",
-          "sameAs": [
-            "https://facebook.com/purelivingpro",
-            "https://twitter.com/purelivingpro",
-            "https://instagram.com/purelivingpro"
-          ],
-          ...(type === "article" && {
-            "headline": title,
-            "author": {
-              "@type": "Person",
-              "name": author || "Pure Living Pro Team"
-            },
-            "publisher": {
-              "@type": "Organization",
-              "name": "Pure Living Pro",
-              "logo": {
-                "@type": "ImageObject",
-                "url": "https://purelivingpro.com/logo.png"
-              }
-            },
-            "datePublished": publishedTime,
-            "dateModified": modifiedTime || publishedTime,
-            "image": image,
-            "articleSection": section
-          })
-        })}
+        {JSON.stringify(schema)}
       </script>
 
       {/* Open Graph Meta Tags */}

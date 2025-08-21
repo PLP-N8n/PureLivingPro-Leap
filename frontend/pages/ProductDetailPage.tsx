@@ -40,8 +40,8 @@ export function ProductDetailPage() {
 
   const handleAffiliateLinkClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    trackAffiliateClick(product.id, product.affiliateUrl);
-    window.open(product.affiliateUrl, '_blank', 'noopener,noreferrer,sponsored');
+    trackAffiliateClick(product.id, product.originalUrl);
+    window.open(product.originalUrl, '_blank', 'noopener,noreferrer,sponsored');
   };
 
   return (
@@ -51,6 +51,14 @@ export function ProductDetailPage() {
         description={product.description}
         image={product.imageUrl}
         url={`https://purelivingpro.com/picks/${product.slug}`}
+        type="product"
+        productData={{
+          name: product.name,
+          description: product.description,
+          image: product.imageUrl,
+          price: product.price,
+          currency: "GBP",
+        }}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
@@ -94,7 +102,7 @@ export function ProductDetailPage() {
             </div>
 
             <Button asChild size="lg" className="w-full mb-4">
-              <a href={product.affiliateUrl} onClick={handleAffiliateLinkClick} target="_blank" rel="nofollow sponsored">
+              <a href={product.originalUrl} onClick={handleAffiliateLinkClick} target="_blank" rel="nofollow sponsored">
                 <ShoppingBag className="h-5 w-5 mr-2" />
                 View on Amazon
               </a>

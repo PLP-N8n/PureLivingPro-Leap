@@ -59,12 +59,16 @@ backend/
   - Click tracking with device/location data
   - Conversion tracking and commission calculation
   - Comprehensive analytics
+  - Full CRUD for products and programs
 
 **Key Endpoints**:
 - `GET /r/:shortCode` - Redirect and track affiliate clicks
 - `POST /affiliate/links` - Create new affiliate tracking links
 - `GET /affiliate/stats` - Comprehensive affiliate analytics
 - `GET /affiliate/products` - List affiliate products with filtering
+- `POST /affiliate/products` - Create a new affiliate product
+- `PUT /affiliate/products/:id` - Update an affiliate product
+- `DELETE /affiliate/products/:id` - Delete an affiliate product
 
 #### Analytics Service (`backend/analytics/`)
 - **Purpose**: Tracks user behavior and provides insights
@@ -197,13 +201,12 @@ CREATE TABLE affiliate_clicks (
 frontend/
 ├── components/          # Reusable UI components
 │   ├── ui/             # shadcn/ui components
+│   ├── admin/          # Admin dashboard components
 │   ├── AIAssistant.tsx # AI chat widget
-│   ├── ProductCard.tsx # Product display component
-│   └── ...
+│   └── ProductCard.tsx # Product display component
 ├── pages/              # Page components
 │   ├── HomePage.tsx    # Landing page
-│   ├── ArticlePage.tsx # Article detail page
-│   ├── AdminPage.tsx   # Admin dashboard
+│   ├── AdminPage.tsx   # Admin dashboard shell
 │   └── ...
 ├── hooks/              # Custom React hooks
 ├── utils/              # Utility functions
@@ -212,21 +215,17 @@ frontend/
 
 ### Key Components
 
-#### ProductCard (`frontend/components/ProductCard.tsx`)
-- Displays affiliate products with tracking
-- Handles click tracking and attribution
-- Supports confidence scoring for AI recommendations
+#### Admin Dashboard (`frontend/pages/AdminPage.tsx` & `frontend/components/admin/*`)
+- A modular dashboard with a persistent sidebar for navigation.
+- **Overview**: Displays KPIs, quick actions, and recent activity.
+- **Blog Management**: Table view for posts with search/filter, and a modal-based editor with AI helper placeholders.
+- **Product Management**: Table view for affiliate products, and a modal-based editor for CRUD operations.
+- **Placeholders**: Includes placeholders for future Automation and Settings sections.
 
 #### AIAssistant (`frontend/components/AIAssistant.tsx`)
 - Floating chat widget for health advice
 - Conversation history management
 - Graceful fallback when AI unavailable
-
-#### AdminPage (`frontend/pages/AdminPage.tsx`)
-- Comprehensive admin dashboard
-- Content management (articles, categories, tags)
-- Analytics visualization
-- Affiliate product management
 
 ### State Management
 
@@ -252,23 +251,18 @@ trackAffiliateClick(productId, shortCode, contentId);
 
 ## Data Flow
 
-### Content Flow
-1. **Admin creates content** → Content Service → Database
-2. **User visits page** → Analytics tracking → Page view recorded
-3. **User searches** → Search Service → Analytics tracking
-4. **Content displayed** → SEO optimization → Search engines
+### Admin Flow
+1. **Admin navigates to `/admin`** → `AdminPage` renders the shell with sidebar.
+2. **Selects a section (e.g., Blog)** → `BlogManagement` component is rendered in the main panel.
+3. **Clicks "New Post"** → A dialog with the `BlogEditor` form is displayed.
+4. **Submits form** → `createArticle` API in the Content Service is called.
+5. **Data is saved** → The table in `BlogManagement` is automatically refreshed via TanStack Query.
 
 ### Affiliate Flow
 1. **Product recommendation** → AI Service → Product matching
 2. **User clicks product** → Affiliate tracking → Click recorded
 3. **Redirect to merchant** → Commission tracking → Analytics
 4. **Purchase conversion** → Webhook → Commission calculation
-
-### AI Flow
-1. **User asks question** → AI Service → OpenAI API (if available)
-2. **AI response** → Conversation storage → Display to user
-3. **Product recommendation** → Keyword matching → Affiliate products
-4. **Fallback handling** → Graceful degradation → Static responses
 
 ## Deployment
 
@@ -277,25 +271,6 @@ trackAffiliateClick(productId, shortCode, contentId);
 2. **Backend**: Encore.ts compiles services
 3. **Database**: Migrations run automatically
 4. **Assets**: Static files served by Encore.ts
-
-### Environment Setup
-```bash
-# Install dependencies
-npm install
-
-# Set up environment
-cp .env.example .env
-# Edit .env with your configuration
-
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
-```
 
 ### Health Monitoring
 - **Health Check**: `GET /healthz` returns service status
@@ -327,34 +302,6 @@ npm start
 - **Code Splitting**: Lazy loading of admin components
 - **Image Optimization**: Lazy loading and responsive images
 - **Bundle Optimization**: Tree shaking and minification
-
-## Monitoring & Analytics
-
-### Built-in Analytics
-- Page view tracking with referrer data
-- Search query analytics
-- Affiliate click tracking
-- User session analysis
-
-### External Integration
-- Google Analytics 4 ready
-- Custom event tracking
-- Conversion funnel analysis
-
-## Future Enhancements
-
-### Planned Features
-1. **Email Marketing**: Newsletter integration
-2. **User Accounts**: Personalized recommendations
-3. **Advanced AI**: GPT-4 integration for better recommendations
-4. **Mobile App**: React Native companion app
-5. **A/B Testing**: Built-in experimentation framework
-
-### Scalability Considerations
-- **Microservices**: Easy to scale individual services
-- **Database Sharding**: User-based data partitioning
-- **CDN Integration**: Static asset optimization
-- **Caching Layer**: Redis for high-traffic scenarios
 
 ---
 

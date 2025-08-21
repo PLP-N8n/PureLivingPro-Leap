@@ -59,3 +59,40 @@ export interface ListAffiliateProductsResponse {
   products: AffiliateProduct[];
   total: number;
 }
+
+export interface CreateAffiliateProgramRequest {
+  name: string;
+  description?: string;
+  commissionRate: number;
+  cookieDuration?: number;
+  trackingDomain?: string;
+  isActive?: boolean;
+}
+
+export interface ListAffiliateProgramsResponse {
+  programs: AffiliateProgram[];
+}
+
+export interface CreateAffiliateProductRequest {
+  programId: number;
+  name: string;
+  description?: string;
+  price?: number;
+  originalUrl: string;
+  imageUrl?: string;
+  category?: string;
+  tags?: string[];
+  isActive?: boolean;
+}
+
+export interface UpdateAffiliateProductRequest {
+  programId?: number;
+  name?: string;
+  description?: string;
+  price?: number;
+  originalUrl?: string;
+  imageUrl?: string;
+  category?: string;
+  tags?: string[];
+  isActive?: boolean;
+}

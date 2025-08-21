@@ -10,8 +10,7 @@ export const generateRobots = api<void, RobotsResponse>(
   async () => {
     const baseUrl = "https://purelivingpro.com";
     
-    return {
-      content: `User-agent: *
+    const content = `User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /api/
@@ -21,7 +20,8 @@ Disallow: /r/
 Sitemap: ${baseUrl}/sitemap.xml
 
 # Crawl-delay for respectful crawling
-Crawl-delay: 1`
-    };
+Crawl-delay: 1`;
+
+    return { content };
   }
 );

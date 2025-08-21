@@ -20,41 +20,56 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
 
   const estimatedReadTime = Math.ceil(article.content.length / 1000) || 3;
 
+  // Use wellness images as fallback if no featured image is provided
+  const getArticleImage = () => {
+    if (article.featuredImageUrl) return article.featuredImageUrl;
+    
+    // Fallback images based on category
+    const fallbackImages = {
+      nutrition: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=400&fit=crop&crop=center",
+      fitness: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=400&fit=crop&crop=center",
+      wellness: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center",
+      supplements: "https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=800&h=400&fit=crop&crop=center",
+      recipes: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=400&fit=crop&crop=center"
+    };
+    
+    return fallbackImages[article.category?.name?.toLowerCase() as keyof typeof fallbackImages] || 
+           "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center";
+  };
+
   return (
     <Card className={`group hover:shadow-2xl transition-all duration-500 border-0 bg-white/90 backdrop-blur-sm hover:bg-white hover:-translate-y-2 transform perspective-1000 hover:rotate-x-1 relative overflow-hidden ${featured ? "md:col-span-2" : ""}`}>
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       
       <CardHeader className="p-0 relative">
-        {article.featuredImageUrl && (
-          <div className={`relative overflow-hidden rounded-t-2xl ${featured ? "h-80" : "h-64"}`}>
-            <img
-              src={article.featuredImageUrl}
-              alt={article.title}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-            
-            {/* Floating elements */}
-            {article.featured && (
-              <Badge className="absolute top-4 left-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-0 shadow-xl backdrop-blur-sm animate-pulse">
-                <Bookmark className="h-3 w-3 mr-1" />
-                Featured
+        <div className={`relative overflow-hidden rounded-t-2xl ${featured ? "h-80" : "h-64"}`}>
+          <img
+            src={getArticleImage()}
+            alt={article.title}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+          
+          {/* Floating elements */}
+          {article.featured && (
+            <Badge className="absolute top-4 left-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-0 shadow-xl backdrop-blur-sm animate-pulse">
+              <Bookmark className="h-3 w-3 mr-1" />
+              Featured
+            </Badge>
+          )}
+          
+          <div className="absolute bottom-4 left-4 right-4">
+            {article.category && (
+              <Badge variant="secondary" className="bg-white/95 text-slate-700 backdrop-blur-sm shadow-lg border-0 font-semibold">
+                {article.category.name}
               </Badge>
             )}
-            
-            <div className="absolute bottom-4 left-4 right-4">
-              {article.category && (
-                <Badge variant="secondary" className="bg-white/95 text-slate-700 backdrop-blur-sm shadow-lg border-0 font-semibold">
-                  {article.category.name}
-                </Badge>
-              )}
-            </div>
-            
-            {/* Hover overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-emerald-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           </div>
-        )}
+          
+          {/* Hover overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-emerald-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        </div>
       </CardHeader>
       
       <CardContent className="p-8 relative z-10">

@@ -45,45 +45,60 @@ export function ProductCard({
     }
   };
 
+  // Use wellness images as fallback if no product image is provided
+  const getProductImage = () => {
+    if (product.imageUrl) return product.imageUrl;
+    
+    // Fallback images based on category
+    const fallbackImages = {
+      supplements: "https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400&h=300&fit=crop&crop=center",
+      skincare: "https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400&h=300&fit=crop&crop=center",
+      fitness: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&crop=center",
+      wellness: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&crop=center",
+      nutrition: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&h=300&fit=crop&crop=center"
+    };
+    
+    return fallbackImages[product.category?.toLowerCase() as keyof typeof fallbackImages] || 
+           "https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400&h=300&fit=crop&crop=center";
+  };
+
   return (
     <Card className="group hover:shadow-2xl transition-all duration-500 border-0 bg-white/90 backdrop-blur-sm hover:bg-white hover:-translate-y-3 transform perspective-1000 hover:rotate-x-1 relative overflow-hidden">
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       
       <CardHeader className="p-0 relative">
-        {product.imageUrl && (
-          <div className="relative h-64 overflow-hidden rounded-t-2xl">
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
-            
-            {/* Floating badges */}
-            {product.category && (
-              <Badge className="absolute top-4 left-4 bg-white/95 text-slate-700 backdrop-blur-sm border-0 shadow-lg font-semibold">
-                {product.category}
-              </Badge>
-            )}
-            
-            {confidenceScore && confidenceScore > 0.8 && (
-              <Badge className="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white border-0 shadow-xl animate-pulse">
-                <Star className="h-3 w-3 mr-1" />
-                Top Pick
-              </Badge>
-            )}
+        <div className="relative h-64 overflow-hidden rounded-t-2xl">
+          <img
+            src={getProductImage()}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+          
+          {/* Floating badges */}
+          {product.category && (
+            <Badge className="absolute top-4 left-4 bg-white/95 text-slate-700 backdrop-blur-sm border-0 shadow-lg font-semibold">
+              {product.category}
+            </Badge>
+          )}
+          
+          {confidenceScore && confidenceScore > 0.8 && (
+            <Badge className="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white border-0 shadow-xl animate-pulse">
+              <Star className="h-3 w-3 mr-1" />
+              Top Pick
+            </Badge>
+          )}
 
-            {/* Wishlist button */}
-            <button className="absolute bottom-4 right-4 w-12 h-12 bg-white/95 hover:bg-white rounded-full flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg hover:shadow-xl transform scale-90 group-hover:scale-100">
-              <Heart className="h-5 w-5 text-slate-600 hover:text-red-500 transition-colors duration-300" />
-            </button>
-            
-            {/* Hover overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          </div>
-        )}
+          {/* Wishlist button */}
+          <button className="absolute bottom-4 right-4 w-12 h-12 bg-white/95 hover:bg-white rounded-full flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg hover:shadow-xl transform scale-90 group-hover:scale-100">
+            <Heart className="h-5 w-5 text-slate-600 hover:text-red-500 transition-colors duration-300" />
+          </button>
+          
+          {/* Hover overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        </div>
       </CardHeader>
       
       <CardContent className="p-8 relative z-10">

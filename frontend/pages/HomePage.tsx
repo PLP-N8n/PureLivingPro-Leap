@@ -135,7 +135,7 @@ export function HomePage() {
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Features Section with Wellness Images */}
         <section className="py-24">
           <div className="text-center mb-20">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 px-6 py-3 rounded-full text-sm font-semibold mb-8 shadow-lg">
@@ -157,6 +157,14 @@ export function HomePage() {
             <Link to="/wellness-plan">
               <Card className="group hover:shadow-2xl transition-all duration-500 cursor-pointer border-0 bg-white/80 backdrop-blur-sm hover:bg-white hover:-translate-y-4 transform perspective-1000 hover:rotate-y-2 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative h-48 overflow-hidden rounded-t-2xl">
+                  <img
+                    src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center"
+                    alt="AI Wellness Plans"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                </div>
                 <CardContent className="p-10 text-center relative z-10">
                   <div className="relative mb-8">
                     <div className="w-24 h-24 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-3xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-500 shadow-xl">
@@ -176,6 +184,14 @@ export function HomePage() {
             <Link to="/products">
               <Card className="group hover:shadow-2xl transition-all duration-500 cursor-pointer border-0 bg-white/80 backdrop-blur-sm hover:bg-white hover:-translate-y-4 transform perspective-1000 hover:rotate-y-2 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative h-48 overflow-hidden rounded-t-2xl">
+                  <img
+                    src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=400&fit=crop&crop=center"
+                    alt="Curated Products"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                </div>
                 <CardContent className="p-10 text-center relative z-10">
                   <div className="relative mb-8">
                     <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-3xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-500 shadow-xl">
@@ -195,6 +211,14 @@ export function HomePage() {
             <Link to="/dashboard">
               <Card className="group hover:shadow-2xl transition-all duration-500 cursor-pointer border-0 bg-white/80 backdrop-blur-sm hover:bg-white hover:-translate-y-4 transform perspective-1000 hover:rotate-y-2 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative h-48 overflow-hidden rounded-t-2xl">
+                  <img
+                    src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=400&fit=crop&crop=center"
+                    alt="Progress Tracking"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                </div>
                 <CardContent className="p-10 text-center relative z-10">
                   <div className="relative mb-8">
                     <div className="w-24 h-24 bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-500 shadow-xl">
@@ -210,6 +234,76 @@ export function HomePage() {
                 </CardContent>
               </Card>
             </Link>
+          </div>
+        </section>
+
+        {/* Wellness Showcase Section */}
+        <section className="py-24">
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 px-6 py-3 rounded-full text-sm font-semibold mb-8 shadow-lg">
+              <Leaf className="h-5 w-5" />
+              Natural Wellness Solutions
+            </div>
+            <h2 className="text-5xl md:text-6xl font-black text-slate-900 mb-8">
+              Pure Ingredients for
+              <span className="block bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                Pure Living
+              </span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+            <div className="relative">
+              <img
+                src="https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=800&h=600&fit=crop&crop=center"
+                alt="Natural herbs and essential oils"
+                className="w-full h-96 object-cover rounded-3xl shadow-2xl"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
+            </div>
+            <div className="space-y-6">
+              <h3 className="text-3xl font-bold text-slate-900">Natural Remedies & Supplements</h3>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                Discover the power of nature with our carefully curated selection of herbs, essential oils, and natural supplements. Each product is sourced from trusted suppliers and backed by scientific research.
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-green-50 rounded-xl">
+                  <h4 className="font-semibold text-green-800 mb-2">100% Natural</h4>
+                  <p className="text-sm text-green-700">Pure, organic ingredients</p>
+                </div>
+                <div className="p-4 bg-blue-50 rounded-xl">
+                  <h4 className="font-semibold text-blue-800 mb-2">Lab Tested</h4>
+                  <p className="text-sm text-blue-700">Quality guaranteed</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6 lg:order-2">
+              <h3 className="text-3xl font-bold text-slate-900">Nutritious Meal Planning</h3>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                Transform your health with our AI-powered meal planning system. Get personalized nutrition recommendations based on your goals, dietary preferences, and lifestyle.
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-purple-50 rounded-xl">
+                  <h4 className="font-semibold text-purple-800 mb-2">AI Powered</h4>
+                  <p className="text-sm text-purple-700">Smart recommendations</p>
+                </div>
+                <div className="p-4 bg-orange-50 rounded-xl">
+                  <h4 className="font-semibold text-orange-800 mb-2">Personalized</h4>
+                  <p className="text-sm text-orange-700">Tailored to your needs</p>
+                </div>
+              </div>
+            </div>
+            <div className="relative lg:order-1">
+              <img
+                src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=600&fit=crop&crop=center"
+                alt="Healthy nutritious meal bowls"
+                className="w-full h-96 object-cover rounded-3xl shadow-2xl"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
+            </div>
           </div>
         </section>
 
@@ -251,7 +345,7 @@ export function HomePage() {
           </section>
         )}
 
-        {/* Premium Products */}
+        {/* Premium Products Section */}
         {curatedProducts?.products && curatedProducts.products.length > 0 && (
           <section className="py-24">
             <div className="text-center mb-20">
@@ -268,6 +362,44 @@ export function HomePage() {
               <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
                 Discover premium wellness products that have been rigorously tested and approved by our team of health experts.
               </p>
+            </div>
+
+            {/* Product Showcase with Image */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+              <div className="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=800&h=600&fit=crop&crop=center"
+                  alt="Premium wellness supplements"
+                  className="w-full h-96 object-cover rounded-3xl shadow-2xl"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-3xl"></div>
+                <div className="absolute bottom-6 left-6 right-6">
+                  <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4">
+                    <h4 className="font-bold text-slate-900 mb-2">Premium Quality Guaranteed</h4>
+                    <p className="text-sm text-slate-600">All products are third-party tested for purity and potency</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-6">
+                <h3 className="text-3xl font-bold text-slate-900">Scientifically Backed Supplements</h3>
+                <p className="text-lg text-slate-600 leading-relaxed">
+                  Our supplement collection features only the highest quality ingredients, backed by scientific research and manufactured in certified facilities.
+                </p>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-slate-700">Third-party tested for purity</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span className="text-slate-700">Manufactured in FDA-approved facilities</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                    <span className="text-slate-700">Backed by clinical research</span>
+                  </div>
+                </div>
+              </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">

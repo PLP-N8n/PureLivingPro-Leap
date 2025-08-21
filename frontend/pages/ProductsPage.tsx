@@ -8,7 +8,7 @@ import { SEOHead } from "../components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, Sparkles, Award } from "lucide-react";
 
 export function ProductsPage() {
   const { category } = useParams<{ category?: string }>();
@@ -51,32 +51,49 @@ export function ProductsPage() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <header className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            {category ? `${category} Products` : "Health & Wellness Products"}
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Carefully selected products to support your health and wellness journey. 
-            All recommendations are based on quality, effectiveness, and customer reviews.
-          </p>
-        </header>
+        {/* Hero Section with Wellness Image */}
+        <section className="relative mb-16 rounded-3xl overflow-hidden">
+          <div className="relative h-96">
+            <img
+              src="https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=1200&h=600&fit=crop&crop=center"
+              alt="Premium wellness products"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
+            <div className="absolute inset-0 flex items-center">
+              <div className="max-w-3xl mx-auto px-8 text-white">
+                <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                  <Award className="h-4 w-4" />
+                  Premium Quality Guaranteed
+                </div>
+                <h1 className="text-5xl md:text-6xl font-black mb-6 leading-tight">
+                  {category ? `${category} Products` : "Health & Wellness Products"}
+                </h1>
+                <p className="text-xl md:text-2xl leading-relaxed max-w-2xl">
+                  Carefully selected products to support your health and wellness journey. 
+                  All recommendations are based on quality, effectiveness, and customer reviews.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Search and Filter */}
-        <div className="mb-8 space-y-4">
+        <div className="mb-12 space-y-6">
           <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <Input
                 type="search"
-                placeholder="Search products..."
+                placeholder="Search wellness products..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-10"
+                className="pl-12 h-12 text-lg border-2 border-slate-200 focus:border-emerald-500 rounded-xl"
               />
             </div>
             
             <Select value={selectedCategory} onValueChange={handleCategoryChange}>
-              <SelectTrigger className="w-full sm:w-48">
+              <SelectTrigger className="w-full sm:w-48 h-12 border-2 border-slate-200 rounded-xl">
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
@@ -89,16 +106,72 @@ export function ProductsPage() {
               </SelectContent>
             </Select>
             
-            <Button type="submit">
-              <Filter className="h-4 w-4 mr-2" />
+            <Button type="submit" size="lg" className="h-12 px-8 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700">
+              <Filter className="h-5 w-5 mr-2" />
               Filter
             </Button>
           </form>
+
+          {/* Category Showcase */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="relative group cursor-pointer" onClick={() => handleCategoryChange("supplements")}>
+              <div className="relative h-32 rounded-2xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400&h=200&fit=crop&crop=center"
+                  alt="Supplements"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/80 to-teal-600/80"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <Sparkles className="h-8 w-8 mx-auto mb-2" />
+                    <h3 className="font-bold text-lg">Supplements</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer" onClick={() => handleCategoryChange("skincare")}>
+              <div className="relative h-32 rounded-2xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400&h=200&fit=crop&crop=center"
+                  alt="Skincare"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-pink-600/80 to-rose-600/80"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <Sparkles className="h-8 w-8 mx-auto mb-2" />
+                    <h3 className="font-bold text-lg">Skincare</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer" onClick={() => handleCategoryChange("fitness")}>
+              <div className="relative h-32 rounded-2xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=200&fit=crop&crop=center"
+                  alt="Fitness"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/80 to-indigo-600/80"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <Sparkles className="h-8 w-8 mx-auto mb-2" />
+                    <h3 className="font-bold text-lg">Fitness</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Products Grid */}
         {isLoading ? (
-          <LoadingSpinner size="lg" />
+          <div className="flex justify-center py-20">
+            <LoadingSpinner size="lg" />
+          </div>
         ) : products && products.products.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -112,7 +185,7 @@ export function ProductsPage() {
                     price: product.price,
                     imageUrl: product.imageUrl,
                     category: product.category,
-                    affiliateUrl: `/r/product-${product.id}`, // This would be generated from actual affiliate links
+                    affiliateUrl: `/r/product-${product.id}`,
                     program: product.program
                   }}
                   onAffiliateClick={handleAffiliateClick}
@@ -127,6 +200,7 @@ export function ProductsPage() {
                   onClick={() => setPage(page + 1)}
                   size="lg"
                   variant="outline"
+                  className="border-2 border-slate-300 hover:border-emerald-500 hover:bg-emerald-50"
                 >
                   Load More Products
                 </Button>
@@ -134,11 +208,24 @@ export function ProductsPage() {
             )}
           </>
         ) : (
-          <div className="text-center py-12">
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No products found</h3>
-            <p className="text-gray-600 mb-6">
+          <div className="text-center py-20">
+            <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Search className="h-12 w-12 text-slate-400" />
+            </div>
+            <h3 className="text-2xl font-bold text-slate-900 mb-4">No products found</h3>
+            <p className="text-slate-600 mb-8 text-lg">
               Try adjusting your search terms or browse different categories.
             </p>
+            <Button 
+              onClick={() => {
+                setSearch("");
+                setSelectedCategory("");
+                setPage(0);
+              }}
+              className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+            >
+              Clear Filters
+            </Button>
           </div>
         )}
       </div>

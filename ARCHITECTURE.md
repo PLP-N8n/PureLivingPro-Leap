@@ -152,6 +152,7 @@ CREATE TABLE subscriptions (
 - **Brand Identity**: Targets Gen Z & Millennials with a focus on clean living, mindfulness, and natural health.
 - **Tone**: Clear, modern, warm, and credible. Avoids "fluff" and dark patterns.
 - **UI/UX**: Aims to drive affiliate clicks, grow email signups, and maximize reader engagement on long-form content.
+- **System**: A cohesive design system based on brand tokens for color, typography, spacing, and motion ensures consistency and rapid development.
 
 ### Project Structure
 
@@ -160,15 +161,15 @@ frontend/
 ├── components/          # Reusable UI components
 │   ├── ui/             # shadcn/ui components
 │   ├── admin/          # Admin dashboard components
-│   ├── EmailSignupForm.tsx # Email subscription form
-│   └── ...
+│   └── design-system/  # Core design system components
 ├── pages/              # Page components
 │   ├── HomePage.tsx    # Landing page
 │   ├── ArticlePage.tsx # Individual article view
-│   └── ...
+│   └── UIPage.tsx      # Design system showcase
 ├── hooks/              # Custom React hooks
 ├── utils/              # Utility functions
-└── App.tsx            # Main app component
+├── styles/             # Global styles and theming
+└── App.tsx             # Main app component
 ```
 
 ### Key Components
@@ -176,11 +177,11 @@ frontend/
 #### Admin Dashboard (`frontend/pages/AdminPage.tsx` & `frontend/components/admin/*`)
 - A modular dashboard for managing content, products, and automation.
 
-#### `ProductCard.tsx`
-- Visually appealing card to showcase affiliate products, designed to maximize click-through rates.
+#### Design System (`frontend/components/design-system/*`)
+- A library of reusable, brand-aligned components including `Hero`, `InsightCard`, `ProductCard`, `CTASection`, `NewsletterSignup`, and more.
 
 #### `ArticlePage.tsx`
-- Optimized for readability with features like a reading progress bar to keep users engaged.
+- Optimized for readability with features like a reading progress bar, table of contents, and clear typographic hierarchy to keep users engaged.
 
 ### State Management
 

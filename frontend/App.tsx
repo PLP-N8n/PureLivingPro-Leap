@@ -15,6 +15,8 @@ import { WellnessPlanPage } from "./pages/WellnessPlanPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { AdminPage } from "./pages/AdminPage";
 import { AboutPage } from "./pages/AboutPage";
+import { UIPage } from "./pages/UIPage";
+import "./styles/globals.css";
 
 const queryClient = new QueryClient();
 
@@ -23,16 +25,9 @@ export default function App() {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <Router>
-          <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50/30 flex flex-col font-inter relative overflow-hidden">
-            {/* Animated background elements */}
-            <div className="fixed inset-0 -z-10">
-              <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-green-200/20 to-lime-200/20 rounded-full blur-3xl animate-pulse"></div>
-              <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-green-200/20 to-emerald-200/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-lime-200/10 to-green-200/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
-            </div>
-            
+          <div className="min-h-screen bg-background text-foreground flex flex-col font-body">
             <Header />
-            <main className="flex-1 relative z-10">
+            <main className="flex-1">
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/blog" element={<BlogPage />} />
@@ -45,6 +40,7 @@ export default function App() {
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/about" element={<AboutPage />} />
+                <Route path="/ui" element={<UIPage />} />
               </Routes>
             </main>
             <Footer />

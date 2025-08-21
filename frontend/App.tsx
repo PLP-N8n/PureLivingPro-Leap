@@ -22,7 +22,7 @@ export default function App() {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <Router>
-          <div className="min-h-screen bg-gray-50 flex flex-col">
+          <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50/30 flex flex-col font-inter">
             <Header />
             <main className="flex-1">
               <Routes>

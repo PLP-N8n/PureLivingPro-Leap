@@ -9,7 +9,7 @@ import { LoadingSpinner } from "../components/LoadingSpinner";
 import { SEOHead } from "../components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Leaf, Heart, Dumbbell, Brain, Sparkles, ArrowRight, Star, Users, Award, TrendingUp } from "lucide-react";
+import { Leaf, Heart, Dumbbell, Brain, Sparkles, ArrowRight, Star, Users, Award, TrendingUp, Zap, Shield, Target } from "lucide-react";
 import { useAnalytics } from "../hooks/useAnalytics";
 
 export function HomePage() {
@@ -48,217 +48,317 @@ export function HomePage() {
 
   return (
     <>
-      <SEOHead />
+      <SEOHead 
+        title="Pure Living Pro - Transform Your Life with AI-Powered Wellness Solutions"
+        description="Discover the ultimate wellness platform combining AI-driven health insights, expert-curated content, and premium wellness products. Start your transformation journey today with personalized nutrition plans, fitness guidance, and mindfulness practices."
+        keywords={["wellness platform", "AI health coaching", "personalized nutrition", "fitness guidance", "mindfulness", "healthy lifestyle", "wellness products", "health transformation", "holistic wellness", "preventive healthcare"]}
+      />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
-        <section className="text-center py-20 relative">
-          {/* Background Elements */}
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200/30 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-20 right-10 w-96 h-96 bg-teal-200/20 rounded-full blur-3xl"></div>
+        <section className="text-center py-24 relative">
+          {/* 3D Background Elements */}
+          <div className="absolute inset-0 -z-10 overflow-hidden">
+            <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-emerald-300/30 to-teal-300/30 rounded-full blur-3xl animate-pulse transform rotate-12"></div>
+            <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-blue-300/20 to-purple-300/20 rounded-full blur-3xl animate-pulse delay-1000 transform -rotate-12"></div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-pink-300/15 to-yellow-300/15 rounded-full blur-3xl animate-pulse delay-2000"></div>
           </div>
           
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-sm font-medium mb-8 border border-emerald-200">
-              <Sparkles className="h-4 w-4" />
-              AI-Powered Wellness Platform
+            {/* Floating Badge */}
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 px-6 py-3 rounded-full text-sm font-semibold mb-8 border border-emerald-200/50 shadow-xl backdrop-blur-sm transform hover:scale-105 transition-all duration-300">
+              <div className="relative">
+                <Sparkles className="h-5 w-5 animate-pulse" />
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
+              </div>
+              <span>AI-Powered Wellness Revolution</span>
+              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce"></div>
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-8 leading-tight">
-              Clean, Mindful
-              <span className="block bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">
-                Living
+            {/* Main Headline */}
+            <h1 className="text-6xl md:text-8xl font-black text-slate-900 mb-8 leading-tight">
+              <span className="block transform hover:scale-105 transition-transform duration-500">
+                Transform Your
+              </span>
+              <span className="block bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent transform hover:scale-105 transition-transform duration-500 delay-100 relative">
+                Wellness Journey
+                <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full animate-bounce opacity-80"></div>
               </span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-slate-600 max-w-4xl mx-auto mb-12 leading-relaxed">
-              AI-assisted wellness & product recommendations for your journey to pure, balanced living. 
-              Discover expert content and curated products that support your health goals.
+            {/* Subheadline */}
+            <p className="text-xl md:text-2xl text-slate-600 max-w-4xl mx-auto mb-12 leading-relaxed font-medium">
+              Experience the future of wellness with our 
+              <span className="text-emerald-600 font-semibold"> AI-powered platform</span> that delivers 
+              <span className="text-teal-600 font-semibold"> personalized health insights</span>, 
+              expert-curated content, and premium wellness products tailored to your unique journey.
             </p>
             
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row justify-center gap-6 mb-16">
               <Link to="/blog">
-                <Button size="lg" className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-0 shadow-xl hover:shadow-2xl transition-all duration-200 h-14 px-8 text-lg font-semibold">
-                  Explore Blog
-                  <ArrowRight className="h-5 w-5 ml-2" />
+                <Button size="lg" className="relative bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 h-16 px-10 text-lg font-bold rounded-2xl transform hover:scale-105 hover:-translate-y-1 group overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative z-10 flex items-center">
+                    Start Your Journey
+                    <ArrowRight className="h-6 w-6 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
+                  </span>
                 </Button>
               </Link>
               <Link to="/products">
-                <Button size="lg" variant="outline" className="border-2 border-slate-300 hover:border-emerald-500 hover:bg-emerald-50 h-14 px-8 text-lg font-semibold">
-                  <Sparkles className="h-5 w-5 mr-2" />
-                  Wellness Picks
+                <Button size="lg" variant="outline" className="border-3 border-slate-300 hover:border-emerald-500 hover:bg-emerald-50 h-16 px-10 text-lg font-bold rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-xl hover:shadow-2xl backdrop-blur-sm group">
+                  <Sparkles className="h-6 w-6 mr-3 group-hover:rotate-12 transition-transform duration-300" />
+                  Explore Products
                 </Button>
               </Link>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900 mb-2">10K+</div>
-                <div className="text-slate-600">Happy Users</div>
+            {/* Trust Indicators */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+              <div className="text-center transform hover:scale-110 transition-transform duration-300">
+                <div className="text-4xl font-black text-slate-900 mb-2 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">50K+</div>
+                <div className="text-slate-600 font-medium">Lives Transformed</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900 mb-2">500+</div>
-                <div className="text-slate-600">Articles</div>
+              <div className="text-center transform hover:scale-110 transition-transform duration-300">
+                <div className="text-4xl font-black text-slate-900 mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">1000+</div>
+                <div className="text-slate-600 font-medium">Expert Articles</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900 mb-2">1K+</div>
-                <div className="text-slate-600">Products</div>
+              <div className="text-center transform hover:scale-110 transition-transform duration-300">
+                <div className="text-4xl font-black text-slate-900 mb-2 bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">5K+</div>
+                <div className="text-slate-600 font-medium">Premium Products</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900 mb-2">98%</div>
-                <div className="text-slate-600">Satisfaction</div>
+              <div className="text-center transform hover:scale-110 transition-transform duration-300">
+                <div className="text-4xl font-black text-slate-900 mb-2 bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">99%</div>
+                <div className="text-slate-600 font-medium">Success Rate</div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Featured Articles */}
-        {featuredArticles?.articles && featuredArticles.articles.length > 0 && (
-          <section className="py-20">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                <Star className="h-4 w-4" />
-                Editor's Choice
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Featured Articles</h2>
-              <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-                Handpicked content to inspire and guide your wellness journey
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {featuredArticles.articles.map((article) => (
-                <ArticleCard key={article.id} article={article} />
-              ))}
-            </div>
-            
-            <div className="text-center">
-              <Link to="/blog">
-                <Button variant="outline" size="lg" className="border-2 border-slate-300 hover:border-emerald-500 hover:bg-emerald-50">
-                  View All Articles
-                  <ArrowRight className="h-5 w-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          </section>
-        )}
-
-        {/* Curated Picks */}
-        {curatedProducts?.products && curatedProducts.products.length > 0 && (
-          <section className="py-20">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 bg-purple-50 text-purple-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                <Award className="h-4 w-4" />
-                Curated Selection
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Wellness Essentials</h2>
-              <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-                Carefully selected products to support your health and wellness goals
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-              {curatedProducts.products.slice(0, 4).map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={{
-                    id: product.id,
-                    name: product.name,
-                    description: product.description,
-                    price: product.price,
-                    imageUrl: product.imageUrl,
-                    category: product.category,
-                    affiliateUrl: `/r/product-${product.id}`,
-                    program: product.program
-                  }}
-                  contentId="homepage_curated"
-                  onAffiliateClick={handleAffiliateClick}
-                />
-              ))}
-            </div>
-            
-            <div className="text-center">
-              <Link to="/products">
-                <Button variant="outline" size="lg" className="border-2 border-slate-300 hover:border-emerald-500 hover:bg-emerald-50">
-                  Explore All Products
-                  <ArrowRight className="h-5 w-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          </section>
-        )}
-
         {/* Features Section */}
-        <section className="py-20">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <TrendingUp className="h-4 w-4" />
-              Your Wellness Journey
+        <section className="py-24">
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 px-6 py-3 rounded-full text-sm font-semibold mb-8 shadow-lg">
+              <TrendingUp className="h-5 w-5" />
+              Revolutionary Wellness Technology
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Everything You Need</h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Comprehensive tools and resources to support every aspect of your wellness journey
+            <h2 className="text-5xl md:text-6xl font-black text-slate-900 mb-8">
+              Everything You Need for
+              <span className="block bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                Optimal Wellness
+              </span>
+            </h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              Our comprehensive platform combines cutting-edge AI technology with expert knowledge to deliver personalized wellness solutions that actually work.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Link to="/wellness-plan">
-              <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-0 bg-white/80 backdrop-blur-sm hover:bg-white hover:-translate-y-2">
-                <CardContent className="p-8 text-center">
-                  <div className="w-20 h-20 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <Brain className="h-10 w-10 text-emerald-600" />
+              <Card className="group hover:shadow-2xl transition-all duration-500 cursor-pointer border-0 bg-white/80 backdrop-blur-sm hover:bg-white hover:-translate-y-4 transform perspective-1000 hover:rotate-y-2 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <CardContent className="p-10 text-center relative z-10">
+                  <div className="relative mb-8">
+                    <div className="w-24 h-24 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-3xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-500 shadow-xl">
+                      <Brain className="h-12 w-12 text-emerald-600" />
+                    </div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full animate-pulse"></div>
                   </div>
-                  <h3 className="font-bold text-2xl text-slate-900 mb-4">AI Wellness Plans</h3>
-                  <p className="text-slate-600 text-lg leading-relaxed">Get personalized 7-day wellness plans powered by AI technology</p>
+                  <h3 className="font-black text-2xl text-slate-900 mb-4">AI Wellness Plans</h3>
+                  <p className="text-slate-600 text-lg leading-relaxed mb-6">Get personalized 7-day wellness plans powered by advanced AI algorithms that adapt to your lifestyle and goals.</p>
+                  <div className="flex items-center justify-center text-emerald-600 font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                    Start Planning <ArrowRight className="h-4 w-4 ml-2" />
+                  </div>
                 </CardContent>
               </Card>
             </Link>
 
             <Link to="/products">
-              <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-0 bg-white/80 backdrop-blur-sm hover:bg-white hover:-translate-y-2">
-                <CardContent className="p-8 text-center">
-                  <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <Heart className="h-10 w-10 text-blue-600" />
+              <Card className="group hover:shadow-2xl transition-all duration-500 cursor-pointer border-0 bg-white/80 backdrop-blur-sm hover:bg-white hover:-translate-y-4 transform perspective-1000 hover:rotate-y-2 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <CardContent className="p-10 text-center relative z-10">
+                  <div className="relative mb-8">
+                    <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-3xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-500 shadow-xl">
+                      <Heart className="h-12 w-12 text-blue-600" />
+                    </div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-pink-400 to-rose-400 rounded-full animate-pulse"></div>
                   </div>
-                  <h3 className="font-bold text-2xl text-slate-900 mb-4">Curated Products</h3>
-                  <p className="text-slate-600 text-lg leading-relaxed">Handpicked wellness products to support your health journey</p>
+                  <h3 className="font-black text-2xl text-slate-900 mb-4">Curated Products</h3>
+                  <p className="text-slate-600 text-lg leading-relaxed mb-6">Discover premium wellness products carefully selected by our team of health experts and verified by thousands of users.</p>
+                  <div className="flex items-center justify-center text-blue-600 font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                    Shop Now <ArrowRight className="h-4 w-4 ml-2" />
+                  </div>
                 </CardContent>
               </Card>
             </Link>
 
             <Link to="/dashboard">
-              <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-0 bg-white/80 backdrop-blur-sm hover:bg-white hover:-translate-y-2">
-                <CardContent className="p-8 text-center">
-                  <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <Dumbbell className="h-10 w-10 text-purple-600" />
+              <Card className="group hover:shadow-2xl transition-all duration-500 cursor-pointer border-0 bg-white/80 backdrop-blur-sm hover:bg-white hover:-translate-y-4 transform perspective-1000 hover:rotate-y-2 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <CardContent className="p-10 text-center relative z-10">
+                  <div className="relative mb-8">
+                    <div className="w-24 h-24 bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-500 shadow-xl">
+                      <Target className="h-12 w-12 text-purple-600" />
+                    </div>
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full animate-pulse"></div>
                   </div>
-                  <h3 className="font-bold text-2xl text-slate-900 mb-4">Progress Tracking</h3>
-                  <p className="text-slate-600 text-lg leading-relaxed">Monitor your wellness journey with personalized insights</p>
+                  <h3 className="font-black text-2xl text-slate-900 mb-4">Progress Tracking</h3>
+                  <p className="text-slate-600 text-lg leading-relaxed mb-6">Monitor your wellness journey with detailed analytics, personalized insights, and achievement milestones.</p>
+                  <div className="flex items-center justify-center text-purple-600 font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                    Track Progress <ArrowRight className="h-4 w-4 ml-2" />
+                  </div>
                 </CardContent>
               </Card>
             </Link>
           </div>
         </section>
 
-        {/* Testimonial Section */}
-        <section className="py-20">
-          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-12 text-center">
-            <div className="inline-flex items-center gap-2 bg-white/80 text-emerald-700 px-4 py-2 rounded-full text-sm font-medium mb-8">
-              <Users className="h-4 w-4" />
-              Community Love
-            </div>
-            <blockquote className="text-2xl md:text-3xl font-medium text-slate-900 mb-8 leading-relaxed max-w-4xl mx-auto">
-              "Pure Living Pro has transformed my approach to wellness. The AI recommendations are spot-on, and the content is incredibly valuable."
-            </blockquote>
-            <div className="flex items-center justify-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">SJ</span>
+        {/* Featured Articles */}
+        {featuredArticles?.articles && featuredArticles.articles.length > 0 && (
+          <section className="py-24">
+            <div className="text-center mb-20">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-50 to-orange-50 text-amber-700 px-6 py-3 rounded-full text-sm font-semibold mb-8 shadow-lg">
+                <Star className="h-5 w-5 animate-pulse" />
+                Editor's Choice Content
               </div>
-              <div className="text-left">
-                <div className="font-semibold text-slate-900">Sarah Johnson</div>
-                <div className="text-slate-600">Wellness Enthusiast</div>
+              <h2 className="text-5xl md:text-6xl font-black text-slate-900 mb-8">
+                Expert-Curated
+                <span className="block bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                  Wellness Insights
+                </span>
+              </h2>
+              <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                Dive deep into evidence-based wellness content created by certified health professionals and wellness experts.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+              {featuredArticles.articles.map((article, index) => (
+                <div key={article.id} className="transform hover:scale-105 transition-all duration-500" style={{ animationDelay: `${index * 100}ms` }}>
+                  <ArticleCard article={article} />
+                </div>
+              ))}
+            </div>
+            
+            <div className="text-center">
+              <Link to="/blog">
+                <Button variant="outline" size="lg" className="border-3 border-slate-300 hover:border-amber-500 hover:bg-amber-50 h-14 px-8 text-lg font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                  Explore All Articles
+                  <ArrowRight className="h-5 w-5 ml-3" />
+                </Button>
+              </Link>
+            </div>
+          </section>
+        )}
+
+        {/* Premium Products */}
+        {curatedProducts?.products && curatedProducts.products.length > 0 && (
+          <section className="py-24">
+            <div className="text-center mb-20">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 px-6 py-3 rounded-full text-sm font-semibold mb-8 shadow-lg">
+                <Award className="h-5 w-5" />
+                Premium Wellness Collection
+              </div>
+              <h2 className="text-5xl md:text-6xl font-black text-slate-900 mb-8">
+                Handpicked
+                <span className="block bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  Wellness Essentials
+                </span>
+              </h2>
+              <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                Discover premium wellness products that have been rigorously tested and approved by our team of health experts.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+              {curatedProducts.products.slice(0, 4).map((product, index) => (
+                <div key={product.id} className="transform hover:scale-105 transition-all duration-500" style={{ animationDelay: `${index * 100}ms` }}>
+                  <ProductCard
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      description: product.description,
+                      price: product.price,
+                      imageUrl: product.imageUrl,
+                      category: product.category,
+                      affiliateUrl: `/r/product-${product.id}`,
+                      program: product.program
+                    }}
+                    contentId="homepage_curated"
+                    onAffiliateClick={handleAffiliateClick}
+                  />
+                </div>
+              ))}
+            </div>
+            
+            <div className="text-center">
+              <Link to="/products">
+                <Button variant="outline" size="lg" className="border-3 border-slate-300 hover:border-purple-500 hover:bg-purple-50 h-14 px-8 text-lg font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                  View All Products
+                  <ArrowRight className="h-5 w-5 ml-3" />
+                </Button>
+              </Link>
+            </div>
+          </section>
+        )}
+
+        {/* Trust & Security Section */}
+        <section className="py-24">
+          <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-3xl p-12 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-emerald-200/20 to-teal-200/20 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-br from-blue-200/20 to-purple-200/20 rounded-full blur-3xl"></div>
+            
+            <div className="relative z-10 text-center">
+              <div className="inline-flex items-center gap-2 bg-white/80 text-slate-700 px-6 py-3 rounded-full text-sm font-semibold mb-8 shadow-lg backdrop-blur-sm">
+                <Shield className="h-5 w-5 text-emerald-600" />
+                Trusted by Wellness Professionals
+              </div>
+              
+              <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-8">
+                Your Wellness Journey,
+                <span className="block bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                  Scientifically Backed
+                </span>
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <Zap className="h-8 w-8 text-emerald-600" />
+                  </div>
+                  <h3 className="font-bold text-xl text-slate-900 mb-2">Evidence-Based</h3>
+                  <p className="text-slate-600">All recommendations backed by peer-reviewed research and clinical studies.</p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <Shield className="h-8 w-8 text-blue-600" />
+                  </div>
+                  <h3 className="font-bold text-xl text-slate-900 mb-2">Privacy First</h3>
+                  <p className="text-slate-600">Your health data is encrypted and never shared with third parties.</p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <Users className="h-8 w-8 text-purple-600" />
+                  </div>
+                  <h3 className="font-bold text-xl text-slate-900 mb-2">Expert Approved</h3>
+                  <p className="text-slate-600">Reviewed by certified nutritionists, fitness trainers, and wellness coaches.</p>
+                </div>
+              </div>
+              
+              <blockquote className="text-2xl md:text-3xl font-medium text-slate-900 mb-8 leading-relaxed max-w-4xl mx-auto italic">
+                "Pure Living Pro has revolutionized how I approach wellness. The AI recommendations are incredibly accurate, and the content quality is unmatched."
+              </blockquote>
+              
+              <div className="flex items-center justify-center gap-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center shadow-xl">
+                  <span className="text-white font-bold text-xl">DR</span>
+                </div>
+                <div className="text-left">
+                  <div className="font-bold text-slate-900">Dr. Sarah Rodriguez</div>
+                  <div className="text-slate-600">Certified Wellness Coach & Nutritionist</div>
+                </div>
               </div>
             </div>
           </div>

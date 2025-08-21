@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Calendar, Eye, User, Clock, ArrowRight } from "lucide-react";
+import { Calendar, Eye, User, Clock, ArrowRight, Bookmark } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Article } from "~backend/content/types";
@@ -21,50 +21,60 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
   const estimatedReadTime = Math.ceil(article.content.length / 1000) || 3;
 
   return (
-    <Card className={`group hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm hover:bg-white hover:-translate-y-1 ${featured ? "md:col-span-2" : ""}`}>
-      <CardHeader className="p-0">
+    <Card className={`group hover:shadow-2xl transition-all duration-500 border-0 bg-white/90 backdrop-blur-sm hover:bg-white hover:-translate-y-2 transform perspective-1000 hover:rotate-x-1 relative overflow-hidden ${featured ? "md:col-span-2" : ""}`}>
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      
+      <CardHeader className="p-0 relative">
         {article.featuredImageUrl && (
-          <div className={`relative overflow-hidden rounded-t-xl ${featured ? "h-80" : "h-56"}`}>
+          <div className={`relative overflow-hidden rounded-t-2xl ${featured ? "h-80" : "h-64"}`}>
             <img
               src={article.featuredImageUrl}
               alt={article.title}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            
+            {/* Floating elements */}
             {article.featured && (
-              <Badge className="absolute top-4 left-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-0 shadow-lg">
+              <Badge className="absolute top-4 left-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-0 shadow-xl backdrop-blur-sm animate-pulse">
+                <Bookmark className="h-3 w-3 mr-1" />
                 Featured
               </Badge>
             )}
+            
             <div className="absolute bottom-4 left-4 right-4">
               {article.category && (
-                <Badge variant="secondary" className="bg-white/90 text-slate-700 backdrop-blur-sm">
+                <Badge variant="secondary" className="bg-white/95 text-slate-700 backdrop-blur-sm shadow-lg border-0 font-semibold">
                   {article.category.name}
                 </Badge>
               )}
             </div>
+            
+            {/* Hover overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-emerald-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           </div>
         )}
       </CardHeader>
       
-      <CardContent className="p-8">
-        <div className="flex items-center gap-6 text-sm text-slate-500 mb-4">
+      <CardContent className="p-8 relative z-10">
+        <div className="flex items-center gap-6 text-sm text-slate-500 mb-6">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4" />
-            <span>{formatDate(article.createdAt)}</span>
+            <span className="font-medium">{formatDate(article.createdAt)}</span>
           </div>
           <div className="flex items-center gap-2">
             <Eye className="h-4 w-4" />
-            <span>{article.viewCount.toLocaleString()}</span>
+            <span className="font-medium">{article.viewCount.toLocaleString()}</span>
           </div>
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
-            <span>{estimatedReadTime} min read</span>
+            <span className="font-medium">{estimatedReadTime} min read</span>
           </div>
         </div>
 
         <Link to={`/article/${article.slug}`}>
-          <h3 className={`font-bold text-slate-900 group-hover:text-emerald-600 transition-colors mb-4 leading-tight ${
+          <h3 className={`font-black text-slate-900 group-hover:text-emerald-600 transition-colors mb-6 leading-tight ${
             featured ? "text-3xl" : "text-xl"
           }`}>
             {article.title}
@@ -72,28 +82,28 @@ export function ArticleCard({ article, featured = false }: ArticleCardProps) {
         </Link>
 
         {article.excerpt && (
-          <p className="text-slate-600 mb-6 line-clamp-3 leading-relaxed text-base">
+          <p className="text-slate-600 mb-8 line-clamp-3 leading-relaxed text-base">
             {article.excerpt}
           </p>
         )}
 
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full flex items-center justify-center">
-              <User className="h-5 w-5 text-emerald-600" />
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full flex items-center justify-center shadow-lg">
+              <User className="h-6 w-6 text-emerald-600" />
             </div>
             <div>
-              <p className="font-medium text-slate-900 text-sm">{article.authorName}</p>
-              <p className="text-slate-500 text-xs">Author</p>
+              <p className="font-bold text-slate-900 text-sm">{article.authorName}</p>
+              <p className="text-slate-500 text-xs">Wellness Expert</p>
             </div>
           </div>
           
           <Link
             to={`/article/${article.slug}`}
-            className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-semibold text-sm transition-colors group/link"
+            className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-bold text-sm transition-all duration-300 group/link bg-emerald-50 hover:bg-emerald-100 px-4 py-2 rounded-full"
           >
             Read More
-            <ArrowRight className="h-4 w-4 group-hover/link:translate-x-1 transition-transform" />
+            <ArrowRight className="h-4 w-4 group-hover/link:translate-x-1 transition-transform duration-300" />
           </Link>
         </div>
       </CardContent>

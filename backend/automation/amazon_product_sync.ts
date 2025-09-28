@@ -137,56 +137,66 @@ export const syncAmazonProducts = api<{ categories: string[] }, ProductSyncRespo
 
             for (const product of searchResult.products) {
               try {
-                // Check if product already exists
+                // Generate a slug for the product
+                const slug = generateSlug(product.title, product.asin);
+                
+                // Get default Amazon affiliate program
+                const amazonProgram = await getOrCreateAmazonProgram();
+                
+                // Check if product already exists by name or description similarity
                 const existing = await affiliateDB.queryRow<{ id: number }>`
                   SELECT id FROM affiliate_products 
-                  WHERE external_id = ${product.asin} OR name = ${product.title}
+                  WHERE name = ${product.title}
                 `;
 
                 if (existing) {
                   // Update existing product
                   await affiliateDB.exec`
                     UPDATE affiliate_products SET
-                      price = ${product.price || 0},
-                      description = ${product.description || ''},
-                      image_url = ${product.imageUrl || ''},
-                      category = ${product.category || 'General'},
-                      rating = ${product.rating || 0},
-                      review_count = ${product.reviewCount || 0},
+                      price = ${product.price || null},
+                      description = ${product.description || null},
+                      image_url = ${product.imageUrl || null},
+                      category = ${product.category || null},
                       updated_at = NOW()
                     WHERE id = ${existing.id}
                   `;
                   updated++;
                 } else {
-                  // Create new product
+                  // Create new product with required fields
+                  const amazonUrl = `https://amazon.com/dp/${product.asin}?tag=${await amazonStoreId()}`;
+                  
                   await affiliateDB.exec`
                     INSERT INTO affiliate_products (
-                      name, description, price, category, image_url, external_id,
-                      rating, review_count, is_active, created_at
+                      program_id, name, slug, description, price, original_url, image_url, category, is_active
                     ) VALUES (
-                      ${product.title}, ${product.description || ''}, ${product.price || 0},
-                      ${product.category || 'General'}, ${product.imageUrl || ''}, ${product.asin},
-                      ${product.rating || 0}, ${product.reviewCount || 0}, true, NOW()
+                      ${amazonProgram.id}, ${product.title}, ${slug}, ${product.description || null}, 
+                      ${product.price || null}, ${amazonUrl}, ${product.imageUrl || null}, 
+                      ${product.category || null}, true
                     )
                   `;
                   imported++;
                 }
 
-                // Create affiliate link
+                // Create affiliate link if needed
                 const productResult = existing?.id ? { id: existing.id } : await affiliateDB.queryRow<{ id: number }>`
-                  SELECT id FROM affiliate_products WHERE external_id = ${product.asin}
+                  SELECT id FROM affiliate_products WHERE slug = ${slug}
                 `;
 
                 if (productResult) {
                   const affiliateUrl = `https://amazon.com/dp/${product.asin}?tag=${await amazonStoreId()}`;
+                  const shortCode = generateShortCode();
                   
-                  await affiliateDB.exec`
-                    INSERT INTO affiliate_links (product_id, url, platform, is_active)
-                    VALUES (${productResult.id}, ${affiliateUrl}, 'amazon', true)
-                    ON CONFLICT (product_id, platform) DO UPDATE SET
-                      url = EXCLUDED.url,
-                      updated_at = NOW()
+                  // Check if link already exists
+                  const existingLink = await affiliateDB.queryRow<{ id: number }>`
+                    SELECT id FROM affiliate_links WHERE product_id = ${productResult.id}
                   `;
+                  
+                  if (!existingLink) {
+                    await affiliateDB.exec`
+                      INSERT INTO affiliate_links (product_id, short_code, original_url, is_active)
+                      VALUES (${productResult.id}, ${shortCode}, ${affiliateUrl}, true)
+                    `;
+                  }
                 }
 
               } catch (productError) {
@@ -319,4 +329,47 @@ async function getTrendingKeywords(category: string): Promise<string[]> {
   };
 
   return fallbackKeywords[category.toLowerCase()] || ['wellness', 'health', 'natural'];
+}
+
+function generateSlug(title: string, asin: string): string {
+  const baseSlug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/--+/g, '-')
+    .replace(/^-|-$/g, '')
+    .substring(0, 50);
+  
+  return `${baseSlug}-${asin.toLowerCase()}`;
+}
+
+function generateShortCode(): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < 8; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
+async function getOrCreateAmazonProgram(): Promise<{ id: number }> {
+  // Try to find existing Amazon program
+  let program = await affiliateDB.queryRow<{ id: number }>`
+    SELECT id FROM affiliate_programs WHERE name = 'Amazon Associates'
+  `;
+  
+  if (!program) {
+    // Create Amazon program if it doesn't exist
+    program = await affiliateDB.queryRow<{ id: number }>`
+      INSERT INTO affiliate_programs (name, description, commission_rate, cookie_duration, tracking_domain)
+      VALUES ('Amazon Associates', 'Amazon affiliate program', 0.05, 24, 'amazon.com')
+      RETURNING id
+    `;
+  }
+  
+  if (!program) {
+    throw new Error('Failed to create or find Amazon affiliate program');
+  }
+  
+  return program;
 }

@@ -366,11 +366,19 @@ import {
     optimizeArticleContent as api_automation_ai_content_optimizer_optimizeArticleContent
 } from "~backend/automation/ai_content_optimizer";
 import {
+    searchAmazonProducts as api_automation_amazon_product_sync_searchAmazonProducts,
+    syncAmazonProducts as api_automation_amazon_product_sync_syncAmazonProducts
+} from "~backend/automation/amazon_product_sync";
+import {
     generateWeeklyReport as api_automation_analytics_reporter_generateWeeklyReport,
     sendWeeklyReport as api_automation_analytics_reporter_sendWeeklyReport
 } from "~backend/automation/analytics_reporter";
 import { generateContent as api_automation_content_generator_generateContent } from "~backend/automation/content_generator";
-import { runContentPipeline as api_automation_content_publishing_pipeline_runContentPipeline } from "~backend/automation/content_publishing_pipeline";
+import {
+    enhanceContentWithProducts as api_automation_content_publishing_pipeline_enhanceContentWithProducts,
+    runContentPipeline as api_automation_content_publishing_pipeline_runContentPipeline,
+    scheduleContentGeneration as api_automation_content_publishing_pipeline_scheduleContentGeneration
+} from "~backend/automation/content_publishing_pipeline";
 import {
     getContentSchedule as api_automation_content_scheduler_getContentSchedule,
     processScheduledContent as api_automation_content_scheduler_processScheduledContent,
@@ -422,6 +430,7 @@ export namespace automation {
             this.checkAffiliateLinks = this.checkAffiliateLinks.bind(this)
             this.createSchedule = this.createSchedule.bind(this)
             this.discoverKeywordOpportunities = this.discoverKeywordOpportunities.bind(this)
+            this.enhanceContentWithProducts = this.enhanceContentWithProducts.bind(this)
             this.generateContent = this.generateContent.bind(this)
             this.generateSEOReport = this.generateSEOReport.bind(this)
             this.generateSocialContent = this.generateSocialContent.bind(this)
@@ -440,7 +449,10 @@ export namespace automation {
             this.runContentPipeline = this.runContentPipeline.bind(this)
             this.runScheduledTasks = this.runScheduledTasks.bind(this)
             this.scheduleContent = this.scheduleContent.bind(this)
+            this.scheduleContentGeneration = this.scheduleContentGeneration.bind(this)
+            this.searchAmazonProducts = this.searchAmazonProducts.bind(this)
             this.sendWeeklyReport = this.sendWeeklyReport.bind(this)
+            this.syncAmazonProducts = this.syncAmazonProducts.bind(this)
             this.testSecrets = this.testSecrets.bind(this)
             this.trackKeyword = this.trackKeyword.bind(this)
             this.updateKeywordRankings = this.updateKeywordRankings.bind(this)
@@ -507,6 +519,12 @@ export namespace automation {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/automation/keyword-opportunities`, {method: "GET", body: undefined})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_automation_seo_tracker_discoverKeywordOpportunities>
+        }
+
+        public async enhanceContentWithProducts(params: RequestType<typeof api_automation_content_publishing_pipeline_enhanceContentWithProducts>): Promise<ResponseType<typeof api_automation_content_publishing_pipeline_enhanceContentWithProducts>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/automation/enhance-content-products`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_automation_content_publishing_pipeline_enhanceContentWithProducts>
         }
 
         /**
@@ -644,9 +662,6 @@ export namespace automation {
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_automation_social_media_automation_publishScheduledPosts>
         }
 
-        /**
-         * Runs the complete content publishing pipeline.
-         */
         public async runContentPipeline(params: RequestType<typeof api_automation_content_publishing_pipeline_runContentPipeline>): Promise<ResponseType<typeof api_automation_content_publishing_pipeline_runContentPipeline>> {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/automation/content-pipeline`, {method: "POST", body: JSON.stringify(params)})
@@ -671,6 +686,18 @@ export namespace automation {
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_automation_content_scheduler_scheduleContent>
         }
 
+        public async scheduleContentGeneration(params: RequestType<typeof api_automation_content_publishing_pipeline_scheduleContentGeneration>): Promise<ResponseType<typeof api_automation_content_publishing_pipeline_scheduleContentGeneration>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/automation/schedule-content-generation`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_automation_content_publishing_pipeline_scheduleContentGeneration>
+        }
+
+        public async searchAmazonProducts(params: RequestType<typeof api_automation_amazon_product_sync_searchAmazonProducts>): Promise<ResponseType<typeof api_automation_amazon_product_sync_searchAmazonProducts>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/automation/amazon/search`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_automation_amazon_product_sync_searchAmazonProducts>
+        }
+
         /**
          * Sends automated email report (placeholder for email integration).
          */
@@ -678,6 +705,12 @@ export namespace automation {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/automation/send-report`, {method: "POST", body: JSON.stringify(params)})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_automation_analytics_reporter_sendWeeklyReport>
+        }
+
+        public async syncAmazonProducts(params: RequestType<typeof api_automation_amazon_product_sync_syncAmazonProducts>): Promise<ResponseType<typeof api_automation_amazon_product_sync_syncAmazonProducts>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/automation/amazon/sync`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_automation_amazon_product_sync_syncAmazonProducts>
         }
 
         public async testSecrets(): Promise<ResponseType<typeof api_automation_test_secrets_testSecrets>> {
@@ -719,7 +752,7 @@ import { getRelatedArticles as api_content_get_related_articles_getRelatedArticl
 import { listArticles as api_content_list_articles_listArticles } from "~backend/content/list_articles";
 import { listCategories as api_content_list_categories_listCategories } from "~backend/content/list_categories";
 import { listTags as api_content_list_tags_listTags } from "~backend/content/list_tags";
-import { publishToMedium as api_content_publish_to_medium_publishToMedium } from "~backend/content/publish_to_medium";
+import { publishArticleToMedium as api_content_publish_to_medium_publishArticleToMedium } from "~backend/content/publish_to_medium";
 import { publishToWordPress as api_content_publish_to_wordpress_publishToWordPress } from "~backend/content/publish_to_wordpress";
 import { searchArticles as api_content_search_articles_searchArticles } from "~backend/content/search_articles";
 import { updateArticle as api_content_update_article_updateArticle } from "~backend/content/update_article";
@@ -741,7 +774,7 @@ export namespace content {
             this.listArticles = this.listArticles.bind(this)
             this.listCategories = this.listCategories.bind(this)
             this.listTags = this.listTags.bind(this)
-            this.publishToMedium = this.publishToMedium.bind(this)
+            this.publishArticleToMedium = this.publishArticleToMedium.bind(this)
             this.publishToWordPress = this.publishToWordPress.bind(this)
             this.searchArticles = this.searchArticles.bind(this)
             this.updateArticle = this.updateArticle.bind(this)
@@ -859,10 +892,10 @@ export namespace content {
         /**
          * Publishes an article to Medium.
          */
-        public async publishToMedium(params: RequestType<typeof api_content_publish_to_medium_publishToMedium>): Promise<ResponseType<typeof api_content_publish_to_medium_publishToMedium>> {
+        public async publishArticleToMedium(params: RequestType<typeof api_content_publish_to_medium_publishArticleToMedium>): Promise<ResponseType<typeof api_content_publish_to_medium_publishArticleToMedium>> {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/content/publish-to-medium`, {method: "POST", body: JSON.stringify(params)})
-            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_content_publish_to_medium_publishToMedium>
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_content_publish_to_medium_publishArticleToMedium>
         }
 
         /**

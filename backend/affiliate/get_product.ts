@@ -12,7 +12,7 @@ export const getProduct = api<GetProductParams, AffiliateProduct>(
   async ({ slug }) => {
     const product = await affiliateDB.queryRow<AffiliateProduct & { programName?: string; commissionRate?: number }>`
       SELECT 
-        p.id, p.name, p.description, p.price, p.original_url as "originalUrl",
+        p.id, p.program_id as "programId", p.name, p.slug, p.description, p.price, p.original_url as "originalUrl",
         p.image_url as "imageUrl", p.category, p.tags, p.is_active as "isActive",
         p.created_at as "createdAt", p.updated_at as "updatedAt",
         prog.name as "programName", prog.commission_rate as "commissionRate"

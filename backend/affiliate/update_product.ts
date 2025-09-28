@@ -46,7 +46,7 @@ export const updateProduct = api<UpdateProductParams & UpdateAffiliateProductReq
     await affiliateDB.rawExec(updateQuery, ...params);
 
     const product = await affiliateDB.queryRow<AffiliateProduct>`
-      SELECT id, program_id as "programId", name, description, price,
+      SELECT id, program_id as "programId", name, slug, description, price,
              original_url as "originalUrl", image_url as "imageUrl", category, tags,
              is_active as "isActive", created_at as "createdAt", updated_at as "updatedAt"
       FROM affiliate_products WHERE id = ${id}

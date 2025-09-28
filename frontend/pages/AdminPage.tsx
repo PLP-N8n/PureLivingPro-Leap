@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, Component, ReactNode } from "react";
 import {
   LayoutDashboard,
   Newspaper,
@@ -9,6 +9,7 @@ import {
   LineChart,
   LifeBuoy,
   Sparkles,
+  AlertTriangle,
 } from "lucide-react";
 import { SEOHead } from "../components/SEOHead";
 import { Link } from "react-router-dom";
@@ -28,6 +29,52 @@ const navItems = [
   { name: "Analytics", href: "analytics", icon: LineChart },
   { name: "Settings", href: "settings", icon: Settings },
 ];
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+}
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: any) {
+    console.error('Admin page error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center space-y-4">
+            <AlertTriangle className="h-12 w-12 text-red-500 mx-auto" />
+            <h2 className="text-xl font-semibold text-gray-900">Something went wrong</h2>
+            <p className="text-gray-600">Please refresh the page to try again.</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+            >
+              Refresh Page
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 export function AdminPage() {
   const [searchParams] = useSearchParams();
@@ -119,7 +166,9 @@ export function AdminPage() {
           {/* Main Panel */}
           <main className="flex-1 p-8">
             <div className="max-w-7xl mx-auto">
-              {renderContent()}
+              <ErrorBoundary>
+                {renderContent()}
+              </ErrorBoundary>
             </div>
           </main>
         </div>

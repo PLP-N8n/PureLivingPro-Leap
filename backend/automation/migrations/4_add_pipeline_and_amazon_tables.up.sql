@@ -34,14 +34,3 @@ CREATE TABLE IF NOT EXISTS automation_schedules (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
--- Add external_id column to affiliate_products for Amazon ASIN tracking
-ALTER TABLE affiliate_products
-  ADD COLUMN IF NOT EXISTS external_id TEXT,
-  ADD COLUMN IF NOT EXISTS rating DECIMAL(2,1) DEFAULT 0,
-  ADD COLUMN IF NOT EXISTS review_count INT DEFAULT 0;
-
--- Add unique constraint on external_id to prevent duplicate Amazon products
-CREATE UNIQUE INDEX IF NOT EXISTS idx_affiliate_products_external_id 
-  ON affiliate_products(external_id) 
-  WHERE external_id IS NOT NULL;

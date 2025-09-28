@@ -107,7 +107,7 @@ export const optimizeArticleContent = api<ContentOptimizationRequest, OptimizedC
         throw new Error(`OpenAI API error: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data = await response.json() as any;
       const optimizationResult = JSON.parse(data.choices[0]?.message?.content || '{}');
 
       // Store optimization in history

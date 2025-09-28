@@ -112,7 +112,7 @@ async function generatePlatformContent(
     }
   };
 
-  const spec = platformSpecs[platform];
+  const spec = platformSpecs[platform as keyof typeof platformSpecs];
   if (!spec) return null;
 
   try {
@@ -146,7 +146,7 @@ async function generatePlatformContent(
       });
 
       if (response.ok) {
-        const data = await response.json();
+        const data = await response.json() as any;
         const result = JSON.parse(data.choices[0]?.message?.content || '{}');
         
         return {
@@ -183,7 +183,7 @@ function generateFallbackSocialContent(
 
   const hashtags = [
     ...baseHashtags,
-    ...(categoryHashtags[article.category?.toLowerCase()] || [])
+    ...(categoryHashtags[article.category?.toLowerCase() as keyof typeof categoryHashtags] || [])
   ].slice(0, spec.hashtags);
 
   let content = `${article.title}\n\n${article.excerpt?.substring(0, 100)}...\n\n${spec.cta}`;
@@ -210,7 +210,7 @@ function getOptimalPostTime(platform: string): Date {
     medium: { hour: 10, delay: 4 } // 10 AM next day, 4 hours from now
   };
 
-  const config = optimal[platform] || { hour: 12, delay: 1 };
+  const config = optimal[platform as keyof typeof optimal] || { hour: 12, delay: 1 };
   const scheduledTime = new Date(now.getTime() + (config.delay * 60 * 60 * 1000));
   
   return scheduledTime;

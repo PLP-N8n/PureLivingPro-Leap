@@ -83,7 +83,7 @@ export const chatAssistant = api<ChatRequest, ChatResponse>(
         throw new Error(`OpenAI API error: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data = await response.json() as any;
       const aiResponse = data.choices[0]?.message?.content || 'I apologize, but I encountered an error processing your request.';
       const tokensUsed = data.usage?.total_tokens || 0;
 

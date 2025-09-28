@@ -72,7 +72,7 @@ export function OverviewDashboard() {
         return await backend.automation.generateWeeklyReport();
       } catch (error) {
         console.error("Weekly report fetch error:", error);
-        return null;
+        throw error;
       }
     },
     retry: false,
@@ -86,7 +86,7 @@ export function OverviewDashboard() {
         return await backend.automation.analyzeRevenue();
       } catch (error) {
         console.error("Revenue analysis fetch error:", error);
-        return null;
+        throw error;
       }
     },
     retry: false,

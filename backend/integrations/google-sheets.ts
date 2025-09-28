@@ -19,7 +19,7 @@ export async function fetchSheetData(range: string, spreadsheetId?: string): Pro
     scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
   });
 
-  const sheets = google.sheets({ version: 'v4', auth: await auth.getClient() });
+  const sheets = google.sheets({ version: 'v4', auth: (await auth.getClient()) as any });
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: sheetsId,
     range,

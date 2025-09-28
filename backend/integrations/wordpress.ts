@@ -48,7 +48,7 @@ export async function createWordPressPost(creds: WordPressCredentials, post: Wor
       throw new Error(`WordPress API error: ${response.status} - ${errorText}`);
     }
 
-    return await response.json();
+    return await response.json() as any;
   } catch (error) {
     console.error('Failed to create WordPress post:', error);
     throw error;
@@ -83,7 +83,7 @@ export async function updateWordPressPost(
       throw new Error(`WordPress API error: ${response.status} - ${errorText}`);
     }
 
-    return await response.json();
+    return await response.json() as any;
   } catch (error) {
     console.error('Failed to update WordPress post:', error);
     throw error;
@@ -121,7 +121,7 @@ export async function uploadWordPressMedia(
       throw new Error(`WordPress media upload error: ${response.status} - ${errorText}`);
     }
 
-    return await response.json();
+    return await response.json() as any;
   } catch (error) {
     console.error('Failed to upload WordPress media:', error);
     throw error;

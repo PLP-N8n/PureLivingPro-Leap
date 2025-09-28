@@ -39,7 +39,7 @@ export async function publishToMedium(
       throw new Error(`Medium API error: ${response.status} - ${errorText}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as any;
     return data.data;
   } catch (error) {
     console.error('Failed to publish to Medium:', error);
@@ -64,7 +64,7 @@ export async function getMediumUser(token: string): Promise<{ id: string; userna
       throw new Error(`Medium API error: ${response.status} - ${errorText}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as any;
     return data.data;
   } catch (error) {
     console.error('Failed to get Medium user:', error);

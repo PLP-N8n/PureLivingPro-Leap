@@ -90,7 +90,7 @@ export const generateContent = api<GenerateContentRequest, GeneratedContent>(
         throw new Error(`OpenAI API error: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data = await response.json() as any;
       const aiResponse = data.choices[0]?.message?.content;
       
       // Parse JSON response

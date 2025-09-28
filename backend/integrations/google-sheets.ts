@@ -1,19 +1,27 @@
 import { google } from 'googleapis';
-import { googleClientEmail, googlePrivateKey } from '../automation/secrets';
+import { googleClientEmail, googlePrivateKey, googleSheetsId } from '../automation/secrets';
 import type { SheetRow } from '../automation/types';
 
-const auth = new google.auth.GoogleAuth({
-  credentials: {
-    client_email: googleClientEmail(),
-    private_key: googlePrivateKey().replace(/\\n/g, '\n'),
-  },
-  scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-});
+export async function fetchSheetData(range: string, spreadsheetId?: string): Promise<SheetRow[]> {
+  const clientEmail = await googleClientEmail();
+  const privateKey = await googlePrivateKey();
+  const sheetsId = spreadsheetId || await googleSheetsId();
+  
+  if (!clientEmail || !privateKey || !sheetsId) {
+    throw new Error('Google Sheets credentials not configured');
+  }
 
-export async function fetchSheetData(range: string): Promise<SheetRow[]> {
+  const auth = new google.auth.GoogleAuth({
+    credentials: {
+      client_email: clientEmail,
+      private_key: privateKey.replace(/\\n/g, '\n'),
+    },
+    scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+  });
+
   const sheets = google.sheets({ version: 'v4', auth: await auth.getClient() });
   const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.GOOGLE_SHEETS_ID!,
+    spreadsheetId: sheetsId,
     range,
   });
 

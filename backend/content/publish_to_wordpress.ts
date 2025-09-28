@@ -50,9 +50,9 @@ export const publishToWordPress = api<PublishToWordPressRequest, PublishToWordPr
     try {
       let wordpressResponse;
       const creds = {
-        baseUrl: wordpressUrl(),
-        username: wordpressUsername(),
-        password: wordpressPassword(),
+        baseUrl: await wordpressUrl(),
+        username: await wordpressUsername(),
+        password: await wordpressPassword(),
       };
 
       if (req.wordpressPostId) {

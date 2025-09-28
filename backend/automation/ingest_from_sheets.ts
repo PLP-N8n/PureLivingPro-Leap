@@ -26,7 +26,7 @@ export const ingestFromSheets = api<IngestFromSheetsRequest, IngestFromSheetsRes
     const errors: string[] = [];
 
     try {
-      const rows = await fetchSheetData(range);
+      const rows = await fetchSheetData(range, sheetId);
       
       for (const row of rows) {
         processed++;

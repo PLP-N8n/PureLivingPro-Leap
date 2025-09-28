@@ -1,6 +1,6 @@
 import { api, APIError } from "encore.dev/api";
 import { contentDB } from "./db";
-import { publishToMedium, getMediumUser } from "../integrations/medium";
+import { publishToMedium as publishToMediumAPI, getMediumUser } from "../integrations/medium";
 import { mediumToken } from "./secrets";
 
 interface PublishToMediumRequest {
@@ -16,7 +16,7 @@ interface PublishToMediumResponse {
 }
 
 // Publishes an article to Medium.
-export const publishToMedium = api<PublishToMediumRequest, PublishToMediumResponse>(
+export const publishArticleToMedium = api<PublishToMediumRequest, PublishToMediumResponse>(
   { expose: true, method: "POST", path: "/content/publish-to-medium" },
   async (req) => {
     // Get article from database
@@ -40,7 +40,7 @@ export const publishToMedium = api<PublishToMediumRequest, PublishToMediumRespon
     }
 
     try {
-      const token = mediumToken();
+      const token = await mediumToken();
       // Get Medium user info
       const mediumUser = await getMediumUser(token);
 
@@ -57,7 +57,7 @@ ${markdownContent}
       `;
 
       // Publish to Medium
-      const mediumResponse = await publishToMedium(token, mediumUser.id, {
+      const mediumResponse = await publishToMediumAPI(token, mediumUser.id, {
         title: article.title,
         content: contentWithDisclosure,
         contentFormat: 'markdown',

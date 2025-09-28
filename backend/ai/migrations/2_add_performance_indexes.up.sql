@@ -1,12 +1,7 @@
 -- Performance indexes for AI service queries
-CREATE INDEX IF NOT EXISTS idx_ai_conversations_user_id ON ai_conversations(user_id);
-CREATE INDEX IF NOT EXISTS idx_ai_conversations_created_at ON ai_conversations(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_ai_conversations_session_id_created ON ai_conversations(session_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_ai_recommendations_confidence ON ai_recommendations(confidence_score DESC);
 
--- AI messages performance indexes
-CREATE INDEX IF NOT EXISTS idx_ai_messages_conversation_id ON ai_messages(conversation_id);
-CREATE INDEX IF NOT EXISTS idx_ai_messages_role ON ai_messages(role);
-CREATE INDEX IF NOT EXISTS idx_ai_messages_created_at ON ai_messages(created_at DESC);
-
--- Composite indexes for conversation queries
-CREATE INDEX IF NOT EXISTS idx_ai_messages_conversation_created ON ai_messages(conversation_id, created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_ai_messages_conversation_role ON ai_messages(conversation_id, role);
+-- Additional performance indexes for existing tables
+CREATE INDEX IF NOT EXISTS idx_ai_conversations_tokens_used ON ai_conversations(tokens_used);
+CREATE INDEX IF NOT EXISTS idx_ai_conversations_response_time ON ai_conversations(response_time_ms);

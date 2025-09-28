@@ -1,4 +1,5 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { AdminErrorBoundary, AdminErrorFallback } from '../AdminErrorBoundary';
 
 interface ContentData {
   category: string;
@@ -44,7 +45,18 @@ export function ContentPerformanceChart({ data }: ContentPerformanceChartProps) 
     );
   };
 
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+        No content performance data available
+      </div>
+    );
+  }
+
   return (
+    <AdminErrorBoundary context="Content Performance Chart" fallback={
+      <AdminErrorFallback context="Content Performance Chart" />
+    }>
     <div className="grid gap-4 md:grid-cols-2">
       {/* Article Count by Category */}
       <div>
@@ -111,5 +123,6 @@ export function ContentPerformanceChart({ data }: ContentPerformanceChartProps) 
         </ResponsiveContainer>
       </div>
     </div>
+    </AdminErrorBoundary>
   );
 }

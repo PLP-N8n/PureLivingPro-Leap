@@ -1,4 +1,5 @@
 import { ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { AdminErrorBoundary, AdminErrorFallback } from '../AdminErrorBoundary';
 
 interface TrafficData {
   date: string;
@@ -19,7 +20,18 @@ export function TrafficChart({ data }: TrafficChartProps) {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+        No traffic data available
+      </div>
+    );
+  }
+
   return (
+    <AdminErrorBoundary context="Traffic Chart" fallback={
+      <AdminErrorFallback context="Traffic Chart" />
+    }>
     <ResponsiveContainer width="100%" height={300}>
       <ComposedChart data={data}>
         <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
@@ -64,5 +76,6 @@ export function TrafficChart({ data }: TrafficChartProps) {
         />
       </ComposedChart>
     </ResponsiveContainer>
+    </AdminErrorBoundary>
   );
 }

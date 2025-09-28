@@ -20,39 +20,26 @@ import {
   CheckCircle,
   Clock
 } from 'lucide-react';
-import backend from '~backend/client';
 import type { UnifiedDashboardData } from '~backend/analytics/get_unified_dashboard';
 import { RevenueChart } from './charts/RevenueChart';
 import { TrafficChart } from './charts/TrafficChart';
 import { ContentPerformanceChart } from './charts/ContentPerformanceChart';
 import { AutomationStatusCard } from './AutomationStatusCard';
 import { MetricCard } from './MetricCard';
+import { AdminErrorBoundary, AdminErrorFallback } from './AdminErrorBoundary';
+import { useUnifiedDashboard } from '../../hooks/useAdminApi';
 
 export function UnifiedAnalyticsDashboard() {
-  const [data, setData] = useState<UnifiedDashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const { data, isLoading: loading, error, refetch } = useUnifiedDashboard();
 
   const fetchData = async () => {
-    try {
-      setLoading(true);
-      const result = await backend.analytics.getUnifiedDashboard();
-      setData(result);
+    const result = await refetch();
+    if (result.data) {
       setLastUpdated(new Date());
-      setError(null);
-    } catch (err) {
-      console.error('Failed to fetch dashboard data:', err);
-      setError('Failed to load dashboard data');
-    } finally {
-      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   useEffect(() => {
     if (!autoRefresh) return;
@@ -62,7 +49,7 @@ export function UnifiedAnalyticsDashboard() {
     }, 30000); // Refresh every 30 seconds
 
     return () => clearInterval(interval);
-  }, [autoRefresh]);
+  }, [autoRefresh, refetch]);
 
   const formatCurrency = (amount: number) => 
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
@@ -86,24 +73,19 @@ export function UnifiedAnalyticsDashboard() {
 
   if (error) {
     return (
-      <Card className="border-red-200 bg-red-50">
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-2 text-red-600">
-            <AlertCircle className="h-5 w-5" />
-            <span>{error}</span>
-            <Button variant="outline" size="sm" onClick={fetchData}>
-              Retry
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <AdminErrorFallback 
+        error={error} 
+        onRetry={fetchData} 
+        context="Unified Analytics Dashboard" 
+      />
     );
   }
 
   if (!data) return null;
 
   return (
-    <div className="space-y-6">
+    <AdminErrorBoundary context="Unified Analytics Dashboard">
+      <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -128,8 +110,11 @@ export function UnifiedAnalyticsDashboard() {
         </div>
       </div>
 
-      {/* Overview Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {/* Overview Cards */}
+        <AdminErrorBoundary context="Overview Metrics" fallback={
+          <AdminErrorFallback context="Overview Metrics" />
+        }>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
@@ -191,10 +176,11 @@ export function UnifiedAnalyticsDashboard() {
             </p>
           </CardContent>
         </Card>
-      </div>
+          </div>
+        </AdminErrorBoundary>
 
-      {/* Main Dashboard Tabs */}
-      <Tabs defaultValue="overview" className="space-y-4">
+        {/* Main Dashboard Tabs */}
+        <Tabs defaultValue="overview" className="space-y-4">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="revenue">Revenue</TabsTrigger>
@@ -206,57 +192,69 @@ export function UnifiedAnalyticsDashboard() {
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {/* Revenue Trend */}
-            <Card className="col-span-2">
-              <CardHeader>
-                <CardTitle>Revenue Trend (14 days)</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <RevenueChart data={data.affiliateRevenue.dailyRevenue} />
-              </CardContent>
-            </Card>
+            <AdminErrorBoundary context="Revenue Trend Chart" fallback={
+              <AdminErrorFallback context="Revenue Trend Chart" />
+            }>
+              <Card className="col-span-2">
+                <CardHeader>
+                  <CardTitle>Revenue Trend (14 days)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <RevenueChart data={data.affiliateRevenue.dailyRevenue} />
+                </CardContent>
+              </Card>
+            </AdminErrorBoundary>
 
             {/* Quick Stats */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Stats</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Content Published Today</span>
-                  <Badge variant="secondary">{data.contentPerformance.publishedToday}</Badge>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Active Automation Jobs</span>
-                  <Badge variant="outline">{data.automationStatus.activePipelineJobs}</Badge>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Working Links</span>
-                  <div className="flex items-center space-x-2">
-                    <Badge variant={data.automationStatus.linkHealthSummary.brokenLinks > 0 ? "destructive" : "default"}>
-                      {data.automationStatus.linkHealthSummary.workingLinks}/{data.automationStatus.linkHealthSummary.totalLinks}
-                    </Badge>
+            <AdminErrorBoundary context="Quick Stats" fallback={
+              <AdminErrorFallback context="Quick Stats" />
+            }>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quick Stats</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Content Published Today</span>
+                    <Badge variant="secondary">{data.contentPerformance.publishedToday}</Badge>
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span>Link Health</span>
-                    <span>{formatPercentage((data.automationStatus.linkHealthSummary.workingLinks / data.automationStatus.linkHealthSummary.totalLinks) * 100)}</span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Active Automation Jobs</span>
+                    <Badge variant="outline">{data.automationStatus.activePipelineJobs}</Badge>
                   </div>
-                  <Progress value={(data.automationStatus.linkHealthSummary.workingLinks / data.automationStatus.linkHealthSummary.totalLinks) * 100} className="h-2" />
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Working Links</span>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant={data.automationStatus.linkHealthSummary.brokenLinks > 0 ? "destructive" : "default"}>
+                        {data.automationStatus.linkHealthSummary.workingLinks}/{data.automationStatus.linkHealthSummary.totalLinks}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Link Health</span>
+                      <span>{formatPercentage((data.automationStatus.linkHealthSummary.workingLinks / data.automationStatus.linkHealthSummary.totalLinks) * 100)}</span>
+                    </div>
+                    <Progress value={(data.automationStatus.linkHealthSummary.workingLinks / data.automationStatus.linkHealthSummary.totalLinks) * 100} className="h-2" />
+                  </div>
+                </CardContent>
+              </Card>
+            </AdminErrorBoundary>
           </div>
 
           {/* Traffic Overview */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Traffic Overview (14 days)</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <TrafficChart data={data.trafficAnalytics.pageViewsTrend} />
-            </CardContent>
-          </Card>
+          <AdminErrorBoundary context="Traffic Chart" fallback={
+            <AdminErrorFallback context="Traffic Chart" />
+          }>
+            <Card>
+              <CardHeader>
+                <CardTitle>Traffic Overview (14 days)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <TrafficChart data={data.trafficAnalytics.pageViewsTrend} />
+              </CardContent>
+            </Card>
+          </AdminErrorBoundary>
         </TabsContent>
 
         <TabsContent value="revenue" className="space-y-4">
@@ -433,7 +431,8 @@ export function UnifiedAnalyticsDashboard() {
             </CardContent>
           </Card>
         </TabsContent>
-      </Tabs>
-    </div>
+        </Tabs>
+      </div>
+    </AdminErrorBoundary>
   );
 }

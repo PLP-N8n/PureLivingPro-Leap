@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import backend from "~backend/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,157 +26,66 @@ import {
   Upload
 } from "lucide-react";
 import { LoadingSpinner } from "../LoadingSpinner";
-import { useToast } from "@/components/ui/use-toast";
 import { RevenueOptimizer } from "./RevenueOptimizer";
+import { AdminErrorBoundary, AdminErrorFallback } from "./AdminErrorBoundary";
+import {
+  useAutomationSchedules,
+  useContentSchedule,
+  usePerformanceAnalysis,
+  useOptimizationTargets,
+  useSEOReport,
+  useWeeklyReport,
+  useRunScheduledTasks,
+  useIngestFromSheets,
+  useBulkOptimizeContent
+} from "../../hooks/useAdminApi";
 
 export function AutomationDashboard() {
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedOptimizationType, setSelectedOptimizationType] = useState("seo");
 
-  const { data: schedulesData, isLoading: schedulesLoading } = useQuery({
-    queryKey: ["automation", "schedules"],
-    queryFn: async () => {
-      try {
-        return await backend.automation.getSchedules();
-      } catch (error) {
-        console.error("Schedules fetch error:", error);
-        return { schedules: [] };
-      }
-    },
-  });
+  const { data: schedulesData, isLoading: schedulesLoading } = useAutomationSchedules();
+  const { data: contentSchedule } = useContentSchedule();
+  const { data: performanceAnalysis } = usePerformanceAnalysis();
+  const { data: optimizationTargets } = useOptimizationTargets();
+  const { data: seoReport } = useSEOReport();
+  const { data: weeklyReport } = useWeeklyReport();
 
-  const { data: contentSchedule } = useQuery({
-    queryKey: ["automation", "content-schedule"],
-    queryFn: async () => {
-      try {
-        return await backend.automation.getContentSchedule();
-      } catch (error) {
-        console.error("Content schedule fetch error:", error);
-        return null;
-      }
-    },
-  });
-
-  const { data: performanceAnalysis } = useQuery({
-    queryKey: ["automation", "performance-analysis"],
-    queryFn: async () => {
-      try {
-        return await backend.automation.analyzePerformance();
-      } catch (error) {
-        console.error("Performance analysis fetch error:", error);
-        return null;
-      }
-    },
-  });
-
-  const { data: optimizationTargets } = useQuery({
-    queryKey: ["automation", "optimization-targets"],
-    queryFn: async () => {
-      try {
-        return await backend.automation.identifyOptimizationTargets();
-      } catch (error) {
-        console.error("Optimization targets fetch error:", error);
-        return null;
-      }
-    },
-  });
-
-  const { data: seoReport } = useQuery({
-    queryKey: ["automation", "seo-report"],
-    queryFn: async () => {
-      try {
-        return await backend.automation.generateSEOReport();
-      } catch (error) {
-        console.error("SEO report fetch error:", error);
-        return null;
-      }
-    },
-  });
-
-  const { data: weeklyReport } = useQuery({
-    queryKey: ["automation", "weekly-report"],
-    queryFn: async () => {
-      try {
-        return await backend.automation.generateWeeklyReport();
-      } catch (error) {
-        console.error("Weekly report fetch error:", error);
-        return null;
-      }
-    },
-  });
-
-  const runTasksMutation = useMutation({
-    mutationFn: () => backend.automation.runScheduledTasks(),
-    onSuccess: (result) => {
-      toast({ 
-        title: "Tasks executed successfully", 
-        description: `${result.executed} tasks completed, ${result.failed} failed` 
-      });
-      queryClient.invalidateQueries({ queryKey: ["automation"] });
-    },
-    onError: () => {
-      toast({ title: "Failed to run tasks", variant: "destructive" });
-    },
-  });
-
-  const ingestMutation = useMutation({
-    mutationFn: () => backend.automation.ingestFromSheets({ spreadsheetId: "" }), // spreadsheetId will be from secrets
-    onSuccess: (result) => {
-      toast({
-        title: "Sheet Ingestion Complete",
-        description: `${result.ingested} new items ingested.`,
-      });
-      queryClient.invalidateQueries({ queryKey: ["automation", "content-schedule"] });
-    },
-    onError: (err) => {
-      toast({
-        title: "Sheet Ingestion Failed",
-        description: err.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  const bulkOptimizeMutation = useMutation({
-    mutationFn: (data: any) => backend.automation.bulkOptimizeContent(data),
-    onSuccess: (result) => {
-      toast({ 
-        title: "Bulk optimization completed", 
-        description: `${result.optimized}/${result.totalArticles} articles optimized` 
-      });
-      queryClient.invalidateQueries({ queryKey: ["automation"] });
-    },
-  });
+  const runTasksMutation = useRunScheduledTasks();
+  const ingestMutation = useIngestFromSheets();
+  const bulkOptimizeMutation = useBulkOptimizeContent();
 
   const schedules = schedulesData?.schedules || [];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
-          <Bot className="h-7 w-7 text-white animate-pulse" />
+    <AdminErrorBoundary context="Automation Dashboard">
+      <div className="space-y-6">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
+            <Bot className="h-7 w-7 text-white animate-pulse" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">AI Automation Hub</h1>
+            <p className="text-gray-600">Autonomous content generation, optimization, and revenue maximization</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">AI Automation Hub</h1>
-          <p className="text-gray-600">Autonomous content generation, optimization, and revenue maximization</p>
-        </div>
-      </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Button 
-          onClick={() => ingestMutation.mutate()}
-          disabled={ingestMutation.isPending}
-          className="h-20 flex flex-col gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
-        >
-          <Upload className="h-5 w-5" />
-          Ingest from Sheets
-        </Button>
+        {/* Quick Actions */}
+        <AdminErrorBoundary context="Quick Actions" fallback={
+          <AdminErrorFallback context="Quick Actions" />
+        }>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <Button 
+              onClick={() => ingestMutation.mutate({ spreadsheetId: "" })}
+              disabled={ingestMutation.isPending}
+              className="h-20 flex flex-col gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+            >
+              <Upload className="h-5 w-5" />
+              Ingest from Sheets
+            </Button>
         
         <Button 
-          onClick={() => runTasksMutation.mutate()}
+          onClick={() => runTasksMutation.mutate(undefined)}
           disabled={runTasksMutation.isPending}
           variant="outline"
           className="h-20 flex flex-col gap-2 border-2 border-blue-200 hover:border-blue-500 hover:bg-blue-50"
@@ -191,7 +98,7 @@ export function AutomationDashboard() {
           onClick={() => {
             if (optimizationTargets?.lowPerformingArticles) {
               bulkOptimizeMutation.mutate({
-                articleIds: optimizationTargets.lowPerformingArticles.slice(0, 5).map(a => a.articleId),
+                articleIds: optimizationTargets.lowPerformingArticles.slice(0, 5).map(a => String(a.articleId)),
                 optimizationType: selectedOptimizationType
               });
             }
@@ -218,8 +125,9 @@ export function AutomationDashboard() {
         >
           <Search className="h-5 w-5" />
           SEO Analysis
-        </Button>
-      </div>
+            </Button>
+          </div>
+        </AdminErrorBoundary>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-6">
@@ -548,6 +456,7 @@ export function AutomationDashboard() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </AdminErrorBoundary>
   );
 }

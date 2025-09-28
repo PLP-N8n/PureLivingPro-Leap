@@ -59,6 +59,26 @@ export const updateArticle = api<UpdateArticleParams & UpdateArticleRequest, Art
       params.push(req.featured);
     }
 
+    if (req.seoMeta !== undefined) {
+      updates.push(`seo_meta = $${paramIndex++}`);
+      params.push(JSON.stringify(req.seoMeta));
+    }
+
+    if (req.affiliateBlocks !== undefined) {
+      updates.push(`affiliate_blocks = $${paramIndex++}`);
+      params.push(JSON.stringify(req.affiliateBlocks));
+    }
+
+    if (req.wpPostId !== undefined) {
+      updates.push(`wp_post_id = $${paramIndex++}`);
+      params.push(req.wpPostId);
+    }
+
+    if (req.mediumPostId !== undefined) {
+      updates.push(`medium_post_id = $${paramIndex++}`);
+      params.push(req.mediumPostId);
+    }
+
     if (updates.length > 0) {
       updates.push(`updated_at = NOW()`);
       

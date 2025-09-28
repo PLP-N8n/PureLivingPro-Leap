@@ -54,6 +54,10 @@ export interface UpdateArticleRequest {
   published?: boolean;
   featured?: boolean;
   tagIds?: number[];
+  seoMeta?: any;
+  affiliateBlocks?: any;
+  wpPostId?: number;
+  mediumPostId?: string;
 }
 
 export interface CreateCategoryRequest {

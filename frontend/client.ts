@@ -930,14 +930,18 @@ export namespace content {
         public async updateArticle(params: RequestType<typeof api_content_update_article_updateArticle>): Promise<ResponseType<typeof api_content_update_article_updateArticle>> {
             // Construct the body with only the fields which we want encoded within the body (excluding query string or header fields)
             const body: Record<string, any> = {
+                affiliateBlocks:  params.affiliateBlocks,
                 categoryId:       params.categoryId,
                 content:          params.content,
                 excerpt:          params.excerpt,
                 featured:         params.featured,
                 featuredImageUrl: params.featuredImageUrl,
+                mediumPostId:     params.mediumPostId,
                 published:        params.published,
+                seoMeta:          params.seoMeta,
                 tagIds:           params.tagIds,
                 title:            params.title,
+                wpPostId:         params.wpPostId,
             }
 
             // Now make the actual call to the API

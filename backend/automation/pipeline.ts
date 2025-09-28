@@ -63,8 +63,8 @@ export async function processScheduledContent() {
       title: optimized.optimizedTitle,
       content: optimized.optimizedContent,
       published: true,
-      seo_meta: JSON.stringify(optimized.estimatedImprovements),
-      affiliate_blocks: JSON.stringify(optimized.suggestedProducts),
+      seoMeta: optimized.estimatedImprovements,
+      affiliateBlocks: optimized.suggestedProducts,
     });
 
     // 6. Publish to WordPress
@@ -74,7 +74,7 @@ export async function processScheduledContent() {
     });
 
     // 7. Cross-post to Medium
-    const mediumPost = await content.publishToMedium({
+    const mediumPost = await content.publishArticleToMedium({
       articleId: publishedArticle.id,
       publishStatus: 'public',
       canonicalUrl: `${process.env.SITE_BASE_URL}/article/${publishedArticle.slug}`,
@@ -83,8 +83,8 @@ export async function processScheduledContent() {
     // 8. Update article with external post IDs
     await content.updateArticle({
       id: publishedArticle.id,
-      wp_post_id: wpPost.wordpressPostId,
-      medium_post_id: mediumPost.mediumPostId,
+      wpPostId: wpPost.wordpressPostId,
+      mediumPostId: mediumPost.mediumPostId,
     });
 
     // 9. Mark pipeline job as complete

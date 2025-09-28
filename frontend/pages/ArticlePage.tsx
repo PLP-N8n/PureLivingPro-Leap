@@ -222,7 +222,21 @@ export function ArticlePage() {
             <AffiliateDisclosure variant="inline" className="mb-6" />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {recommendedProducts.products.map((product) => (
-                <ProductCard key={product.id} product={product} contentId={article.slug} />
+                <ProductCard 
+                  key={product.id} 
+                  product={{
+                    id: product.id,
+                    name: product.name,
+                    slug: product.slug,
+                    description: product.description,
+                    price: product.price,
+                    imageUrl: product.imageUrl,
+                    category: product.category,
+                    affiliateUrl: `/r/product-${product.id}`,
+                    program: product.program
+                  }} 
+                  contentId={article.slug} 
+                />
               ))}
             </div>
           </div>

@@ -139,7 +139,20 @@ export function ProductDetailPage() {
                 .filter(p => p.id !== product.id)
                 .slice(0, 4)
                 .map(p => (
-                  <ProductCard key={p.id} product={p} />
+                  <ProductCard 
+                    key={p.id} 
+                    product={{
+                      id: p.id,
+                      name: p.name,
+                      slug: p.slug,
+                      description: p.description,
+                      price: p.price,
+                      imageUrl: p.imageUrl,
+                      category: p.category,
+                      affiliateUrl: `/r/product-${p.id}`,
+                      program: p.program
+                    }} 
+                  />
               ))}
             </div>
           </div>

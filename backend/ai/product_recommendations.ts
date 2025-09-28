@@ -16,6 +16,7 @@ interface RecommendationResponse {
     product: {
       id: number;
       name: string;
+      slug: string;
       description?: string;
       price?: number;
       imageUrl?: string;
@@ -36,6 +37,7 @@ export const getProductRecommendations = api<RecommendationRequest, Recommendati
       const products = await affiliateDB.queryAll<{
         id: number;
         name: string;
+        slug: string;
         description?: string;
         price?: number;
         imageUrl?: string;
@@ -43,7 +45,7 @@ export const getProductRecommendations = api<RecommendationRequest, Recommendati
         tags?: string[];
       }>`
         SELECT 
-          p.id, p.name, p.description, p.price, p.image_url as "imageUrl",
+          p.id, p.name, p.slug, p.description, p.price, p.image_url as "imageUrl",
           p.category, p.tags
         FROM affiliate_products p
         WHERE p.is_active = true
@@ -159,6 +161,7 @@ async function generateRecommendations(
         product: {
           id: product.id,
           name: product.name,
+          slug: product.slug,
           description: product.description,
           price: product.price,
           imageUrl: product.imageUrl,

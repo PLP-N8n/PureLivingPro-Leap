@@ -88,7 +88,20 @@ export function HomePage() {
             <h2 className="text-3xl font-bold text-center mb-8">Our Picks</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {curatedProducts.products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard 
+                  key={product.id} 
+                  product={{
+                    id: product.id,
+                    name: product.name,
+                    slug: product.slug,
+                    description: product.description,
+                    price: product.price,
+                    imageUrl: product.imageUrl,
+                    category: product.category,
+                    affiliateUrl: `/r/product-${product.id}`,
+                    program: product.program
+                  }} 
+                />
               ))}
             </div>
             <div className="text-center mt-8">

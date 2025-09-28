@@ -405,6 +405,7 @@ import {
     generateSocialContent as api_automation_social_media_automation_generateSocialContent,
     publishScheduledPosts as api_automation_social_media_automation_publishScheduledPosts
 } from "~backend/automation/social_media_automation";
+import { testSecrets as api_automation_test_secrets_testSecrets } from "~backend/automation/test_secrets";
 import { generateWeeklyDigest as api_automation_weekly_digest_generateWeeklyDigest } from "~backend/automation/weekly_digest";
 
 export namespace automation {
@@ -440,6 +441,7 @@ export namespace automation {
             this.runScheduledTasks = this.runScheduledTasks.bind(this)
             this.scheduleContent = this.scheduleContent.bind(this)
             this.sendWeeklyReport = this.sendWeeklyReport.bind(this)
+            this.testSecrets = this.testSecrets.bind(this)
             this.trackKeyword = this.trackKeyword.bind(this)
             this.updateKeywordRankings = this.updateKeywordRankings.bind(this)
         }
@@ -676,6 +678,12 @@ export namespace automation {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/automation/send-report`, {method: "POST", body: JSON.stringify(params)})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_automation_analytics_reporter_sendWeeklyReport>
+        }
+
+        public async testSecrets(): Promise<ResponseType<typeof api_automation_test_secrets_testSecrets>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/test-secrets`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_automation_test_secrets_testSecrets>
         }
 
         /**

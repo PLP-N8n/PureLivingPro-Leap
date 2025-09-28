@@ -39,32 +39,74 @@ export function AutomationDashboard() {
 
   const { data: schedulesData, isLoading: schedulesLoading } = useQuery({
     queryKey: ["automation", "schedules"],
-    queryFn: () => backend.automation.getSchedules(),
+    queryFn: async () => {
+      try {
+        return await backend.automation.getSchedules();
+      } catch (error) {
+        console.error("Schedules fetch error:", error);
+        return { schedules: [] };
+      }
+    },
   });
 
   const { data: contentSchedule } = useQuery({
     queryKey: ["automation", "content-schedule"],
-    queryFn: () => backend.automation.getContentSchedule(),
+    queryFn: async () => {
+      try {
+        return await backend.automation.getContentSchedule();
+      } catch (error) {
+        console.error("Content schedule fetch error:", error);
+        return null;
+      }
+    },
   });
 
   const { data: performanceAnalysis } = useQuery({
     queryKey: ["automation", "performance-analysis"],
-    queryFn: () => backend.automation.analyzePerformance(),
+    queryFn: async () => {
+      try {
+        return await backend.automation.analyzePerformance();
+      } catch (error) {
+        console.error("Performance analysis fetch error:", error);
+        return null;
+      }
+    },
   });
 
   const { data: optimizationTargets } = useQuery({
     queryKey: ["automation", "optimization-targets"],
-    queryFn: () => backend.automation.identifyOptimizationTargets(),
+    queryFn: async () => {
+      try {
+        return await backend.automation.identifyOptimizationTargets();
+      } catch (error) {
+        console.error("Optimization targets fetch error:", error);
+        return null;
+      }
+    },
   });
 
   const { data: seoReport } = useQuery({
     queryKey: ["automation", "seo-report"],
-    queryFn: () => backend.automation.generateSEOReport(),
+    queryFn: async () => {
+      try {
+        return await backend.automation.generateSEOReport();
+      } catch (error) {
+        console.error("SEO report fetch error:", error);
+        return null;
+      }
+    },
   });
 
   const { data: weeklyReport } = useQuery({
     queryKey: ["automation", "weekly-report"],
-    queryFn: () => backend.automation.generateWeeklyReport(),
+    queryFn: async () => {
+      try {
+        return await backend.automation.generateWeeklyReport();
+      } catch (error) {
+        console.error("Weekly report fetch error:", error);
+        return null;
+      }
+    },
   });
 
   const runTasksMutation = useMutation({

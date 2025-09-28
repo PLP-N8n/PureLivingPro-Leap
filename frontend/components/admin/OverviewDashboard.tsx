@@ -25,35 +25,70 @@ import { LoadingSpinner } from "../LoadingSpinner";
 export function OverviewDashboard() {
   const { data: analytics, isLoading: analyticsLoading, error: analyticsError } = useQuery({
     queryKey: ["admin", "analytics"],
-    queryFn: () => backend.analytics.getAnalyticsSummary(),
+    queryFn: async () => {
+      try {
+        return await backend.analytics.getAnalyticsSummary();
+      } catch (error) {
+        console.error("Analytics fetch error:", error);
+        return null;
+      }
+    },
     retry: false,
     refetchOnWindowFocus: false,
   });
 
   const { data: affiliateStats, isLoading: affiliateLoading, error: affiliateError } = useQuery({
     queryKey: ["admin", "affiliate-stats"],
-    queryFn: () => backend.affiliate.getAffiliateStats(),
+    queryFn: async () => {
+      try {
+        return await backend.affiliate.getAffiliateStats();
+      } catch (error) {
+        console.error("Affiliate stats fetch error:", error);
+        return null;
+      }
+    },
     retry: false,
     refetchOnWindowFocus: false,
   });
 
   const { data: articles, error: articlesError } = useQuery({
     queryKey: ["admin", "articles"],
-    queryFn: () => backend.content.listArticles({ limit: 1 }),
+    queryFn: async () => {
+      try {
+        return await backend.content.listArticles({ limit: 1 });
+      } catch (error) {
+        console.error("Articles fetch error:", error);
+        return { articles: [], total: 0 };
+      }
+    },
     retry: false,
     refetchOnWindowFocus: false,
   });
 
   const { data: weeklyReport, error: weeklyReportError } = useQuery({
     queryKey: ["automation", "weekly-report"],
-    queryFn: () => backend.automation.generateWeeklyReport(),
+    queryFn: async () => {
+      try {
+        return await backend.automation.generateWeeklyReport();
+      } catch (error) {
+        console.error("Weekly report fetch error:", error);
+        return null;
+      }
+    },
     retry: false,
     refetchOnWindowFocus: false,
   });
 
   const { data: revenueAnalysis, error: revenueError } = useQuery({
     queryKey: ["automation", "revenue-analysis"],
-    queryFn: () => backend.automation.analyzeRevenue(),
+    queryFn: async () => {
+      try {
+        return await backend.automation.analyzeRevenue();
+      } catch (error) {
+        console.error("Revenue analysis fetch error:", error);
+        return null;
+      }
+    },
     retry: false,
     refetchOnWindowFocus: false,
   });

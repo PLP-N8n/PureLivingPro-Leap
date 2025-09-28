@@ -26,7 +26,7 @@ export const getRelatedArticles = api<GetRelatedArticlesParams & GetRelatedArtic
     }
 
     // Get related articles based on category and tags
-    const articles = await contentDB.rawQueryAll<Article & { categoryName?: string; categorySlug?: string }>`
+    const articles = await contentDB.queryAll<Article & { categoryName?: string; categorySlug?: string }>`
       SELECT DISTINCT
         a.id, a.title, a.slug, a.content, a.excerpt,
         a.featured_image_url as "featuredImageUrl", a.category_id as "categoryId",

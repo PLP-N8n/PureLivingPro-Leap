@@ -137,66 +137,88 @@ export const syncAmazonProducts = api<{ categories: string[] }, ProductSyncRespo
 
             for (const product of searchResult.products) {
               try {
-                // Generate a slug for the product
-                const slug = generateSlug(product.title, product.asin);
+                // Generate a unique slug for the product
+                const baseSlug = generateSlug(product.title, product.asin);
+                const slug = await ensureUniqueSlug(baseSlug);
                 
                 // Get default Amazon affiliate program
                 const amazonProgram = await getOrCreateAmazonProgram();
                 
-                // Check if product already exists by name or description similarity
+                // Check if product already exists by ASIN (most reliable) or exact title match
+                const amazonUrl = `https://amazon.com/dp/${product.asin}?tag=${await amazonStoreId()}`;
+                
                 const existing = await affiliateDB.queryRow<{ id: number }>`
                   SELECT id FROM affiliate_products 
-                  WHERE name = ${product.title}
+                  WHERE original_url LIKE ${'%' + product.asin + '%'} OR name = ${product.title}
+                  LIMIT 1
                 `;
 
+                let productId: number;
+                
                 if (existing) {
-                  // Update existing product
+                  // Update existing product with current data
                   await affiliateDB.exec`
                     UPDATE affiliate_products SET
-                      price = ${product.price || null},
-                      description = ${product.description || null},
-                      image_url = ${product.imageUrl || null},
-                      category = ${product.category || null},
+                      price = COALESCE(${product.price || null}, price),
+                      description = COALESCE(${product.description || null}, description),
+                      image_url = COALESCE(${product.imageUrl || null}, image_url),
+                      category = COALESCE(${product.category || null}, category),
                       updated_at = NOW()
                     WHERE id = ${existing.id}
                   `;
+                  productId = existing.id;
                   updated++;
                 } else {
-                  // Create new product with required fields
-                  const amazonUrl = `https://amazon.com/dp/${product.asin}?tag=${await amazonStoreId()}`;
-                  
-                  await affiliateDB.exec`
+                  // Create new product with all required fields populated
+                  const newProduct = await affiliateDB.queryRow<{ id: number }>`
                     INSERT INTO affiliate_products (
                       program_id, name, slug, description, price, original_url, image_url, category, is_active
                     ) VALUES (
-                      ${amazonProgram.id}, ${product.title}, ${slug}, ${product.description || null}, 
+                      ${amazonProgram.id}, ${product.title}, ${slug}, ${product.description || 'Amazon product'}, 
                       ${product.price || null}, ${amazonUrl}, ${product.imageUrl || null}, 
-                      ${product.category || null}, true
+                      ${product.category || 'general'}, true
                     )
+                    RETURNING id
                   `;
+                  
+                  if (!newProduct) {
+                    throw new Error(`Failed to create product for ASIN ${product.asin}`);
+                  }
+                  
+                  productId = newProduct.id;
                   imported++;
                 }
 
-                // Create affiliate link if needed
-                const productResult = existing?.id ? { id: existing.id } : await affiliateDB.queryRow<{ id: number }>`
-                  SELECT id FROM affiliate_products WHERE slug = ${slug}
+                // Create affiliate link if it doesn't exist
+                const existingLink = await affiliateDB.queryRow<{ id: number }>`
+                  SELECT id FROM affiliate_links WHERE product_id = ${productId}
                 `;
-
-                if (productResult) {
-                  const affiliateUrl = `https://amazon.com/dp/${product.asin}?tag=${await amazonStoreId()}`;
+                
+                if (!existingLink) {
                   const shortCode = generateShortCode();
                   
-                  // Check if link already exists
-                  const existingLink = await affiliateDB.queryRow<{ id: number }>`
-                    SELECT id FROM affiliate_links WHERE product_id = ${productResult.id}
-                  `;
-                  
-                  if (!existingLink) {
-                    await affiliateDB.exec`
-                      INSERT INTO affiliate_links (product_id, short_code, original_url, is_active)
-                      VALUES (${productResult.id}, ${shortCode}, ${affiliateUrl}, true)
+                  // Ensure short code is unique
+                  let uniqueShortCode = shortCode;
+                  let attempts = 0;
+                  while (attempts < 5) {
+                    const codeExists = await affiliateDB.queryRow<{ id: number }>`
+                      SELECT id FROM affiliate_links WHERE short_code = ${uniqueShortCode}
                     `;
+                    
+                    if (!codeExists) break;
+                    
+                    uniqueShortCode = generateShortCode();
+                    attempts++;
                   }
+                  
+                  if (attempts >= 5) {
+                    throw new Error(`Failed to generate unique short code for product ${product.asin}`);
+                  }
+                  
+                  await affiliateDB.exec`
+                    INSERT INTO affiliate_links (product_id, short_code, original_url, is_active)
+                    VALUES (${productId}, ${uniqueShortCode}, ${amazonUrl}, true)
+                  `;
                 }
 
               } catch (productError) {
@@ -340,7 +362,30 @@ function generateSlug(title: string, asin: string): string {
     .replace(/^-|-$/g, '')
     .substring(0, 50);
   
+  // Include ASIN to ensure uniqueness across products
   return `${baseSlug}-${asin.toLowerCase()}`;
+}
+
+async function ensureUniqueSlug(baseSlug: string): Promise<string> {
+  let slug = baseSlug;
+  let counter = 1;
+  
+  while (counter <= 10) {
+    const existing = await affiliateDB.queryRow<{ id: number }>`
+      SELECT id FROM affiliate_products WHERE slug = ${slug}
+    `;
+    
+    if (!existing) {
+      return slug;
+    }
+    
+    // If slug exists, append counter
+    slug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+  
+  // If we still can't find a unique slug after 10 attempts, use timestamp
+  return `${baseSlug}-${Date.now()}`;
 }
 
 function generateShortCode(): string {

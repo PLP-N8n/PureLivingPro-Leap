@@ -3,9 +3,8 @@ import { automationDB } from "./db";
 import { contentDB } from "../content/db";
 import { generateContent } from "./content_generator";
 import { optimizeArticleContent } from "./ai_content_optimizer";
-import { publishToMedium as publishToMediumAPI } from "../integrations/medium";
+import { publishArticleToMedium } from "../content/publish_to_medium";
 import { createWordPressPost } from "../integrations/wordpress";
-import { mediumToken } from "../content/secrets";
 import { wordpressUrl, wordpressUsername, wordpressPassword } from "../content/secrets";
 import { searchAmazonProducts } from "./amazon_product_sync";
 
@@ -104,21 +103,11 @@ export const runContentPipeline = api<ContentPipelineRequest, ContentPipelineRes
         if (req.autoPublish && req.platforms) {
           if (req.platforms.includes('medium')) {
             try {
-              const token = await mediumToken();
-              if (token) {
-                const mediumUser = await getMediumUser(token);
-                await publishToMediumAPI(token, mediumUser.id, {
-                  title: generatedContent.title,
-                  content: generatedContent.content,
-                  contentFormat: 'html',
-                  publishStatus: 'draft',
-                  tags: keywords.slice(0, 3)
-                });
-                result.publishingStatus.medium = 'success';
-              } else {
-                result.publishingStatus.medium = 'skipped';
-                result.errors.push('Medium token not configured');
-              }
+              await publishArticleToMedium({
+                articleId: articleResult.id,
+                publishStatus: 'draft'
+              });
+              result.publishingStatus.medium = 'success';
             } catch (error) {
               result.publishingStatus.medium = 'failed';
               result.errors.push(`Medium publishing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -394,18 +383,3 @@ function calculateNextRunTime(cronExpression: string): string {
   }
 }
 
-// Import the required function - this would normally be imported from the medium integration
-async function getMediumUser(token: string): Promise<{ id: string; username: string; name: string }> {
-  const response = await fetch('https://api.medium.com/v1/me', {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error(`Medium API error: ${response.status}`);
-  }
-
-  const data = await response.json();
-  return data.data;
-}

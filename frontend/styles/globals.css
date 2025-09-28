@@ -44,6 +44,13 @@
     --ring: 180 82% 35%;
 
     --radius: 1rem; /* 16px */
+
+    /* Chart colors */
+    --chart-1: 180 82% 35%; /* Primary teal */
+    --chart-2: 152 76% 73%; /* Mint green */
+    --chart-3: 38 92% 50%; /* Orange */
+    --chart-4: 204 90% 53%; /* Blue */
+    --chart-5: 0 84% 60%; /* Red */
   }
 
   .theme-mint {

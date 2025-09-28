@@ -19,6 +19,7 @@ import { BlogManagement } from "../components/admin/BlogManagement";
 import { ProductManagement } from "../components/admin/ProductManagement";
 import { AutomationDashboard } from "../components/admin/AutomationDashboard";
 import { SettingsDashboard } from "../components/admin/SettingsDashboard";
+import { UnifiedAnalyticsDashboard } from "../components/admin/UnifiedAnalyticsDashboard";
 import { useAnalytics } from "../hooks/useAnalytics";
 
 const navItems = [
@@ -96,6 +97,8 @@ export function AdminPage() {
         return <ProductManagement />;
       case "automation":
         return <AutomationDashboard />;
+      case "analytics":
+        return <UnifiedAnalyticsDashboard />;
       case "settings":
         return <SettingsDashboard />;
       default:

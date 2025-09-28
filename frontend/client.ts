@@ -290,6 +290,7 @@ export namespace ai {
  * Import the endpoint handlers to derive the types for the client.
  */
 import { getAnalyticsSummary as api_analytics_get_analytics_summary_getAnalyticsSummary } from "~backend/analytics/get_analytics_summary";
+import { getUnifiedDashboard as api_analytics_get_unified_dashboard_getUnifiedDashboard } from "~backend/analytics/get_unified_dashboard";
 import { trackPageView as api_analytics_track_page_view_trackPageView } from "~backend/analytics/track_page_view";
 import { trackSearch as api_analytics_track_search_trackSearch } from "~backend/analytics/track_search";
 
@@ -301,6 +302,7 @@ export namespace analytics {
         constructor(baseClient: BaseClient) {
             this.baseClient = baseClient
             this.getAnalyticsSummary = this.getAnalyticsSummary.bind(this)
+            this.getUnifiedDashboard = this.getUnifiedDashboard.bind(this)
             this.trackPageView = this.trackPageView.bind(this)
             this.trackSearch = this.trackSearch.bind(this)
         }
@@ -312,6 +314,12 @@ export namespace analytics {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/analytics/summary`, {method: "GET", body: undefined})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_analytics_get_analytics_summary_getAnalyticsSummary>
+        }
+
+        public async getUnifiedDashboard(): Promise<ResponseType<typeof api_analytics_get_unified_dashboard_getUnifiedDashboard>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/analytics/unified-dashboard`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_analytics_get_unified_dashboard_getUnifiedDashboard>
         }
 
         /**

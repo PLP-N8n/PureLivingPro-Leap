@@ -1,4 +1,2 @@
--- Add foreign key constraints for analytics tables
-ALTER TABLE page_views 
-  ADD CONSTRAINT fk_page_views_article_id 
-  FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE SET NULL;
+-- Note: Cannot add foreign key constraint to articles table as it lives in a separate database (content service)
+-- article_id in page_views is maintained as a regular column with application-level referential integrity

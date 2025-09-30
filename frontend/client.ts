@@ -289,7 +289,10 @@ export namespace ai {
 /**
  * Import the endpoint handlers to derive the types for the client.
  */
+import { getActionableInsights as api_analytics_get_actionable_insights_getActionableInsights } from "~backend/analytics/get_actionable_insights";
 import { getAnalyticsSummary as api_analytics_get_analytics_summary_getAnalyticsSummary } from "~backend/analytics/get_analytics_summary";
+import { getPerformanceTrends as api_analytics_get_performance_trends_getPerformanceTrends } from "~backend/analytics/get_performance_trends";
+import { getRealTimeMetrics as api_analytics_get_real_time_metrics_getRealTimeMetrics } from "~backend/analytics/get_real_time_metrics";
 import { getUnifiedDashboard as api_analytics_get_unified_dashboard_getUnifiedDashboard } from "~backend/analytics/get_unified_dashboard";
 import { trackPageView as api_analytics_track_page_view_trackPageView } from "~backend/analytics/track_page_view";
 import { trackSearch as api_analytics_track_search_trackSearch } from "~backend/analytics/track_search";
@@ -301,10 +304,19 @@ export namespace analytics {
 
         constructor(baseClient: BaseClient) {
             this.baseClient = baseClient
+            this.getActionableInsights = this.getActionableInsights.bind(this)
             this.getAnalyticsSummary = this.getAnalyticsSummary.bind(this)
+            this.getPerformanceTrends = this.getPerformanceTrends.bind(this)
+            this.getRealTimeMetrics = this.getRealTimeMetrics.bind(this)
             this.getUnifiedDashboard = this.getUnifiedDashboard.bind(this)
             this.trackPageView = this.trackPageView.bind(this)
             this.trackSearch = this.trackSearch.bind(this)
+        }
+
+        public async getActionableInsights(): Promise<ResponseType<typeof api_analytics_get_actionable_insights_getActionableInsights>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/analytics/insights`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_analytics_get_actionable_insights_getActionableInsights>
         }
 
         /**
@@ -314,6 +326,23 @@ export namespace analytics {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/analytics/summary`, {method: "GET", body: undefined})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_analytics_get_analytics_summary_getAnalyticsSummary>
+        }
+
+        public async getPerformanceTrends(params: RequestType<typeof api_analytics_get_performance_trends_getPerformanceTrends>): Promise<ResponseType<typeof api_analytics_get_performance_trends_getPerformanceTrends>> {
+            // Convert our params into the objects we need for the request
+            const query = makeRecord<string, string | string[]>({
+                days: params.days === undefined ? undefined : String(params.days),
+            })
+
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/analytics/trends`, {query, method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_analytics_get_performance_trends_getPerformanceTrends>
+        }
+
+        public async getRealTimeMetrics(): Promise<ResponseType<typeof api_analytics_get_real_time_metrics_getRealTimeMetrics>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/analytics/real-time`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_analytics_get_real_time_metrics_getRealTimeMetrics>
         }
 
         public async getUnifiedDashboard(): Promise<ResponseType<typeof api_analytics_get_unified_dashboard_getUnifiedDashboard>> {

@@ -127,12 +127,6 @@ export function useAnalyticsSummary() {
     ['admin', 'analytics-summary'],
     () => backend.analytics.getAnalyticsSummary(),
     {
-      fallbackData: {
-        totalPageViews: 0,
-        totalSearches: 0,
-        topPages: [],
-        searchTerms: []
-      },
       errorContext: 'analytics data'
     }
   );
@@ -143,12 +137,6 @@ export function useAffiliateStats() {
     ['admin', 'affiliate-stats'],
     () => backend.affiliate.getAffiliateStats(),
     {
-      fallbackData: {
-        totalClicks: 0,
-        totalCommission: 0,
-        conversionRate: 0,
-        topProducts: []
-      },
       errorContext: 'affiliate statistics'
     }
   );
@@ -171,7 +159,6 @@ export function useContentList(params: { limit?: number } = {}) {
     ['admin', 'content-list', JSON.stringify(params)],
     () => backend.content.listArticles(params),
     {
-      fallbackData: { articles: [], total: 0 },
       errorContext: 'content list'
     }
   );
@@ -182,7 +169,6 @@ export function useAutomationSchedules() {
     ['admin', 'automation-schedules'],
     () => backend.automation.getSchedules(),
     {
-      fallbackData: { schedules: [] },
       errorContext: 'automation schedules'
     }
   );
@@ -235,11 +221,6 @@ export function useContentSchedule() {
     ['admin', 'content-schedule'],
     () => backend.automation.getContentSchedule(),
     {
-      fallbackData: {
-        totalScheduled: 0,
-        nextPublishDate: null,
-        scheduledContent: []
-      },
       errorContext: 'content schedule'
     }
   );
@@ -298,7 +279,6 @@ export function useAffiliateProducts(params: { limit?: number } = {}) {
     ['admin', 'affiliate-products', JSON.stringify(params)],
     () => backend.affiliate.listAffiliateProducts(params),
     {
-      fallbackData: { products: [] },
       errorContext: 'affiliate products'
     }
   );
@@ -311,6 +291,39 @@ export function useDeleteProduct() {
       successMessage: 'Product deleted successfully',
       errorMessage: 'Failed to delete product',
       invalidateQueries: [['admin', 'affiliate-products']]
+    }
+  );
+}
+
+export function useActionableInsights() {
+  return useSafeQuery(
+    ['admin', 'actionable-insights'],
+    () => backend.analytics.getActionableInsights(),
+    {
+      errorContext: 'actionable insights',
+      staleTime: 60000
+    }
+  );
+}
+
+export function useRealTimeMetrics() {
+  return useSafeQuery(
+    ['admin', 'real-time-metrics'],
+    () => backend.analytics.getRealTimeMetrics(),
+    {
+      errorContext: 'real-time metrics',
+      staleTime: 10000
+    }
+  );
+}
+
+export function usePerformanceTrends(params: { days?: number } = {}) {
+  return useSafeQuery(
+    ['admin', 'performance-trends', JSON.stringify(params)],
+    () => backend.analytics.getPerformanceTrends(params),
+    {
+      errorContext: 'performance trends',
+      staleTime: 300000
     }
   );
 }

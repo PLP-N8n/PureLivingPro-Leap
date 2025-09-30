@@ -28,6 +28,9 @@ import { AutomationStatusCard } from './AutomationStatusCard';
 import { MetricCard } from './MetricCard';
 import { AdminErrorBoundary, AdminErrorFallback } from './AdminErrorBoundary';
 import { useUnifiedDashboard } from '../../hooks/useAdminApi';
+import { InsightsPanel } from './InsightsPanel';
+import { RealTimeMetrics } from './RealTimeMetrics';
+import { PerformanceTrendsChart } from './PerformanceTrendsChart';
 
 export function UnifiedAnalyticsDashboard() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
@@ -181,12 +184,14 @@ export function UnifiedAnalyticsDashboard() {
 
         {/* Main Dashboard Tabs */}
         <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="revenue">Revenue</TabsTrigger>
           <TabsTrigger value="content">Content</TabsTrigger>
           <TabsTrigger value="automation">Automation</TabsTrigger>
           <TabsTrigger value="insights">Insights</TabsTrigger>
+          <TabsTrigger value="real-time">Real-Time</TabsTrigger>
+          <TabsTrigger value="trends">Trends</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -382,54 +387,15 @@ export function UnifiedAnalyticsDashboard() {
         </TabsContent>
 
         <TabsContent value="insights" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <MetricCard
-              title="AI Recommendation Performance"
-              metric={formatPercentage(data.aiInsights.recommendationAccuracy)}
-              description={`${formatNumber(data.aiInsights.totalRecommendationsServed)} recommendations served`}
-              trend={12.5}
-              icon={<Activity className="h-4 w-4" />}
-            />
-            
-            <MetricCard
-              title="User Engagement Rate"
-              metric={formatPercentage(data.aiInsights.userEngagementRate)}
-              description="Average engagement across all content"
-              trend={-2.1}
-              icon={<Users className="h-4 w-4" />}
-            />
-            
-            <MetricCard
-              title="Revenue Per Click"
-              metric={formatCurrency(data.overview.totalRevenue / Math.max(data.overview.totalAffiliateClicks, 1))}
-              description="Average revenue generated per click"
-              trend={8.3}
-              icon={<DollarSign className="h-4 w-4" />}
-            />
-          </div>
+          <InsightsPanel />
+        </TabsContent>
 
-          {/* AI Insights */}
-          <Card>
-            <CardHeader>
-              <CardTitle>AI-Powered Insights</CardTitle>
-              <CardDescription>Top recommended products and performance metrics</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {data.aiInsights.topRecommendedProducts.map((product: any, index: number) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div className="space-y-1">
-                      <p className="font-medium">{product.productName}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {formatNumber(product.recommendationCount)} recommendations • {formatPercentage(product.clickThrough)} CTR
-                      </p>
-                    </div>
-                    <Badge variant="outline">#{index + 1}</Badge>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="real-time" className="space-y-4">
+          <RealTimeMetrics />
+        </TabsContent>
+
+        <TabsContent value="trends" className="space-y-4">
+          <PerformanceTrendsChart />
         </TabsContent>
         </Tabs>
       </div>

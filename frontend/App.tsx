@@ -25,6 +25,7 @@ import { TermsPage } from "./pages/TermsPage";
 import { AffiliateDisclosurePage } from "./pages/AffiliateDisclosurePage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { DiagnosticsPage } from "./pages/DiagnosticsPage";
+import HeroGeometricDemo from "./pages/HeroGeometricDemo";
 import "./styles/globals.css";
 
 const queryClient = new QueryClient();
@@ -54,6 +55,7 @@ export default function App() {
                     <Route path="/ui" element={<UIPage />} />
                     <Route path="/theme" element={<ThemePage />} />
                     <Route path="/diagnostics" element={<DiagnosticsPage />} />
+                    <Route path="/hero-demo" element={<HeroGeometricDemo />} />
                     <Route path="/privacy" element={<PrivacyPage />} />
                     <Route path="/terms" element={<TermsPage />} />
                     <Route path="/affiliate-disclosure" element={<AffiliateDisclosurePage />} />

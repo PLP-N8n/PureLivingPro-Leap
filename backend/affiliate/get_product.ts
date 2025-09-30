@@ -8,7 +8,7 @@ interface GetProductParams {
 
 // Retrieves a single affiliate product by its slug.
 export const getProduct = api<GetProductParams, AffiliateProduct>(
-  { expose: true, method: "GET", path: "/affiliate/products/:slug" },
+  { expose: true, method: "GET", path: "/affiliate/products/by-slug/:slug" },
   async ({ slug }) => {
     const product = await affiliateDB.queryRow<AffiliateProduct & { programName?: string; commissionRate?: number }>`
       SELECT 

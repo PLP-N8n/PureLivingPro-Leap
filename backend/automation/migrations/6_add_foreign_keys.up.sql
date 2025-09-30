@@ -1,12 +1,7 @@
--- Add foreign key constraints for automation tables
-ALTER TABLE content_pipeline 
-  ADD CONSTRAINT fk_content_pipeline_published_article_id 
-  FOREIGN KEY (published_article_id) REFERENCES articles(id) ON DELETE SET NULL;
-
-ALTER TABLE affiliate_link_health 
-  ADD CONSTRAINT fk_affiliate_link_health_affiliate_link_id 
-  FOREIGN KEY (affiliate_link_id) REFERENCES affiliate_links(id) ON DELETE CASCADE;
-
-ALTER TABLE social_media_posts 
-  ADD CONSTRAINT fk_social_media_posts_article_id 
-  FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE SET NULL;
+-- Note: Cannot add foreign key constraints to tables in other databases
+-- The following tables live in separate service databases:
+-- - articles (content service)
+-- - affiliate_links (affiliate service)
+-- 
+-- Foreign key relationships are maintained at the application level
+-- The columns (published_article_id, affiliate_link_id, article_id) remain as regular columns

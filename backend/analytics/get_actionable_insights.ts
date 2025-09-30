@@ -308,34 +308,7 @@ export const getActionableInsights = api<void, ActionableInsightsResponse>(
       });
     }
 
-    const revenuePerArticle = await affiliateDB.queryRow<{ avgRevenue: number }>`
-      SELECT AVG(article_revenue) as "avgRevenue"
-      FROM (
-        SELECT 
-          attr.article_id,
-          COALESCE(SUM(ac.commission_earned), 0) as article_revenue
-        FROM content_attribution attr
-        LEFT JOIN affiliate_conversions ac ON attr.conversion_id = ac.id
-        WHERE ac.converted_at >= NOW() - INTERVAL '30 days'
-        GROUP BY attr.article_id
-      ) AS article_revenues
-      WHERE article_revenue > 0
-    `;
 
-    if (revenuePerArticle && revenuePerArticle.avgRevenue > 0) {
-      insights.push({
-        id: "revenue-per-article",
-        type: "info",
-        priority: "low",
-        category: "performance",
-        title: "Average Revenue Per Article",
-        description: "Benchmark for content performance",
-        metric: `$${revenuePerArticle.avgRevenue.toFixed(2)}`,
-        actionable: false,
-        suggestedAction: "Focus on creating content that exceeds this benchmark",
-        createdAt: now,
-      });
-    }
 
     const highPriority = insights.filter(i => i.priority === "high").length;
     const actionableItems = insights.filter(i => i.actionable).length;

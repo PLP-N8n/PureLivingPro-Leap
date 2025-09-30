@@ -369,7 +369,7 @@ export const getUnifiedDashboard = api<void, UnifiedDashboardData>(
       SELECT 
         COALESCE(referrer, 'Direct') as source,
         COUNT(DISTINCT ip_address) as visitors,
-        (COUNT(DISTINCT ip_address) * 100.0 / (SELECT COUNT(DISTINCT ip_address) FROM page_views WHERE created_at >= NOW() - INTERVAL '30 days')) as percentage
+        (COUNT(DISTINCT ip_address) * 100.0 / (SELECT COUNT(DISTINCT ip_address) FROM page_views WHERE created_at >= NOW() - INTERVAL '30 days'))::FLOAT as percentage
       FROM page_views
       WHERE created_at >= NOW() - INTERVAL '30 days'
       GROUP BY referrer
@@ -385,7 +385,7 @@ export const getUnifiedDashboard = api<void, UnifiedDashboardData>(
       SELECT 
         COALESCE(user_agent, 'Unknown') as device,
         COUNT(DISTINCT ip_address) as visitors,
-        (COUNT(DISTINCT ip_address) * 100.0 / (SELECT COUNT(DISTINCT ip_address) FROM page_views WHERE created_at >= NOW() - INTERVAL '30 days')) as percentage
+        (COUNT(DISTINCT ip_address) * 100.0 / (SELECT COUNT(DISTINCT ip_address) FROM page_views WHERE created_at >= NOW() - INTERVAL '30 days'))::FLOAT as percentage
       FROM page_views
       WHERE created_at >= NOW() - INTERVAL '30 days'
       GROUP BY user_agent

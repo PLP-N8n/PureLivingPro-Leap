@@ -172,7 +172,7 @@ export namespace affiliate {
          */
         public async getProduct(params: { slug: string }): Promise<ResponseType<typeof api_affiliate_get_product_getProduct>> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI(`/affiliate/products/${encodeURIComponent(params.slug)}`, {method: "GET", body: undefined})
+            const resp = await this.baseClient.callTypedAPI(`/affiliate/products/by-slug/${encodeURIComponent(params.slug)}`, {method: "GET", body: undefined})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_affiliate_get_product_getProduct>
         }
 

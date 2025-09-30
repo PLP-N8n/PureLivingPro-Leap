@@ -21,14 +21,30 @@ export function HomePage() {
     trackPageView("/");
   }, [trackPageView]);
 
-  const { data: featuredArticles, isLoading: featuredLoading } = useQuery({
+  const { data: featuredArticles, isLoading: featuredLoading, error: articlesError } = useQuery({
     queryKey: ["articles", "featured"],
-    queryFn: () => backend.content.listArticles({ featured: true, published: true, limit: 4 }),
+    queryFn: async () => {
+      try {
+        return await backend.content.listArticles({ featured: true, published: true, limit: 4 });
+      } catch (err) {
+        console.error("Failed to fetch articles:", err);
+        return { articles: [], total: 0 };
+      }
+    },
+    retry: false,
   });
 
-  const { data: curatedProducts, isLoading: productsLoading } = useQuery({
+  const { data: curatedProducts, isLoading: productsLoading, error: productsError } = useQuery({
     queryKey: ["curated-products"],
-    queryFn: () => backend.affiliate.listAffiliateProducts({ limit: 3 }),
+    queryFn: async () => {
+      try {
+        return await backend.affiliate.listAffiliateProducts({ limit: 3 });
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+        return { products: [], total: 0 };
+      }
+    },
+    retry: false,
   });
 
   if (featuredLoading || productsLoading) {
@@ -60,7 +76,7 @@ export function HomePage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 my-24">
         {/* Foundations Series */}
-        {featuredArticles && featuredArticles.articles.length > 0 && (
+        {featuredArticles?.articles && featuredArticles.articles.length > 0 && (
           <section>
             <h2 className="text-3xl font-bold text-center mb-2">Foundations Series</h2>
             <p className="text-lg text-gray-600 text-center mb-8">Featured articles to kickstart your wellness journey.</p>
@@ -83,7 +99,7 @@ export function HomePage() {
         </section>
 
         {/* Our Picks Teaser */}
-        {curatedProducts && curatedProducts.products.length > 0 && (
+        {curatedProducts?.products && curatedProducts.products.length > 0 && (
           <section>
             <h2 className="text-3xl font-bold text-center mb-8">Our Picks</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

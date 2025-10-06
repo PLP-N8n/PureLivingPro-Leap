@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, Youtube, Sparkles, Heart, Mail, Phone, MapPin } from "lucide-react";
+import { Heart, Sparkles } from "lucide-react";
+import { FaInstagram, FaTiktok, FaXTwitter, FaMedium, FaThreads, FaPinterest } from "react-icons/fa6";
 import { NewsletterForm } from "./NewsletterForm";
 
 export function Footer() {
@@ -62,18 +63,24 @@ export function Footer() {
             </p>
             
             {/* Social Links */}
-            <div className="flex space-x-4">
-              <a href="#" className="w-12 h-12 bg-slate-800/80 hover:bg-green-600 rounded-xl flex items-center justify-center transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110">
-                <Facebook className="h-6 w-6 text-slate-400 group-hover:text-white transition-colors duration-300" />
+            <div className="flex flex-wrap gap-4">
+              <a href="https://www.instagram.com/pure.living.pro/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-slate-800/80 hover:bg-green-600 rounded-xl flex items-center justify-center transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110">
+                <FaInstagram className="h-6 w-6 text-slate-400 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="#" className="w-12 h-12 bg-slate-800/80 hover:bg-green-600 rounded-xl flex items-center justify-center transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110">
-                <Twitter className="h-6 w-6 text-slate-400 group-hover:text-white transition-colors duration-300" />
+              <a href="https://www.tiktok.com/@pure.living.pro" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-slate-800/80 hover:bg-green-600 rounded-xl flex items-center justify-center transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110">
+                <FaTiktok className="h-6 w-6 text-slate-400 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="#" className="w-12 h-12 bg-slate-800/80 hover:bg-green-600 rounded-xl flex items-center justify-center transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110">
-                <Instagram className="h-6 w-6 text-slate-400 group-hover:text-white transition-colors duration-300" />
+              <a href="https://x.com/pure_living_pro" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-slate-800/80 hover:bg-green-600 rounded-xl flex items-center justify-center transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110">
+                <FaXTwitter className="h-6 w-6 text-slate-400 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="#" className="w-12 h-12 bg-slate-800/80 hover:bg-green-600 rounded-xl flex items-center justify-center transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110">
-                <Youtube className="h-6 w-6 text-slate-400 group-hover:text-white transition-colors duration-300" />
+              <a href="https://medium.com/@cvchaudhary" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-slate-800/80 hover:bg-green-600 rounded-xl flex items-center justify-center transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110">
+                <FaMedium className="h-6 w-6 text-slate-400 group-hover:text-white transition-colors duration-300" />
+              </a>
+              <a href="https://www.threads.com/@pure.living.pro" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-slate-800/80 hover:bg-green-600 rounded-xl flex items-center justify-center transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110">
+                <FaThreads className="h-6 w-6 text-slate-400 group-hover:text-white transition-colors duration-300" />
+              </a>
+              <a href="https://uk.pinterest.com/cvchaudhary/?actingBusinessId=976155425391260972" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-slate-800/80 hover:bg-green-600 rounded-xl flex items-center justify-center transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110">
+                <FaPinterest className="h-6 w-6 text-slate-400 group-hover:text-white transition-colors duration-300" />
               </a>
             </div>
           </div>

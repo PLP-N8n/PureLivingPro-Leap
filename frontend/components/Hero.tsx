@@ -62,11 +62,11 @@ export function Hero({
       };
 
   return (
-    <section className="relative text-center py-24 overflow-hidden">
+    <section 
+      className="relative text-center py-24 overflow-hidden bg-cover bg-center bg-no-repeat"
+      style={mediaType === "image" ? { backgroundImage: `url(${mediaSrc})` } : undefined}
+    >
       <div className="absolute inset-0 -z-10">
-        {mediaType === "image" && (
-          <img src={mediaSrc} alt="Hero background" className="w-full h-full object-cover" />
-        )}
         {mediaType === "video" && (
           <video
             src={mediaSrc}

@@ -61,7 +61,7 @@ export function HomePage() {
       
       <Hero
         mediaType="image"
-        mediaSrc="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1600&h=900&fit=crop"
+        mediaSrc="/Homepage.jpeg"
         headline={
           <>
             Your Journey to

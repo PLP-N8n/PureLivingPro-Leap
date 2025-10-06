@@ -1,5 +1,5 @@
 import { google } from 'googleapis';
-import { googleClientEmail, googlePrivateKey, googleSheetsId } from '../automation/secrets';
+import { googleClientEmail, googlePrivateKey, googleSheetsId } from '../config/secrets';
 import type { SheetRow } from '../automation/types';
 
 export async function fetchSheetData(range: string, spreadsheetId?: string): Promise<SheetRow[]> {

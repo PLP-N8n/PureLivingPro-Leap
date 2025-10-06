@@ -1,7 +1,7 @@
 import { api } from "encore.dev/api";
 import { automationDB } from "./db";
 import { fetchSheetData } from "../integrations/google-sheets";
-import { googleSheetsId } from "./secrets";
+import { googleSheetsId } from "../config/secrets";
 import type { SheetRow } from "./types";
 
 interface IngestFromSheetsRequest {

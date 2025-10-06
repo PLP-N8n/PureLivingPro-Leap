@@ -5,7 +5,7 @@ import { generateContent } from "./content_generator";
 import { optimizeArticleContent } from "./ai_content_optimizer";
 import { publishArticleToMedium } from "../content/publish_to_medium";
 import { createWordPressPost } from "../integrations/wordpress";
-import { wordpressUrl, wordpressUsername, wordpressPassword } from "../content/secrets";
+import { wordpressUrl, wordpressUsername, wordpressPassword } from "../config/secrets";
 import { searchAmazonProducts } from "./amazon_product_sync";
 
 interface ContentPipelineRequest {

@@ -1,5 +1,5 @@
 import { api } from "encore.dev/api";
-import { googleClientEmail, googlePrivateKey } from "../automation/secrets";
+import { googleClientEmail, googlePrivateKey } from "../config/secrets";
 import { ServiceHealthCheck, HealthStatus } from "./types";
 
 export const checkGoogleSheets = api(

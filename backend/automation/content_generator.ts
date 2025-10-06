@@ -2,7 +2,7 @@ import { api } from "encore.dev/api";
 import { automationDB } from "./db";
 import { contentDB } from "../content/db";
 import { affiliateDB } from "../affiliate/db";
-import { openAIKey } from "./secrets";
+import { openAIKey } from "../config/secrets";
 
 interface GenerateContentRequest {
   topic: string;

@@ -1,5 +1,5 @@
 import { api } from "encore.dev/api";
-import { amazonAccessKeyId, amazonSecretAccessKey, amazonAssociateTag } from "./secrets";
+import { amazonAccessKey, amazonSecretKey, amazonStoreId } from "../config/secrets";
 import { ServiceHealthCheck, HealthStatus } from "./types";
 
 export const checkAmazon = api(
@@ -11,9 +11,9 @@ export const checkAmazon = api(
     let details: Record<string, any> = {};
 
     try {
-      const accessKeyId = amazonAccessKeyId();
-      const secretAccessKey = amazonSecretAccessKey();
-      const associateTag = amazonAssociateTag();
+      const accessKeyId = amazonAccessKey();
+      const secretAccessKey = amazonSecretKey();
+      const associateTag = amazonStoreId();
       
       const missingKeys = [];
       if (!accessKeyId || accessKeyId.trim() === "") missingKeys.push("Access Key ID");

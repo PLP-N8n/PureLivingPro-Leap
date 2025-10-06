@@ -1,7 +1,7 @@
 import { api, APIError } from "encore.dev/api";
 import { contentDB } from "./db";
 import { createWordPressPost, updateWordPressPost } from "../integrations/wordpress";
-import { wordpressUrl, wordpressUsername, wordpressPassword } from "./secrets";
+import { wordpressUrl, wordpressUsername, wordpressPassword } from "../config/secrets";
 
 interface PublishToWordPressRequest {
   articleId: number;

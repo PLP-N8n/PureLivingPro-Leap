@@ -1,6 +1,5 @@
 import { api } from "encore.dev/api";
-import { openAIKey, googleSheetsId, googleClientEmail, googlePrivateKey, amazonAccessKey, amazonSecretKey, amazonStoreId } from "./secrets.js";
-import { wordpressUrl, wordpressUsername, wordpressPassword, mediumToken } from "../content/secrets.js";
+import { openAIKey, googleSheetsId, googleClientEmail, googlePrivateKey, amazonAccessKey, amazonSecretKey, amazonStoreId, wordpressUrl, wordpressUsername, wordpressPassword, mediumToken } from "../config/secrets";
 
 export interface SecretTestResult {
   service: string;

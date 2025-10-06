@@ -1,7 +1,7 @@
 import { api, APIError } from "encore.dev/api";
 import { contentDB } from "./db";
 import { publishToMedium as publishToMediumAPI, getMediumUser } from "../integrations/medium";
-import { mediumToken } from "./secrets";
+import { mediumToken } from "../config/secrets";
 
 interface PublishToMediumRequest {
   articleId: number;

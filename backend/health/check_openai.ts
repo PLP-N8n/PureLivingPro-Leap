@@ -1,5 +1,5 @@
 import { api } from "encore.dev/api";
-import { openaiApiKey } from "./secrets";
+import { openAIKey } from "../config/secrets";
 import { ServiceHealthCheck, HealthStatus } from "./types";
 
 export const checkOpenAI = api(
@@ -11,7 +11,7 @@ export const checkOpenAI = api(
     let details: Record<string, any> = {};
 
     try {
-      const key = openaiApiKey();
+      const key = openAIKey();
       
       if (!key || key.trim() === "") {
         return {

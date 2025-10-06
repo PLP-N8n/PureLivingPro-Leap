@@ -1,7 +1,7 @@
 import { api } from "encore.dev/api";
 import { automationDB } from "./db";
 import { affiliateDB } from "../affiliate/db";
-import { amazonAccessKey, amazonSecretKey, amazonStoreId } from "./secrets";
+import { amazonAccessKey, amazonSecretKey, amazonStoreId } from "../config/secrets";
 import crypto from "crypto";
 
 interface ProductSearchRequest {

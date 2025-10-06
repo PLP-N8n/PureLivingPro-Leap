@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Search, Menu, User, Sparkles } from "lucide-react";
+import { Search, Menu, User, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
@@ -42,7 +42,7 @@ export function Header() {
                 }}
               />
               <div className={cn("bg-gradient-to-br from-green-500 via-green-600 to-lime-600 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-110 transition-all duration-300", isScrolled ? "w-10 h-10" : "w-12 h-12")} style={{ display: "none" }}>
-                <Sparkles className={cn("text-white animate-pulse", isScrolled ? "h-6 w-6" : "h-7 w-7")} />
+                <Leaf className={cn("text-white animate-pulse", isScrolled ? "h-6 w-6" : "h-7 w-7")} />
               </div>
             </div>
             <div>

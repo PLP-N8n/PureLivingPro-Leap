@@ -28,17 +28,14 @@ export function Header() {
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
               <img
-                src="/logo.svg"
+                src="/logo.png"
                 alt="Pure Living Pro Logo"
                 className={cn("group-hover:scale-110 transition-all duration-300", isScrolled ? "w-10 h-10" : "w-12 h-12")}
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  target.src = "/logo.png";
-                  target.onerror = () => {
-                    target.style.display = "none";
-                    const fallback = target.nextElementSibling as HTMLElement;
-                    if (fallback) fallback.style.display = "flex";
-                  };
+                  target.style.display = "none";
+                  const fallback = target.nextElementSibling as HTMLElement;
+                  if (fallback) fallback.style.display = "flex";
                 }}
               />
               <div className={cn("bg-gradient-to-br from-green-500 via-green-600 to-lime-600 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-110 transition-all duration-300", isScrolled ? "w-10 h-10" : "w-12 h-12")} style={{ display: "none" }}>
@@ -97,17 +94,14 @@ export function Header() {
               <SheetContent className="w-80 bg-white/95 backdrop-blur-xl">
                 <div className="flex items-center space-x-3 mb-8">
                   <img
-                    src="/logo.svg"
+                    src="/logo.png"
                     alt="Pure Living Pro Logo"
                     className="w-10 h-10"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = "/logo.png";
-                      target.onerror = () => {
-                        target.style.display = "none";
-                        const fallback = target.nextElementSibling as HTMLElement;
-                        if (fallback) fallback.style.display = "flex";
-                      };
+                      target.style.display = "none";
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = "flex";
                     }}
                   />
                   <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-lime-600 rounded-xl flex items-center justify-center shadow-lg" style={{ display: "none" }}>

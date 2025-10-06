@@ -33,17 +33,14 @@ export function Footer() {
             <Link to="/" className="flex items-center space-x-4 mb-8 group">
               <div className="relative">
                 <img
-                  src="/logo.svg"
+                  src="/logo.png"
                   alt="Pure Living Pro Logo"
                   className="w-14 h-14 shadow-xl"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src = "/logo.png";
-                    target.onerror = () => {
-                      target.style.display = "none";
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = "flex";
-                    };
+                    target.style.display = "none";
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.style.display = "flex";
                   }}
                 />
                 <div className="w-14 h-14 bg-gradient-to-br from-green-500 via-green-600 to-lime-500 rounded-2xl flex items-center justify-center shadow-xl" style={{ display: "none" }}>

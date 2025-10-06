@@ -33,7 +33,7 @@ export function ProductsPage() {
   };
 
   const handleCategoryChange = (value: string) => {
-    setSelectedCategory(value);
+    setSelectedCategory(value === "all" ? "" : value);
     setPage(0);
   };
 
@@ -89,12 +89,12 @@ export function ProductsPage() {
               />
             </div>
             
-            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+            <Select value={selectedCategory || "all"} onValueChange={handleCategoryChange}>
               <SelectTrigger className="w-full sm:w-48 h-12 border-2 border-slate-200 rounded-xl">
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="supplements">Supplements</SelectItem>
                 <SelectItem value="fitness">Fitness Equipment</SelectItem>
                 <SelectItem value="nutrition">Nutrition</SelectItem>

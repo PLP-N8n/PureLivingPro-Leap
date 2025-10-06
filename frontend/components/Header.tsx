@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Search, Menu, User, Leaf } from "lucide-react";
+import { Search, Menu, User, Leaf, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";

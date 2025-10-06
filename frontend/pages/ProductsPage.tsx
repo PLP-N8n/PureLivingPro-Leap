@@ -37,17 +37,14 @@ export function ProductsPage() {
     setPage(0);
   };
 
-  const handleAffiliateClick = (productId: number) => {
-    // Track affiliate click for analytics
-    console.log(`Affiliate click tracked for product ${productId}`);
-  };
+
 
   return (
     <>
       <SEOHead
         title={category ? `${category} Products` : "Health & Wellness Products"}
         description="Discover our curated selection of health and wellness products. From supplements to fitness equipment, find everything you need for your wellness journey."
-        keywords={["health products", "wellness", "supplements", "fitness", category].filter(Boolean)}
+        keywords={["health products", "wellness", "supplements", "fitness", category].filter(Boolean) as string[]}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -117,9 +114,12 @@ export function ProductsPage() {
             <div className="relative group cursor-pointer" onClick={() => handleCategoryChange("supplements")}>
               <div className="relative h-32 rounded-2xl overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1607619056574-7d8d3ee536b2?w=400&h=200&fit=crop&crop=center"
+                  src="https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
                   alt="Natural supplements and vitamins"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  data-unsplash-id="RgT22Ixcq4Y"
+                  data-unsplash-author="Tangerine Newt"
+                  data-unsplash-query="healthy food nutrition organic"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/80 to-teal-600/80"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -134,9 +134,12 @@ export function ProductsPage() {
             <div className="relative group cursor-pointer" onClick={() => handleCategoryChange("skincare")}>
               <div className="relative h-32 rounded-2xl overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=200&fit=crop&crop=center"
+                  src="https://images.unsplash.com/photo-1641301547846-2cf73f58fdca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
                   alt="Natural skincare and beauty products"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  data-unsplash-id="6AUHONBTYjI"
+                  data-unsplash-author="Tangerine Newt"
+                  data-unsplash-query="healthy food nutrition organic"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-pink-600/80 to-rose-600/80"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -151,9 +154,12 @@ export function ProductsPage() {
             <div className="relative group cursor-pointer" onClick={() => handleCategoryChange("fitness")}>
               <div className="relative h-32 rounded-2xl overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=200&fit=crop&crop=center"
+                  src="https://images.unsplash.com/photo-1517931524326-bdd55a541177?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
                   alt="Home fitness equipment and yoga accessories"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  data-unsplash-id="ITDjGji__6Y"
+                  data-unsplash-author="dylan nolte"
+                  data-unsplash-query="fitness exercise workout wellness"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/80 to-indigo-600/80"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -171,9 +177,12 @@ export function ProductsPage() {
             <div className="relative group cursor-pointer" onClick={() => handleCategoryChange("nutrition")}>
               <div className="relative h-24 rounded-xl overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=300&h=150&fit=crop&crop=center"
+                  src="https://images.unsplash.com/photo-1679602583037-dcc5ca743391?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=300"
                   alt="Healthy nutrition and superfoods"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  data-unsplash-id="jpCVsEC6JYU"
+                  data-unsplash-author="Debby Hudson"
+                  data-unsplash-query="healthy food nutrition organic"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-green-600/80 to-emerald-600/80"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -185,9 +194,12 @@ export function ProductsPage() {
             <div className="relative group cursor-pointer" onClick={() => handleCategoryChange("wellness")}>
               <div className="relative h-24 rounded-xl overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=150&fit=crop&crop=center"
+                  src="https://images.unsplash.com/photo-1730104196488-da2fb5beb3b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=300"
                   alt="Wellness and mindfulness products"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  data-unsplash-id="kDodvyYF0CU"
+                  data-unsplash-author="Hitomi Okushima"
+                  data-unsplash-query="yoga meditation wellness lifestyle"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600/80 to-pink-600/80"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -199,9 +211,12 @@ export function ProductsPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-24 rounded-xl overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&h=150&fit=crop&crop=center"
+                  src="https://images.unsplash.com/photo-1730104993558-90719dc6f1c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=300"
                   alt="Essential oils and aromatherapy"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  data-unsplash-id="GSQVizPGNGs"
+                  data-unsplash-author="Hitomi Okushima"
+                  data-unsplash-query="yoga meditation wellness lifestyle"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-600/80 to-yellow-600/80"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -213,9 +228,12 @@ export function ProductsPage() {
             <div className="relative group cursor-pointer">
               <div className="relative h-24 rounded-xl overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=150&fit=crop&crop=center"
+                  src="https://images.unsplash.com/photo-1722094250550-4993fa28a51b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=300"
                   alt="Yoga and meditation accessories"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  data-unsplash-id="iC3uXZuFA2Q"
+                  data-unsplash-author="Sam Carter"
+                  data-unsplash-query="yoga meditation wellness lifestyle"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/80 to-blue-600/80"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -248,7 +266,6 @@ export function ProductsPage() {
                     affiliateUrl: `/r/product-${product.id}`,
                     program: product.program
                   }}
-                  onAffiliateClick={handleAffiliateClick}
                 />
               ))}
             </div>

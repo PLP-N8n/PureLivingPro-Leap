@@ -25,13 +25,12 @@ export function Header() {
     )}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-full">
-          {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
               <img
                 src="/logo.svg"
                 alt="Pure Living Pro Logo"
-                className={cn("transform rotate-3 group-hover:rotate-6 transition-all duration-300", isScrolled ? "w-10 h-10" : "w-12 h-12")}
+                className={cn("group-hover:scale-110 transition-all duration-300", isScrolled ? "w-10 h-10" : "w-12 h-12")}
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = "/logo.png";
@@ -42,7 +41,7 @@ export function Header() {
                   };
                 }}
               />
-              <div className={cn("bg-gradient-to-br from-green-500 via-green-600 to-lime-600 rounded-2xl flex items-center justify-center shadow-xl transform rotate-3 group-hover:rotate-6 transition-all duration-300", isScrolled ? "w-10 h-10" : "w-12 h-12")} style={{ display: "none" }}>
+              <div className={cn("bg-gradient-to-br from-green-500 via-green-600 to-lime-600 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-110 transition-all duration-300", isScrolled ? "w-10 h-10" : "w-12 h-12")} style={{ display: "none" }}>
                 <Sparkles className={cn("text-white animate-pulse", isScrolled ? "h-6 w-6" : "h-7 w-7")} />
               </div>
             </div>

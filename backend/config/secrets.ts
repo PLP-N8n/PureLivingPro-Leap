@@ -15,3 +15,7 @@ export const wordpressUsername = secret("WordPressUsername");
 export const wordpressPassword = secret("WordPressPassword");
 
 export const mediumToken = secret("MediumToken");
+
+export const mailchimpAPIKey = secret("MailchimpAPIKey");
+export const mailchimpServerPrefix = secret("MailchimpServerPrefix"); // e.g., 'us1', 'us2'
+export const mailchimpListID = secret("MailchimpListID");

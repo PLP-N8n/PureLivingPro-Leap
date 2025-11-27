@@ -1,10 +1,36 @@
 import { api } from "encore.dev/api";
 import { mailchimpAPIKey, mailchimpServerPrefix, mailchimpListID } from "../config/secrets";
 
+// Fallback to dev config if secrets not available
+let devConfig: any = null;
+try {
+  devConfig = require("./config.dev").mailchimpConfig;
+} catch (e) {
+  // No dev config, will use secrets
+}
+
 interface MailchimpResponse {
   success: boolean;
   data?: any;
   error?: string;
+}
+
+// Helper to get config with fallback to dev config
+function getMailchimpConfig() {
+  try {
+    return {
+      apiKey: mailchimpAPIKey(),
+      serverPrefix: mailchimpServerPrefix(),
+      listId: mailchimpListID(),
+    };
+  } catch (e) {
+    // Fallback to dev config for testing
+    if (devConfig) {
+      console.log("Using dev config for Mailchimp (secrets not set)");
+      return devConfig;
+    }
+    throw new Error("Mailchimp configuration not found. Please set secrets or create config.dev.ts");
+  }
 }
 
 interface SubscriberData {
@@ -20,9 +46,8 @@ interface SubscriberData {
  */
 export const addSubscriber = async (data: SubscriberData): Promise<MailchimpResponse> => {
   try {
-    const apiKey = mailchimpAPIKey();
-    const serverPrefix = mailchimpServerPrefix();
-    const listId = mailchimpListID();
+    const config = getMailchimpConfig();
+    const { apiKey, serverPrefix, listId } = config;
 
     const url = `https://${serverPrefix}.api.mailchimp.com/3.0/lists/${listId}/members`;
 
@@ -97,14 +122,14 @@ export const createAutomation = async (
   triggerSettings: any
 ): Promise<MailchimpResponse> => {
   try {
-    const apiKey = mailchimpAPIKey();
-    const serverPrefix = mailchimpServerPrefix();
+    const config = getMailchimpConfig();
+    const { apiKey, serverPrefix, listId } = config;
 
     const url = `https://${serverPrefix}.api.mailchimp.com/3.0/automations`;
 
     const payload = {
       recipients: {
-        list_id: mailchimpListID(),
+        list_id: listId,
       },
       settings: {
         title: name,
@@ -141,8 +166,8 @@ export const createAutomation = async (
  */
 export const getCampaignStats = async (campaignId: string): Promise<MailchimpResponse> => {
   try {
-    const apiKey = mailchimpAPIKey();
-    const serverPrefix = mailchimpServerPrefix();
+    const config = getMailchimpConfig();
+    const { apiKey, serverPrefix } = config;
 
     const url = `https://${serverPrefix}.api.mailchimp.com/3.0/reports/${campaignId}`;
 
@@ -171,9 +196,8 @@ export const getCampaignStats = async (campaignId: string): Promise<MailchimpRes
  */
 export const getSubscribers = async (offset = 0, count = 100): Promise<MailchimpResponse> => {
   try {
-    const apiKey = mailchimpAPIKey();
-    const serverPrefix = mailchimpServerPrefix();
-    const listId = mailchimpListID();
+    const config = getMailchimpConfig();
+    const { apiKey, serverPrefix, listId } = config;
 
     const url = `https://${serverPrefix}.api.mailchimp.com/3.0/lists/${listId}/members?offset=${offset}&count=${count}`;
 
@@ -205,9 +229,8 @@ export const addTagsToSubscriber = async (
   tags: string[]
 ): Promise<MailchimpResponse> => {
   try {
-    const apiKey = mailchimpAPIKey();
-    const serverPrefix = mailchimpServerPrefix();
-    const listId = mailchimpListID();
+    const config = getMailchimpConfig();
+    const { apiKey, serverPrefix, listId } = config;
 
     const subscriberHash = md5(email.toLowerCase());
     const url = `https://${serverPrefix}.api.mailchimp.com/3.0/lists/${listId}/members/${subscriberHash}/tags`;
@@ -250,8 +273,8 @@ function md5(str: string): string {
  */
 export const verifyConnection = async (): Promise<MailchimpResponse> => {
   try {
-    const apiKey = mailchimpAPIKey();
-    const serverPrefix = mailchimpServerPrefix();
+    const config = getMailchimpConfig();
+    const { apiKey, serverPrefix } = config;
 
     const url = `https://${serverPrefix}.api.mailchimp.com/3.0/ping`;
 

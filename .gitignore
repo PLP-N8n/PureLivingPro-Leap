@@ -15,6 +15,10 @@ build/
 .env.production
 .env.*.local
 
+# Development config files with secrets
+backend/email/config.dev.ts
+**/config.dev.ts
+
 # Editor directories
 .vscode/
 .idea/

@@ -4,3 +4,21 @@ encore.gen.cue
 /.encore
 node_modules
 /encore.gen
+
+# Build outputs
+frontend/dist/
+dist/
+build/
+
+# Environment files (keep .example files)
+.env.local
+.env.production
+.env.*.local
+
+# Editor directories
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

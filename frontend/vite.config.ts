@@ -12,8 +12,18 @@ export default defineConfig({
     },
   },
   plugins: [tailwindcss(), react()],
-  mode: "development",
   build: {
-    minify: false,
-  }
+    // Production optimizations
+    minify: 'esbuild',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tabs'],
+          'query-vendor': ['@tanstack/react-query'],
+        },
+      },
+    },
+  },
 })

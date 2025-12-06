@@ -1,1 +1,1 @@
-{"id": "pure-living-pro-4mhi", "lang": "typescript"}
+{"id": "purelivingpro-ygzi", "lang": "typescript"}

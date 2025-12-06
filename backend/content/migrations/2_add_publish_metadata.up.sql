@@ -1,0 +1,5 @@
+ALTER TABLE articles
+  ADD COLUMN IF NOT EXISTS wp_post_id BIGINT,
+  ADD COLUMN IF NOT EXISTS medium_post_id TEXT,
+  ADD COLUMN IF NOT EXISTS seo_meta JSONB,
+  ADD COLUMN IF NOT EXISTS affiliate_blocks JSONB;

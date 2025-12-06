@@ -1,0 +1,12 @@
+ALTER TABLE content_pipeline
+  ADD COLUMN IF NOT EXISTS last_error TEXT,
+  ADD COLUMN IF NOT EXISTS attempts INT NOT NULL DEFAULT 0;
+
+CREATE TABLE IF NOT EXISTS sheets_ingest_runs (
+  id BIGSERIAL PRIMARY KEY,
+  sheet_id TEXT NOT NULL,
+  range TEXT NOT NULL,
+  imported_rows INT NOT NULL DEFAULT 0,
+  errors JSONB,
+  ran_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

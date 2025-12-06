@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&family=Spectral:wght@400;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root, .theme-teal {
+    --background: 220 20% 99%; /* #F8FAFC */
+    --foreground: 224 71% 4%; /* #0F172A */
+
+    --card: 220 20% 99%;
+    --card-foreground: 224 71% 4%;
+
+    --popover: 220 20% 99%;
+    --popover-foreground: 224 71% 4%;
+
+    --primary: 180 82% 35%; /* #0EA5A6 - Teal 500 */
+    --primary-foreground: 220 20% 99%;
+
+    --secondary: 216 33% 97%; /* #EEF2F7 - Surface */
+    --secondary-foreground: 224 71% 4%;
+
+    --muted: 215 20% 81%; /* #CBD5E1 */
+    --muted-foreground: 215 28% 47%;
+
+    --accent: 152 76% 73%; /* #6EE7B7 - Mint 300 */
+    --accent-foreground: 224 71% 4%;
+
+    --destructive: 0 84% 60%; /* #EF4444 - Danger */
+    --destructive-foreground: 220 20% 99%;
+
+    --success: 152 63% 40%; /* #10B981 */
+    --success-foreground: 220 20% 99%;
+
+    --warning: 38 92% 50%; /* #F59E0B */
+    --warning-foreground: 224 71% 4%;
+
+    --info: 204 90% 53%; /* #0EA5E9 */
+    --info-foreground: 220 20% 99%;
+
+    --border: 216 33% 97%;
+    --input: 215 20% 81%;
+    --ring: 180 82% 35%;
+
+    --radius: 1rem; /* 16px */
+
+    /* Chart colors */
+    --chart-1: 180 82% 35%; /* Primary teal */
+    --chart-2: 152 76% 73%; /* Mint green */
+    --chart-3: 38 92% 50%; /* Orange */
+    --chart-4: 204 90% 53%; /* Blue */
+    --chart-5: 0 84% 60%; /* Red */
+  }
+
+  .theme-mint {
+    --primary: 152 76% 73%; /* #6EE7B7 - Mint 300 */
+    --primary-foreground: 224 71% 4%;
+    --ring: 152 76% 73%;
+  }
+
+  .theme-sand {
+    --primary: 38 92% 81%; /* #FAD7A0 - Sand 300 */
+    --primary-foreground: 224 71% 4%;
+    --ring: 38 92% 81%;
+  }
+
+  .dark {
+    /* Dark theme colors can be defined here if needed */
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  a {
+    color: hsl(var(--primary));
+    @apply underline-offset-4 hover:underline hover:underline-offset-2 decoration-2;
+  }
+}
+
+@layer components {
+  .card-accent-border {
+    @apply border-l-4;
+    border-left-color: hsl(var(--primary));
+  }
+}

@@ -1,0 +1,181 @@
+import { useSearchParams } from "react-router-dom";
+import { useEffect, Component, ReactNode } from "react";
+import {
+  LayoutDashboard,
+  Newspaper,
+  ShoppingBag,
+  Bot,
+  Settings,
+  LineChart,
+  LifeBuoy,
+  Sparkles,
+  AlertTriangle,
+} from "lucide-react";
+import { SEOHead } from "../components/SEOHead";
+import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { OverviewDashboard } from "../components/admin/OverviewDashboard";
+import { BlogManagement } from "../components/admin/BlogManagement";
+import { ProductManagement } from "../components/admin/ProductManagement";
+import { AutomationDashboard } from "../components/admin/AutomationDashboard";
+import { SettingsDashboard } from "../components/admin/SettingsDashboard";
+import { UnifiedAnalyticsDashboard } from "../components/admin/UnifiedAnalyticsDashboard";
+import { useAnalytics } from "../hooks/useAnalytics";
+
+const navItems = [
+  { name: "Overview", href: "overview", icon: LayoutDashboard },
+  { name: "Blog", href: "blog", icon: Newspaper },
+  { name: "Products", href: "products", icon: ShoppingBag },
+  { name: "Automation", href: "automation", icon: Bot },
+  { name: "Analytics", href: "analytics", icon: LineChart },
+  { name: "Settings", href: "settings", icon: Settings },
+];
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+}
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: any) {
+    console.error('Admin page error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center space-y-4">
+            <AlertTriangle className="h-12 w-12 text-red-500 mx-auto" />
+            <h2 className="text-xl font-semibold text-gray-900">Something went wrong</h2>
+            <p className="text-gray-600">Please refresh the page to try again.</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+            >
+              Refresh Page
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+export function AdminPage() {
+  const [searchParams] = useSearchParams();
+  const activeTab = searchParams.get("tab") || "overview";
+  const { trackPageView } = useAnalytics();
+
+  useEffect(() => {
+    // Track page view with error handling
+    trackPageView(`/admin?tab=${activeTab}`);
+  }, [activeTab, trackPageView]);
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "overview":
+        return <OverviewDashboard />;
+      case "blog":
+        return <BlogManagement />;
+      case "products":
+        return <ProductManagement />;
+      case "automation":
+        return <AutomationDashboard />;
+      case "analytics":
+        return <UnifiedAnalyticsDashboard />;
+      case "settings":
+        return <SettingsDashboard />;
+      default:
+        return <OverviewDashboard />;
+    }
+  };
+
+  return (
+    <>
+      <SEOHead title="Admin Dashboard" />
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="flex">
+          {/* Sidebar */}
+          <aside className="w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white min-h-screen p-4 flex flex-col justify-between shadow-2xl">
+            <div>
+              <div className="mb-8 flex items-center space-x-3">
+                <img
+                  src="/logo.svg"
+                  alt="Pure Living Pro Logo"
+                  className="w-10 h-10 shadow-lg"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/logo.png";
+                    target.onerror = () => {
+                      target.style.display = "none";
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = "flex";
+                    };
+                  }}
+                />
+                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-lime-600 rounded-xl flex items-center justify-center shadow-lg" style={{ display: "none" }}>
+                  <Sparkles className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-green-400 to-lime-400 bg-clip-text text-transparent">Admin Panel</h2>
+                  <div className="text-xs text-slate-400">Pure Living Pro</div>
+                </div>
+              </div>
+              <nav className="space-y-2">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={`?tab=${item.href}`}
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                      activeTab === item.href
+                        ? "bg-gradient-to-r from-green-600 to-lime-600 text-white shadow-lg"
+                        : "text-gray-300 hover:bg-slate-700 hover:text-white"
+                    )}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    {item.name}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+            <div>
+              <Link
+                to="/help"
+                className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-slate-700 hover:text-white"
+              >
+                <LifeBuoy className="h-5 w-5" />
+                Help & Support
+              </Link>
+            </div>
+          </aside>
+
+          {/* Main Panel */}
+          <main className="flex-1 p-8">
+            <div className="max-w-7xl mx-auto">
+              <ErrorBoundary>
+                {renderContent()}
+              </ErrorBoundary>
+            </div>
+          </main>
+        </div>
+      </div>
+    </>
+  );
+}

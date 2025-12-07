@@ -1,19 +1,38 @@
-import { api, APIError, APICallMeta } from "encore.dev/api";
+import { api, APIError, Header } from "encore.dev/api";
+import jwt from "jsonwebtoken";
 import { authDB } from "./db";
-import type { User, AuthData } from "./types";
+import { jwtSecret } from "./secrets";
+import type { User, JWTPayload } from "./types";
 
 interface MeRequest {
-  meta: APICallMeta<AuthData>;
+  authorization: Header<"Authorization">;
 }
 
-// Get current user endpoint - requires authentication
+// Get current user endpoint - validates JWT and returns user info
 export const me = api<MeRequest, User>(
-  { expose: true, method: "GET", path: "/auth/me", auth: true },
-  async ({ meta }) => {
-    // Get authenticated user data from request context
-    const auth = meta.auth;
-    if (!auth) {
-      throw APIError.unauthenticated("Not authenticated");
+  { expose: true, method: "GET", path: "/auth/me" },
+  async ({ authorization }) => {
+    // Validate authorization header
+    if (!authorization) {
+      throw APIError.unauthenticated("No authorization header provided");
+    }
+
+    const parts = authorization.split(" ");
+    if (parts.length !== 2 || parts[0] !== "Bearer") {
+      throw APIError.unauthenticated("Invalid authorization header format");
+    }
+
+    // Verify JWT token
+    const token = parts[1];
+    let payload: JWTPayload;
+    try {
+      const secret = await jwtSecret();
+      payload = jwt.verify(token, secret) as JWTPayload;
+    } catch (error) {
+      if (error instanceof jwt.TokenExpiredError) {
+        throw APIError.unauthenticated("Token has expired");
+      }
+      throw APIError.unauthenticated("Invalid token");
     }
 
     // Fetch full user details from database
@@ -25,7 +44,7 @@ export const me = api<MeRequest, User>(
       WHERE id = $1
     `;
 
-    const result = await authDB.exec(query, auth.userID);
+    const result = await authDB.exec(query, payload.sub);
 
     if (!result.rows || result.rows.length === 0) {
       throw APIError.notFound("User not found");

@@ -1,14 +1,17 @@
-import { api, APIError } from "encore.dev/api";
-import { getAuthData } from "encore.dev/auth";
+import { api, APIError, APICallMeta } from "encore.dev/api";
 import { authDB } from "./db";
 import type { User, AuthData } from "./types";
 
+interface MeRequest {
+  meta: APICallMeta<AuthData>;
+}
+
 // Get current user endpoint - requires authentication
-export const me = api<void, User>(
+export const me = api<MeRequest, User>(
   { expose: true, method: "GET", path: "/auth/me", auth: true },
-  async () => {
+  async ({ meta }) => {
     // Get authenticated user data from request context
-    const auth = getAuthData<AuthData>();
+    const auth = meta.auth;
     if (!auth) {
       throw APIError.unauthenticated("Not authenticated");
     }

@@ -1,0 +1,5 @@
+# Encore Cloud Configuration
+# Specifies that the Encore app root is in the backend/ directory
+
+[app]
+root = "backend"

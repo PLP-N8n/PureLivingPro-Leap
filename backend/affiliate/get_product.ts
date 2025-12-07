@@ -6,7 +6,7 @@ interface GetProductParams {
   slug: string;
 }
 
-// Retrieves a single affiliate product by its slug.
+// Retrieves a single affiliate product by its slug (URL-friendly identifier).
 export const getProduct = api<GetProductParams, AffiliateProduct>(
   { expose: true, method: "GET", path: "/affiliate/products/by-slug/:slug" },
   async ({ slug }) => {

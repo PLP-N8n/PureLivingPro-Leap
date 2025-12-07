@@ -79,31 +79,54 @@ function validateDateRange(startDateStr?: string, endDateStr?: string) {
   return { startDate, endDate };
 }
 
-// Get total statistics with conditional filtering
+// Build WHERE clause conditions based on request filters
+function buildWhereConditions(req: GetClickStatsRequest): string[] {
+  const conditions: string[] = [];
+
+  if (req.productId !== undefined) {
+    conditions.push(`product_id = ${req.productId}`);
+  }
+  if (req.contentId) {
+    conditions.push(`content_id = '${req.contentId.replace(/'/g, "''")}'`);
+  }
+  if (req.utmSource) {
+    conditions.push(`utm_source = '${req.utmSource.replace(/'/g, "''")}'`);
+  }
+  if (req.utmMedium) {
+    conditions.push(`utm_medium = '${req.utmMedium.replace(/'/g, "''")}'`);
+  }
+  if (req.utmCampaign) {
+    conditions.push(`utm_campaign = '${req.utmCampaign.replace(/'/g, "''")}'`);
+  }
+  if (req.device) {
+    conditions.push(`device = '${req.device.replace(/'/g, "''")}'`);
+  }
+
+  return conditions;
+}
+
+// Get total statistics
 async function getTotalStats(req: GetClickStatsRequest, startDate: Date, endDate: Date) {
-  // Build the query with conditional WHERE clauses using Encore's SQL templates
-  const result = await analyticsDB.queryRow<{
-    totalClicks: number;
-    uniqueClicks: number;
-    avgRedirectTime: number;
-  }>`
+  const additionalConditions = buildWhereConditions(req);
+  const whereClause = additionalConditions.length > 0
+    ? 'AND ' + additionalConditions.join(' AND ')
+    : '';
+
+  const query = `
     SELECT
-      COUNT(*) as "totalClicks",
-      COUNT(DISTINCT COALESCE(content_id, link_id::text)) as "uniqueClicks",
-      COALESCE(AVG(redirect_ms), 0) as "avgRedirectTime"
+      COUNT(*) as total_clicks,
+      COUNT(DISTINCT COALESCE(content_id, link_id::text)) as unique_clicks,
+      COALESCE(AVG(redirect_ms), 0) as avg_redirect_time
     FROM click_events
-    WHERE timestamp >= ${startDate}
-      AND timestamp <= ${endDate}
+    WHERE timestamp >= $1
+      AND timestamp <= $2
       AND success = true
-      ${req.productId !== undefined ? `AND product_id = ${req.productId}` : ''}
-      ${req.contentId ? `AND content_id = ${req.contentId}` : ''}
-      ${req.utmSource ? `AND utm_source = ${req.utmSource}` : ''}
-      ${req.utmMedium ? `AND utm_medium = ${req.utmMedium}` : ''}
-      ${req.utmCampaign ? `AND utm_campaign = ${req.utmCampaign}` : ''}
-      ${req.device ? `AND device = ${req.device}` : ''}
+      ${whereClause}
   `;
 
-  if (!result) {
+  const result = await analyticsDB.exec(query, startDate, endDate);
+
+  if (!result.rows || result.rows.length === 0) {
     return {
       totalClicks: 0,
       uniqueClicks: 0,
@@ -112,14 +135,12 @@ async function getTotalStats(req: GetClickStatsRequest, startDate: Date, endDate
     };
   }
 
-  // Calculate CTR (assuming views are tracked separately - placeholder for now)
-  const ctr = 0; // TODO: Calculate from page_views table when available
-
+  const row = result.rows[0];
   return {
-    totalClicks: result.totalClicks || 0,
-    uniqueClicks: result.uniqueClicks || 0,
-    ctr,
-    avgRedirectTime: Math.round(result.avgRedirectTime || 0)
+    totalClicks: Number(row[0]) || 0,
+    uniqueClicks: Number(row[1]) || 0,
+    ctr: 0, // TODO: Calculate from page_views table when available
+    avgRedirectTime: Math.round(Number(row[2]) || 0)
   };
 }
 
@@ -130,41 +151,36 @@ async function getTopProducts(
   endDate: Date,
   limit: number
 ): Promise<ProductStats[]> {
-  const products = await analyticsDB.queryAll<{
-    productId: number;
-    productName: string;
-    clicks: number;
-    uniqueClicks: number;
-    conversionRate: number;
-  }>`
+  const additionalConditions = buildWhereConditions(req);
+  const whereClause = additionalConditions.length > 0
+    ? 'AND ' + additionalConditions.join(' AND ')
+    : '';
+
+  const query = `
     SELECT
-      product_id as "productId",
-      MAX(product_name) as "productName",
-      COUNT(*) as "clicks",
-      COUNT(DISTINCT COALESCE(content_id, link_id::text)) as "uniqueClicks",
-      0.0 as "conversionRate"
+      product_id,
+      MAX(product_name) as product_name,
+      COUNT(*) as clicks,
+      COUNT(DISTINCT COALESCE(content_id, link_id::text)) as unique_clicks
     FROM click_events
-    WHERE timestamp >= ${startDate}
-      AND timestamp <= ${endDate}
+    WHERE timestamp >= $1
+      AND timestamp <= $2
       AND success = true
       AND product_id IS NOT NULL
-      ${req.productId !== undefined ? `AND product_id = ${req.productId}` : ''}
-      ${req.contentId ? `AND content_id = ${req.contentId}` : ''}
-      ${req.utmSource ? `AND utm_source = ${req.utmSource}` : ''}
-      ${req.utmMedium ? `AND utm_medium = ${req.utmMedium}` : ''}
-      ${req.utmCampaign ? `AND utm_campaign = ${req.utmCampaign}` : ''}
-      ${req.device ? `AND device = ${req.device}` : ''}
+      ${whereClause}
     GROUP BY product_id
     ORDER BY clicks DESC
-    LIMIT ${limit}
+    LIMIT $3
   `;
 
-  return products.map(p => ({
-    productId: p.productId,
-    productName: p.productName || `Product ${p.productId}`,
-    clicks: p.clicks || 0,
-    uniqueClicks: p.uniqueClicks || 0,
-    conversionRate: p.conversionRate || 0
+  const result = await analyticsDB.exec(query, startDate, endDate, limit);
+
+  return (result.rows || []).map(row => ({
+    productId: Number(row[0]),
+    productName: String(row[1]) || `Product ${row[0]}`,
+    clicks: Number(row[2]) || 0,
+    uniqueClicks: Number(row[3]) || 0,
+    conversionRate: 0 // TODO: Calculate when conversion tracking available
   }));
 }
 
@@ -175,35 +191,33 @@ async function getTopPages(
   endDate: Date,
   limit: number
 ): Promise<PageStats[]> {
-  const pages = await analyticsDB.queryAll<{
-    pagePath: string;
-    clicks: number;
-    uniqueClicks: number;
-  }>`
+  const additionalConditions = buildWhereConditions(req);
+  const whereClause = additionalConditions.length > 0
+    ? 'AND ' + additionalConditions.join(' AND ')
+    : '';
+
+  const query = `
     SELECT
-      page_path as "pagePath",
-      COUNT(*) as "clicks",
-      COUNT(DISTINCT COALESCE(content_id, link_id::text)) as "uniqueClicks"
+      page_path,
+      COUNT(*) as clicks,
+      COUNT(DISTINCT COALESCE(content_id, link_id::text)) as unique_clicks
     FROM click_events
-    WHERE timestamp >= ${startDate}
-      AND timestamp <= ${endDate}
+    WHERE timestamp >= $1
+      AND timestamp <= $2
       AND success = true
       AND page_path IS NOT NULL
-      ${req.productId !== undefined ? `AND product_id = ${req.productId}` : ''}
-      ${req.contentId ? `AND content_id = ${req.contentId}` : ''}
-      ${req.utmSource ? `AND utm_source = ${req.utmSource}` : ''}
-      ${req.utmMedium ? `AND utm_medium = ${req.utmMedium}` : ''}
-      ${req.utmCampaign ? `AND utm_campaign = ${req.utmCampaign}` : ''}
-      ${req.device ? `AND device = ${req.device}` : ''}
+      ${whereClause}
     GROUP BY page_path
     ORDER BY clicks DESC
-    LIMIT ${limit}
+    LIMIT $3
   `;
 
-  return pages.map(p => ({
-    pagePath: p.pagePath || '/',
-    clicks: p.clicks || 0,
-    uniqueClicks: p.uniqueClicks || 0
+  const result = await analyticsDB.exec(query, startDate, endDate, limit);
+
+  return (result.rows || []).map(row => ({
+    pagePath: String(row[0]) || '/',
+    clicks: Number(row[1]) || 0,
+    uniqueClicks: Number(row[2]) || 0
   }));
 }
 
@@ -213,29 +227,28 @@ async function getTimeSeries(
   startDate: Date,
   endDate: Date
 ): Promise<TimeSeriesPoint[]> {
-  const timeSeries = await analyticsDB.queryAll<{
-    date: Date;
-    clicks: number;
-  }>`
+  const additionalConditions = buildWhereConditions(req);
+  const whereClause = additionalConditions.length > 0
+    ? 'AND ' + additionalConditions.join(' AND ')
+    : '';
+
+  const query = `
     SELECT
-      DATE_TRUNC('day', timestamp) as "date",
-      COUNT(*) as "clicks"
+      DATE_TRUNC('day', timestamp) as date,
+      COUNT(*) as clicks
     FROM click_events
-    WHERE timestamp >= ${startDate}
-      AND timestamp <= ${endDate}
+    WHERE timestamp >= $1
+      AND timestamp <= $2
       AND success = true
-      ${req.productId !== undefined ? `AND product_id = ${req.productId}` : ''}
-      ${req.contentId ? `AND content_id = ${req.contentId}` : ''}
-      ${req.utmSource ? `AND utm_source = ${req.utmSource}` : ''}
-      ${req.utmMedium ? `AND utm_medium = ${req.utmMedium}` : ''}
-      ${req.utmCampaign ? `AND utm_campaign = ${req.utmCampaign}` : ''}
-      ${req.device ? `AND device = ${req.device}` : ''}
+      ${whereClause}
     GROUP BY DATE_TRUNC('day', timestamp)
     ORDER BY date ASC
   `;
 
-  return timeSeries.map(t => ({
-    date: t.date,
-    clicks: t.clicks || 0
+  const result = await analyticsDB.exec(query, startDate, endDate);
+
+  return (result.rows || []).map(row => ({
+    date: row[0] as Date,
+    clicks: Number(row[1]) || 0
   }));
 }

@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "encore.dev": "^1.52.3",
-    "googleapis": "^149.0.0"
+    "googleapis": "^149.0.0",
+    "undici": "^7.0.0"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

@@ -1,3 +1,6 @@
+// Import FormData from undici (Encore's fetch implementation)
+import { FormData } from 'undici';
+
 interface WordPressPost {
   title: string;
   content: string;

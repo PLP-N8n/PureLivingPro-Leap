@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { AIAssistant } from "./components/AIAssistant";
@@ -16,8 +17,10 @@ import { ProductDetailPage } from "./pages/ProductDetailPage";
 import { WellnessPlanPage } from "./pages/WellnessPlanPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { AdminPage } from "./pages/AdminPage";
+import { LoginPage } from "./pages/LoginPage";
 import { AboutPage } from "./pages/AboutPage";
 import { UIPage } from "./pages/UIPage";
+import { AuthProvider } from "./providers/AuthProvider";
 import { MotionProvider } from "./providers/MotionProvider";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { ThemePage } from "./pages/ThemePage";
@@ -38,34 +41,51 @@ export default function App() {
           <ThemeProvider defaultTheme="teal" storageKey="vite-ui-theme">
             <MotionProvider>
               <Router>
-                <div className="min-h-screen bg-background text-foreground flex flex-col font-body">
-                  <Header />
-                  <main className="flex-1">
-                    <Routes>
-                      <Route path="/" element={<HomePage />} />
-                      <Route path="/insights" element={<BlogPage />} />
-                      <Route path="/insights/:slug" element={<ArticlePage />} />
-                      <Route path="/category/:slug" element={<CategoryPage />} />
-                      <Route path="/search" element={<SearchPage />} />
-                      <Route path="/picks" element={<ProductsPage />} />
-                      <Route path="/picks/:slug" element={<ProductDetailPage />} />
-                      <Route path="/wellness-plan" element={<WellnessPlanPage />} />
-                      <Route path="/dashboard" element={<DashboardPage />} />
-                      <Route path="/admin" element={<AdminPage />} />
-                      <Route path="/about" element={<AboutPage />} />
-                      <Route path="/ui" element={<UIPage />} />
-                      <Route path="/theme" element={<ThemePage />} />
-                      <Route path="/diagnostics" element={<DiagnosticsPage />} />
-                      <Route path="/privacy" element={<PrivacyPage />} />
-                      <Route path="/terms" element={<TermsPage />} />
-                      <Route path="/affiliate-disclosure" element={<AffiliateDisclosurePage />} />
-                      <Route path="*" element={<NotFoundPage />} />
-                    </Routes>
-                  </main>
-                  <Footer />
-                  <AIAssistant />
-                  <Toaster />
-                </div>
+                <AuthProvider>
+                  <div className="min-h-screen bg-background text-foreground flex flex-col font-body">
+                    <Header />
+                    <main className="flex-1">
+                      <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/insights" element={<BlogPage />} />
+                        <Route path="/insights/:slug" element={<ArticlePage />} />
+                        <Route path="/category/:slug" element={<CategoryPage />} />
+                        <Route path="/search" element={<SearchPage />} />
+                        <Route path="/picks" element={<ProductsPage />} />
+                        <Route path="/picks/:slug" element={<ProductDetailPage />} />
+                        <Route path="/wellness-plan" element={<WellnessPlanPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route
+                          path="/dashboard"
+                          element={
+                            <ProtectedRoute requiredRole="viewer">
+                              <DashboardPage />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin"
+                          element={
+                            <ProtectedRoute requiredRole="admin">
+                              <AdminPage />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route path="/about" element={<AboutPage />} />
+                        <Route path="/ui" element={<UIPage />} />
+                        <Route path="/theme" element={<ThemePage />} />
+                        <Route path="/diagnostics" element={<DiagnosticsPage />} />
+                        <Route path="/privacy" element={<PrivacyPage />} />
+                        <Route path="/terms" element={<TermsPage />} />
+                        <Route path="/affiliate-disclosure" element={<AffiliateDisclosurePage />} />
+                        <Route path="*" element={<NotFoundPage />} />
+                      </Routes>
+                    </main>
+                    <Footer />
+                    <AIAssistant />
+                    <Toaster />
+                  </div>
+                </AuthProvider>
               </Router>
             </MotionProvider>
           </ThemeProvider>

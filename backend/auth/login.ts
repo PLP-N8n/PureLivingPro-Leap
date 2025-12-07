@@ -9,21 +9,22 @@ import type { LoginRequest, LoginResponse, User, UserWithPassword, JWTPayload } 
 export const login = api<LoginRequest, LoginResponse>(
   { expose: true, method: "POST", path: "/auth/login" },
   async ({ email, password }) => {
-    // Validate input
-    if (!email || !password) {
-      throw APIError.invalidArgument("Email and password are required");
-    }
+    try {
+      // Validate input
+      if (!email || !password) {
+        throw APIError.invalidArgument("Email and password are required");
+      }
 
-    // Find user by email
-    const query = `
-      SELECT
-        id, email, password_hash, role, name, is_active,
-        created_at, updated_at, last_login_at
-      FROM users
-      WHERE email = $1
-    `;
+      // Find user by email
+      const query = `
+        SELECT
+          id, email, password_hash, role, name, is_active,
+          created_at, updated_at, last_login_at
+        FROM users
+        WHERE email = $1
+      `;
 
-    const result = await authDB.exec(query, email.toLowerCase().trim());
+      const result = await authDB.exec(query, email.toLowerCase().trim());
 
     if (!result.rows || result.rows.length === 0) {
       // Don't reveal whether email exists
@@ -88,10 +89,19 @@ export const login = api<LoginRequest, LoginResponse>(
       lastLoginAt: new Date()
     };
 
-    return {
-      token,
-      user: safeUser,
-      expiresAt: expiresAt.toISOString()
-    };
+      return {
+        token,
+        user: safeUser,
+        expiresAt: expiresAt.toISOString()
+      };
+    } catch (error) {
+      console.error("Login error:", error);
+      // If it's already an APIError, rethrow it
+      if (error instanceof APIError) {
+        throw error;
+      }
+      // Otherwise, wrap it as an internal error with details for debugging
+      throw APIError.internal("Login failed: " + (error instanceof Error ? error.message : "Unknown error"));
+    }
   }
 );

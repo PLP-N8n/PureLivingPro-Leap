@@ -1,13 +1,10 @@
-// TEMPORARILY DISABLED FOR LOCAL DEVELOPMENT
-// These secrets require Encore Cloud authentication
-// For local dev, these features will be unavailable until cloud is configured
+import { secret } from "encore.dev/config";
 
-// Placeholder values for local development - these won't work for actual API calls
-// but will allow the server to start
-export const openAIKey = () => process.env.OPENAI_KEY || "local-dev-placeholder";
-export const googleSheetsId = () => process.env.GOOGLE_SHEETS_ID || "local-dev-placeholder";
-export const googleClientEmail = () => process.env.GOOGLE_CLIENT_EMAIL || "local@dev.com";
-export const googlePrivateKey = () => process.env.GOOGLE_PRIVATE_KEY || "local-dev-placeholder";
-export const amazonAccessKey = () => process.env.AMAZON_ACCESS_KEY || "local-dev-placeholder";
-export const amazonSecretKey = () => process.env.AMAZON_SECRET_KEY || "local-dev-placeholder";
-export const amazonStoreId = () => process.env.AMAZON_STORE_ID || "local-dev-placeholder";
+// External API secrets for automation services
+export const openAIKey = secret("OpenAIKey");
+export const googleSheetsId = secret("GoogleSheetsId");
+export const googleClientEmail = secret("GoogleClientEmail");
+export const googlePrivateKey = secret("GooglePrivateKey");
+export const amazonAccessKey = secret("AmazonAccessKey");
+export const amazonSecretKey = secret("AmazonSecretKey");
+export const amazonStoreId = secret("AmazonStoreId");

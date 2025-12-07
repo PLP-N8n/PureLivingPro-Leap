@@ -9,6 +9,7 @@ interface MeRequest {
 }
 
 // Get current user endpoint - validates JWT and returns user info
+// Force deployment: 2025-12-07 17:33
 export const me = api<MeRequest, User>(
   { expose: true, method: "GET", path: "/auth/me" },
   async ({ authorization }) => {

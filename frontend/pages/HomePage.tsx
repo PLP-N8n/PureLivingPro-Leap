@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { CategoryCard } from "../components/CategoryCard";
 import { Hero } from "../components/Hero";
 import { NewsletterForm } from "../components/NewsletterForm";
-import { BentoGrid } from "../components/ui/bento-grid";
 import { sampleCategories } from "../data/fixtures";
 import { useAnalytics } from "../hooks/useAnalytics";
 
@@ -43,39 +42,41 @@ export function HomePage() {
   return (
     <>
       <SEOHead />
-      
+
       <Hero
         mediaType="image"
         mediaSrc="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1600&h=900&fit=crop"
         headline={
           <>
-            Your Journey to
+            Build Your Best Life
             <span className="block bg-gradient-to-r from-green-600 to-lime-600 bg-clip-text text-transparent">
               Pure Living
             </span>
           </>
         }
-        subhead="Discover AI-powered wellness insights, expert-curated content, and premium products tailored to your unique health goals."
+        subhead="Expert insights + AI-powered tools"
         primaryCta={{ text: "Explore Insights", href: "/insights" }}
+        secondaryCta={{ text: "Explore Products", href: "/products" }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 my-24">
+      <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
         {/* Foundations Series */}
         {featuredArticles && featuredArticles.articles.length > 0 && (
-          <section>
-            <h2 className="text-3xl font-bold text-center mb-2">Foundations Series</h2>
-            <p className="text-lg text-gray-600 text-center mb-8">Featured articles to kickstart your wellness journey.</p>
-            <BentoGrid>
-              {featuredArticles.articles.map((article, i) => (
-                <InsightCard key={article.id} article={article} featured={i === 0 || i === 3} />
+          <section className="mt-24">
+            <h2 className="text-3xl font-bold text-center mb-3 text-green-950">Foundations Series</h2>
+            <p className="text-lg text-green-700 text-center mb-12">Featured articles to kickstart your wellness journey.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredArticles.articles.map((article) => (
+                <InsightCard key={article.id} article={article} featured={false} />
               ))}
-            </BentoGrid>
+            </div>
           </section>
         )}
 
         {/* Category Grid */}
-        <section>
-          <h2 className="text-3xl font-bold text-center mb-8">Explore by Category</h2>
+        <section className="mt-20">
+          <h2 className="text-3xl font-bold text-center mb-3 text-green-950">Explore by Category</h2>
+          <p className="text-lg text-green-700 text-center mb-12">Discover content tailored to your wellness interests.</p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {sampleCategories.slice(0, 7).map((category) => (
               <CategoryCard key={category.slug} category={category} />
@@ -85,12 +86,13 @@ export function HomePage() {
 
         {/* Our Picks Teaser */}
         {curatedProducts && curatedProducts.products.length > 0 && (
-          <section>
-            <h2 className="text-3xl font-bold text-center mb-8">Our Picks</h2>
+          <section className="mt-30">
+            <h2 className="text-3xl font-bold text-center mb-3 text-green-950">Our Picks</h2>
+            <p className="text-lg text-green-700 text-center mb-12">Premium products we recommend for your wellness journey.</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {curatedProducts.products.map((product) => (
-                <ProductCard 
-                  key={product.id} 
+                <ProductCard
+                  key={product.id}
                   product={{
                     id: product.id,
                     name: product.name,
@@ -101,24 +103,28 @@ export function HomePage() {
                     category: product.category,
                     affiliateUrl: `/r/product-${product.id}`,
                     program: product.program
-                  }} 
+                  }}
                 />
               ))}
             </div>
             <div className="text-center mt-8">
-              <AffiliateDisclosure />
+              <span className="text-green-700">
+                <AffiliateDisclosure />
+              </span>
             </div>
           </section>
         )}
 
         {/* Newsletter Inline Block */}
-        <section className="bg-primary/10 p-12 rounded-lg text-center">
-          <h2 className="text-3xl font-bold mb-4">Join the Wellness Circle</h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-            Get exclusive wellness tips, product recommendations, and early access to content delivered straight to your inbox.
-          </p>
-          <div className="flex justify-center">
-            <NewsletterForm />
+        <section className="mt-24 mb-24">
+          <div className="bg-gradient-to-r from-green-50 to-lime-50 p-12 rounded-2xl border-2 border-green-200/50 text-center">
+            <h2 className="text-3xl font-bold mb-4 text-green-950">Join the Wellness Circle</h2>
+            <p className="text-lg text-green-700 max-w-2xl mx-auto mb-8">
+              Get exclusive wellness tips, product recommendations, and early access to content delivered straight to your inbox.
+            </p>
+            <div className="flex justify-center">
+              <NewsletterForm />
+            </div>
           </div>
         </section>
       </div>
